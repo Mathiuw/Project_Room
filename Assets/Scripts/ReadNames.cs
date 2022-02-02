@@ -21,7 +21,7 @@ public class ReadNames : MonoBehaviour
     {
         if (Physics.Raycast(playerCamera.position,playerCamera.forward,out hit, 5f,layersToRead))
         {
-            if (hit.transform.GetComponent<Name>().enabled == true)
+            if (hit.transform.GetComponent<Name>())
             {
                 displayText.SetText(hit.transform.GetComponent<Name>().text);
             }

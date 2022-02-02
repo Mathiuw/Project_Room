@@ -32,7 +32,7 @@ public class interactive : MonoBehaviour
         switch (interactiveTypes)
         {
             case InteractiveTypes.None:
-                break;
+                return;
 
             case InteractiveTypes.keycard:
                 puzzleScript.UseKeycard(necessaryItem);
@@ -64,7 +64,7 @@ public class interactive : MonoBehaviour
         elevatorAnimator.SetTrigger("Open Door");
         elevatorAnimator.ResetTrigger("Close Door");
         transform.GetComponent<Name>().text = "";
-        Destroy(this);
+        interactiveTypes = InteractiveTypes.None;
     }
 
     IEnumerator CloseElevatorAndSwitchLevel()
@@ -80,7 +80,6 @@ public class interactive : MonoBehaviour
         yield return new WaitForSeconds(3);
         elevatorAnimator.SetTrigger("Open Door");
         elevatorAnimator.ResetTrigger("Close Door");
-        Destroy(this);
         yield break;
     }
 }

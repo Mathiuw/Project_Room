@@ -9,6 +9,7 @@ public class WeaponPickup : MonoBehaviour
     [SerializeField] private Transform Camera;
     [SerializeField] private int maxItemDistance = 5;
     [SerializeField] private float dropForce = 10;
+    private Animator animator;
 
     private MeshCollider[] cols;
     private RaycastHit hit;
@@ -16,6 +17,8 @@ public class WeaponPickup : MonoBehaviour
     private void Awake()
     {
         gunHolder = GameObject.Find("Gun_holder").transform;
+
+        animator = GetComponentInParent<Animator>();
     }
 
     private void Update()
@@ -71,6 +74,7 @@ public class WeaponPickup : MonoBehaviour
             {
                 cols[i].isTrigger = false;
             }
+            animator.Rebind();
             hit.rigidbody.AddForce(Camera.forward * dropForce, ForceMode.VelocityChange);
             Debug.Log("Dropped gun");
         }

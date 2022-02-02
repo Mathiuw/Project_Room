@@ -13,13 +13,13 @@ public class Elevator : MonoBehaviour
     {
         foreach (Transform panel in elevatorPanels)
         {
-            if (panel.GetComponent<interactive>().interactiveTypes == interactive.InteractiveTypes.OpenElevator)
+            if (panel.GetComponentInChildren<interactive>().interactiveTypes == interactive.InteractiveTypes.OpenElevator)
             {
-                panel.GetComponent<Name>().text = "Open Elevator";
+                panel.GetComponentInChildren<Name>().text = "Open Elevator";
             }
-            else if (panel.GetComponent<interactive>().interactiveTypes == interactive.InteractiveTypes.CloseElevatorAndSwitchLevel)
+            else if (panel.GetComponentInChildren<interactive>().interactiveTypes == interactive.InteractiveTypes.CloseElevatorAndSwitchLevel)
             {
-                panel.GetComponent<Name>().text = "Close Elevator";
+                panel.GetComponentInChildren<Name>().text = "Close Elevator";
             }
         }
     }
