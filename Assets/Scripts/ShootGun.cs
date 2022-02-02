@@ -1,0 +1,123 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ShootGun : MonoBehaviour
+{
+    [SerializeField] private GameObject Camera;
+    [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] private LayerMask playerLayer;
+    [SerializeField] private ParticleSystem muzzleFlash;
+    private Animator animator;
+    private Rigidbody rb;
+    private GameObject playerRef;
+    [HideInInspector] public bool beingHold;
+
+    [Header("Weapon config")]
+    public float fireRate;
+    [SerializeField] private int damage;
+    [SerializeField] private int bulletMaxDistace = 100;
+    public int ammo;
+    public int maximumAmmo;
+
+    private float nextTimeToFire = 0;
+
+    private void Awake()
+    {
+        playerRef = GameObject.Find("Player");
+
+        Camera = GameObject.Find("Main Camera");
+
+        rb = GetComponent<Rigidbody>();
+
+        animator = playerRef.GetComponentInParent<Animator>();
+    }
+
+    private void Update()
+    {
+        if (beingHold && !Health.playerDead)
+        {
+            if (Input.GetKey(KeyCode.Mouse0))
+            {
+                if (ammo > 0)
+                {
+                    animator.SetBool("isShooting", true);
+
+                    if (Time.time > +nextTimeToFire)
+                    {
+                        nextTimeToFire = Time.time + (1f / fireRate);
+                        Shoot();
+                        FindObjectOfType<AudioManager>().Play("Smg Shot");
+                        muzzleFlash.Play(true);
+                        ammo--;
+                    }
+                }
+                else
+                {
+                    animator.SetBool("isShooting", false);
+                }
+            }
+            else
+            {
+                animator.ResetTrigger("isShooting");
+            }
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                Reload();
+            }
+        }
+        else if (transform.parent != null && transform.parent.CompareTag("Enemy"))
+        {
+            if (!GetComponentInParent<EnemyAi>().IsDead())
+            {
+                rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                rb.isKinematic = true;
+            }
+            else
+            {
+                transform.parent = null;
+                rb.isKinematic = false;
+                rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            }
+        }
+    }
+
+    private void Shoot()
+    {
+        RaycastHit hit;  
+        
+        if (Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, bulletMaxDistace, enemyLayer))
+        {
+            EnemyAi enemy = hit.transform.GetComponent<EnemyAi>();
+            enemy.TakeDamage(damage);
+            Debug.Log("Enemy hit");
+            Debug.Log(hit.transform.name + "life = " + enemy.health);
+        }
+    }
+
+    public void EnemyShoot(Transform enemyTransfom)
+    {
+        RaycastHit hit;
+
+        muzzleFlash.Play(true);
+        FindObjectOfType<AudioManager>().Play("Smg Shot");
+
+        if (Physics.Raycast(enemyTransfom.position, enemyTransfom.forward, out hit, bulletMaxDistace, playerLayer))
+        {
+            Health.RemoveHealth(damage/2);
+            Debug.Log("Player hit");
+
+            if (Health.playerDead)
+            {
+                Rigidbody playerRB = playerRef.GetComponent<Rigidbody>();
+                playerRB.AddForce(enemyTransfom.forward * 2, ForceMode.VelocityChange);
+            }
+        }
+    }
+
+    private void Reload()
+    {
+        ammo = maximumAmmo;
+    }
+}
