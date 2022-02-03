@@ -60,9 +60,27 @@ public class interactive : MonoBehaviour
     public void OpenElevator()
     {
         Animator elevatorAnimator = GetComponentInParent<Animator>();
+        Elevator elevatorScript = GetComponentInParent<Elevator>();
+        MeshRenderer panelMesh = elevatorScript.elevatorPanels[0].GetComponentInChildren<MeshRenderer>();
+
+        Material[] changeGlows = new Material[panelMesh.materials.Length];
+
+        for (int i = 0; i < panelMesh.materials.Length; i++)
+        {
+            if (i == 1)
+            {
+                changeGlows[i] = elevatorScript.glows[1];
+            }
+            else
+            {
+                changeGlows[i] = panelMesh.materials[i];
+            }
+        }
+        panelMesh.materials = changeGlows;
 
         elevatorAnimator.SetTrigger("Open Door");
         elevatorAnimator.ResetTrigger("Close Door");
+        elevatorAnimator.Play("Elevator_ExteriorDownButtom");
         transform.GetComponent<Name>().text = "";
         interactiveTypes = InteractiveTypes.None;
     }
@@ -70,11 +88,29 @@ public class interactive : MonoBehaviour
     IEnumerator CloseElevatorAndSwitchLevel()
     {
         Animator elevatorAnimator = GetComponentInParent<Animator>();
+        Elevator elevatorScript = GetComponentInParent<Elevator>();
+        MeshRenderer panelMesh = elevatorScript.elevatorPanels[1].GetComponentInChildren<MeshRenderer>();
 
-        interactiveTypes = InteractiveTypes.None;
+        Material[] changeGlows = new Material[panelMesh.materials.Length];
+
+        for (int i = 0; i < panelMesh.materials.Length; i++)
+        {
+            if (i == 1)
+            {
+                changeGlows[i] = elevatorScript.glows[1];
+            }
+            else
+            {
+                changeGlows[i] = panelMesh.materials[i];
+            }
+        }
+        panelMesh.materials = changeGlows;
+
         elevatorAnimator.SetTrigger("Close Door");
         elevatorAnimator.ResetTrigger("Open Door");
+        elevatorAnimator.Play("Elevator_InteriorDownButtom");
         GetComponent<Name>().text = "";
+        interactiveTypes = InteractiveTypes.None;
         yield return new WaitForSeconds(3);
         FindObjectOfType<gameManagent>().StartCoroutine("NextLevel");
         yield return new WaitForSeconds(3);

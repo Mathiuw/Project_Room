@@ -6,8 +6,10 @@ using UnityEngine.SceneManagement;
 public class Elevator : MonoBehaviour
 {
     [SerializeField] private Transform[] elevatorDoors;
+    
+    public Transform[] elevatorPanels;
 
-    [SerializeField] private Transform[] elevatorPanels; 
+    public Material[] glows;
 
     private void Awake()
     {
