@@ -65,7 +65,7 @@ public class EnemyAi : MonoBehaviour
         if (!IsDead())
         {
             if (!canSeePlayer && !canAttackPlayer) Patroling();
-            if (canSeePlayer && !canAttackPlayer) ChasePlayer();
+            if (canSeePlayer && !canAttackPlayer || health < 100 && !canAttackPlayer) ChasePlayer();
             if (canSeePlayer && canAttackPlayer) AttackPlayer();
         }
         else
@@ -78,10 +78,7 @@ public class EnemyAi : MonoBehaviour
 
     private void Patroling()
     {
-        if (!startedPatroling)
-        {
-            StartCoroutine(PatrolRoute());
-        }
+        if (!startedPatroling) StartCoroutine(PatrolRoute());
     }
 
     IEnumerator PatrolRoute()
@@ -164,6 +161,8 @@ public class EnemyAi : MonoBehaviour
     {
         startedAttacking = true;
 
+        yield return new WaitForSeconds(0.5f);
+
         for (int i = 0; i < burst; i++)
         {
             gunScript.EnemyShoot(transform);
@@ -183,10 +182,7 @@ public class EnemyAi : MonoBehaviour
 
         if (gunScript != null)
         {
-            if (!startedAttacking)
-            {
-                StartCoroutine(AttackRoutine());
-            }
+            if (!startedAttacking) StartCoroutine(AttackRoutine());
         }
     }
 
@@ -194,13 +190,9 @@ public class EnemyAi : MonoBehaviour
     {
         if (health <= 0)
         {
-            Debug.Log("Enemy Dead");           
             return true;
         }
-        else
-        {
-            return false;
-        }
+        else return false;
     }
 
     private void ResetCoRoutines()
@@ -215,10 +207,7 @@ public class EnemyAi : MonoBehaviour
     public void TakeDamage(int amount)
     {
         health -= amount;
-        if (health < 0)
-        {
-            health = 0;
-        }
+        if (health < 0) health = 0;
     }
 
     private void OnDrawGizmos()
