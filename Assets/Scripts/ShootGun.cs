@@ -35,9 +35,9 @@ public class ShootGun : MonoBehaviour
 
     private void Update()
     {
-        if (beingHold && !Health.playerDead)
+        if (beingHold)
         {
-            if (Input.GetKey(KeyCode.Mouse0))
+            if (Input.GetKey(KeyCode.Mouse0) && !Health.playerDead)
             {
                 if (ammo > 0)
                 {
@@ -48,6 +48,7 @@ public class ShootGun : MonoBehaviour
                         nextTimeToFire = Time.time + (1f / fireRate);
                         Shoot();
                         FindObjectOfType<AudioManager>().Play("Smg Shot");
+                        Camera.GetComponent<CamFollowAndShake>().shakeDuration += 0.1f;
                         muzzleFlash.Play(true);
                         ammo--;
                     }

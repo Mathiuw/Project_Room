@@ -5,6 +5,7 @@ using UnityEngine;
 public class AnimationStateController : MonoBehaviour
 {
     [SerializeField] private Animator animator;
+    [SerializeField] private GameObject AmmoUI;
     private Rigidbody rb;
 
     private void Awake()
@@ -25,10 +26,12 @@ public class AnimationStateController : MonoBehaviour
         if (WeaponPickup.IsHoldingWeapon())
         {
             animator.SetBool("isHoldingWeapon", true);
+            AmmoUI.SetActive(true);
         }
         else
         {
             animator.SetBool("isHoldingWeapon", false);
+            AmmoUI.SetActive(false);
         }
     }
 
