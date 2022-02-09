@@ -1874,7 +1874,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camPlace: {fileID: 3297487630335051389}
   shakeDuration: 0
-  shakeAmount: 0.1
+  shakeAmount: 0.05
 --- !u!1 &3348716874169796827
 GameObject:
   m_ObjectHideFlags: 0

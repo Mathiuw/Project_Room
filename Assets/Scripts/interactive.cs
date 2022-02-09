@@ -25,6 +25,14 @@ public class interactive : MonoBehaviour
         {
             puzzleScript = GetComponentInParent<Puzzle_1>();
         }
+        else if (interactiveTypes == InteractiveTypes.Door)
+        {
+            Animator DoorAnimator = GetComponentInParent<Animator>();
+
+            DoorAnimator.SetBool("Open Door", false);
+            DoorAnimator.SetBool("Close Door", true);
+            GetComponentInChildren<Name>().text = "Open Door";
+        }
     }
 
     public void Interact()
@@ -54,7 +62,20 @@ public class interactive : MonoBehaviour
 
     public void UseDoor()
     {
+        Animator DoorAnimator = GetComponentInParent<Animator>();
 
+        if (DoorAnimator.GetBool("Open Door") == true)
+        {
+            DoorAnimator.SetBool("Open Door",false);
+            DoorAnimator.SetBool("Close Door",true);
+            GetComponentInChildren<Name>().text = "Open Door";
+        }
+        else if (DoorAnimator.GetBool("Close Door") == true)
+        {
+            DoorAnimator.SetBool("Close Door", false);
+            DoorAnimator.SetBool("Open Door", true);
+            GetComponentInChildren<Name>().text = "Close Door";
+        }
     }
 
     public void OpenElevator()
