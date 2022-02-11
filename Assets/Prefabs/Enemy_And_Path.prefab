@@ -380,7 +380,7 @@ MonoBehaviour:
     m_Bits: 1024
   obstructionMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 8448
   canSeePlayer: 0
   canAttackPlayer: 0
   health: 100

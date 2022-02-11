@@ -31,7 +31,10 @@ public class interactive : MonoBehaviour
 
             DoorAnimator.SetBool("Open Door", false);
             DoorAnimator.SetBool("Close Door", true);
-            GetComponentInChildren<Name>().text = "Open Door";
+            foreach (Name name in GetComponentsInChildren<Name>())
+            {
+                name.text = "Open Door";
+            }  
         }
     }
 
@@ -68,13 +71,19 @@ public class interactive : MonoBehaviour
         {
             DoorAnimator.SetBool("Open Door",false);
             DoorAnimator.SetBool("Close Door",true);
-            GetComponentInChildren<Name>().text = "Open Door";
+            foreach (Name name in GetComponentsInChildren<Name>())
+            {
+                name.text = "Open Door";
+            }
         }
         else if (DoorAnimator.GetBool("Close Door") == true)
         {
             DoorAnimator.SetBool("Close Door", false);
             DoorAnimator.SetBool("Open Door", true);
-            GetComponentInChildren<Name>().text = "Close Door";
+            foreach (Name name in GetComponentsInChildren<Name>())
+            {
+                name.text = "Close Door";
+            }
         }
     }
 
