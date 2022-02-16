@@ -46,7 +46,7 @@ public class interactive : MonoBehaviour
                 return;
 
             case InteractiveTypes.keycard:
-                puzzleScript.UseKeycard(necessaryItem);
+                puzzleScript.UseKeycard(necessaryItem, transform);
                 break;
 
             case InteractiveTypes.Door:

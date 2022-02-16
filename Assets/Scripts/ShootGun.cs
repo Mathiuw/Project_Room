@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ShootGun : MonoBehaviour
 {
-    [SerializeField] private GameObject Camera;
-    [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] private GameObject playerCamera;
+    [SerializeField] private LayerMask shootLayer;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private ParticleSystem muzzleFlash;
     private Animator animator;
@@ -26,7 +26,7 @@ public class ShootGun : MonoBehaviour
     {
         playerRef = GameObject.Find("Player");
 
-        Camera = GameObject.Find("Main Camera");
+        playerCamera = GameObject.Find("Main Camera");
 
         rb = GetComponent<Rigidbody>();
 
@@ -46,10 +46,10 @@ public class ShootGun : MonoBehaviour
                     if (Time.time > +nextTimeToFire)
                     {
                         nextTimeToFire = Time.time + (1f / fireRate);
-                        Shoot();
                         FindObjectOfType<AudioManager>().Play("Smg Shot");
-                        Camera.GetComponent<CamFollowAndShake>().shakeDuration += 0.1f;
+                        playerCamera.GetComponent<CamFollowAndShake>().shakeDuration += 0.1f;
                         muzzleFlash.Play(true);
+                        Shoot();
                         ammo--;
                     }
                 }
@@ -88,12 +88,14 @@ public class ShootGun : MonoBehaviour
     {
         RaycastHit hit;  
         
-        if (Physics.Raycast(Camera.transform.position, Camera.transform.forward, out hit, bulletMaxDistace, enemyLayer))
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, bulletMaxDistace, shootLayer))
         {
-            EnemyAi enemy = hit.transform.GetComponent<EnemyAi>();
-            enemy.TakeDamage(damage);
-            Debug.Log("Enemy hit");
-            Debug.Log(hit.transform.name + "life = " + enemy.health);
+            if (hit.transform.GetComponent<EnemyAi>())
+            {
+                hit.transform.GetComponent<EnemyAi>().TakeDamage(damage);
+                Debug.Log("Enemy hit");
+                Debug.Log(hit.transform.name + "life = " + hit.transform.GetComponent<EnemyAi>().health);
+            }
         }
     }
 

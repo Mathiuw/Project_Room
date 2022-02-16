@@ -15,6 +15,9 @@ public class Puzzle_1 : MonoBehaviour
     public Items[] keyCards;
     [SerializeField]private bool[] keycardReaderUsed;
 
+    [Header("Glow Materials")]
+    [SerializeField] private Material[] glows;
+
     private Inventory inventory;
     private UI_Inventory uiInventory;
 
@@ -52,7 +55,7 @@ public class Puzzle_1 : MonoBehaviour
         }
     }
 
-    public void UseKeycard(Items keycard)
+    public void UseKeycard(Items keycard,Transform transform)
     {
         for (int i = 0; i < keyCards.Length; i++)
         {
@@ -60,6 +63,28 @@ public class Puzzle_1 : MonoBehaviour
             {
                 inventory.inventory.RemoveAt(SelectItem.index);
                 keycardReaderUsed[i] = true;
+
+                MeshRenderer readerMesh = transform.GetComponentInChildren<MeshRenderer>();
+                Material[] changeGlows = new Material[readerMesh.materials.Length];
+
+                for (int g = 0; g < readerMesh.materials.Length; g++)
+                {
+                    if (g == 1)
+                    {
+                        changeGlows[g] = glows[2];
+                    }
+                    else if (g == 2)
+                    {
+                        changeGlows[g] = glows[0];
+                    }
+                    else
+                    {
+                        changeGlows[g] = readerMesh.materials[g];
+                    }
+                }
+                readerMesh.materials = changeGlows;
+
+                transform.GetComponentInChildren<Name>().text = "";
                 uiInventory.RefreshInventory();
                 CheckPuzzle();
             }

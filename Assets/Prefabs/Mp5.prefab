@@ -5065,7 +5065,7 @@ MonoBehaviour:
   Camera: {fileID: 0}
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 2048
+    m_Bits: 15104
   playerLayer:
     serializedVersion: 2
     m_Bits: 1024
