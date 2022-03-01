@@ -37,8 +37,9 @@ public class UseAndDropItems : MonoBehaviour
         {
             if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, rayLenght, itemMask))
             {
-                if (inventory.AddItem(hit.transform.GetComponent<SetItem>()))
+                if (hit.transform.TryGetComponent(out SetItem item))
                 {
+                    inventory.AddItem(item);
                     uiInventory.RefreshInventory();
                     Destroy(hit.transform.gameObject);
                     Debug.Log("Picked item");
@@ -105,7 +106,6 @@ public class UseAndDropItems : MonoBehaviour
                 {
                     item.amount--;
                 }
-
                 GameObject itemSpawned = Instantiate(itemPrefab, cameraTransform.position + cameraTransform.forward * 1.5f, cameraTransform.rotation);
                 itemSpawned.GetComponent<SetItem>().item = item.item;
                 itemSpawned.GetComponent<Rigidbody>().AddForce(cameraTransform.forward * 5, ForceMode.VelocityChange);

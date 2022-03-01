@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b98681e1605233f49a758d188a71b1ec, type: 3}
   m_Name: Adrenaline
   m_EditorClassIdentifier: 
-  itemType: 7
+  itemType: 6
   itemName: Adrenaline
   hotbarSprite: {fileID: 21300000, guid: ae85001525fff72499f67a5c48ad2209, type: 3}
   itemPrefab: {fileID: 1280249119779745769, guid: 643f097e5d9c5bf47b58e544e7a273bd,
     type: 3}
-  isStackable: 0
-  maxStack: 0
+  isStackable: 1
+  maxStack: 2
   isConsumable: 1
   recoverHealth: 0
-  recoverStamina: 15
+  recoverStamina: 20

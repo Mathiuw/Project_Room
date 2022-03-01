@@ -8,7 +8,7 @@ public class ShootGun : MonoBehaviour
     [SerializeField] private LayerMask shootLayer;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private ParticleSystem muzzleFlash;
-    private Animator animator;
+    private Animator playerAnimator;
     private Rigidbody rb;
     private GameObject playerRef;
     [HideInInspector] public bool beingHold;
@@ -25,47 +25,38 @@ public class ShootGun : MonoBehaviour
     private void Awake()
     {
         playerRef = GameObject.Find("Player");
-
         playerCamera = GameObject.Find("Main Camera");
-
+        playerAnimator = playerRef.GetComponentInParent<Animator>();
         rb = GetComponent<Rigidbody>();
 
-        animator = playerRef.GetComponentInParent<Animator>();
     }
 
     private void Update()
     {
         if (beingHold)
         {
-            if (Input.GetKey(KeyCode.Mouse0) && !Health.playerDead)
+            if (!Health.playerDead)
             {
-                if (ammo > 0)
+                if (Input.GetKey(KeyCode.Mouse0))
                 {
-                    animator.SetBool("isShooting", true);
-
-                    if (Time.time > +nextTimeToFire)
+                    if (ammo > 0)
                     {
-                        nextTimeToFire = Time.time + (1f / fireRate);
-                        FindObjectOfType<AudioManager>().Play("Smg Shot");
-                        playerCamera.GetComponent<CamFollowAndShake>().shakeDuration += 0.1f;
-                        muzzleFlash.Play(true);
-                        Shoot();
-                        ammo--;
-                    }
-                }
-                else
-                {
-                    animator.SetBool("isShooting", false);
-                }
-            }
-            else
-            {
-                animator.ResetTrigger("isShooting");
-            }
+                        playerAnimator.SetBool("isShooting", true);
 
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                Reload();
+                        if (Time.time > +nextTimeToFire)
+                        {
+                            nextTimeToFire = Time.time + (1f / fireRate);
+                            Shoot();
+                        }
+                    }
+                    else playerAnimator.SetBool("isShooting", false);
+                }
+                else playerAnimator.ResetTrigger("isShooting");
+
+                if (Input.GetKeyDown(KeyCode.R))
+                {
+                    Reload();
+                }
             }
         }
         else if (transform.parent != null && transform.parent.CompareTag("Enemy"))
@@ -96,6 +87,10 @@ public class ShootGun : MonoBehaviour
                 Debug.Log("Enemy hit");
                 Debug.Log(hit.transform.name + "life = " + hit.transform.GetComponent<EnemyAi>().health);
             }
+            FindObjectOfType<AudioManager>().Play("Smg Shot");
+            playerCamera.GetComponent<CamFollowAndShake>().shakeDuration += 0.1f;
+            muzzleFlash.Play(true);
+            ammo--;
         }
     }
 

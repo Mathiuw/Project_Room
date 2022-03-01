@@ -20,7 +20,12 @@ public class Interact : MonoBehaviour
         {
             if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, rayLength, interactiveMask))
             {
-                hit.transform.GetComponentInParent<interactive>().Interact();
+                interactive interactive = hit.transform.GetComponentInParent<interactive>();
+
+                if (interactive)
+                {
+                    interactive.Interact();
+                }
             }
         }
     }

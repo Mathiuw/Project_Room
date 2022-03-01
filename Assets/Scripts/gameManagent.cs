@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class gameManagent : MonoBehaviour
+public class GameManagent : MonoBehaviour
 {
     public GameObject loadingScreen;
 
@@ -17,7 +17,7 @@ public class gameManagent : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
 
-        gameManagent[] instances = FindObjectsOfType<gameManagent>();
+        GameManagent[] instances = FindObjectsOfType<GameManagent>();
 
         if (instances.Length > 1)
         {

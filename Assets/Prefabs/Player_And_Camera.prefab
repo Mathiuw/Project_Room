@@ -1267,19 +1267,19 @@ GameObject:
   - component: {fileID: 3297487630424410173}
   - component: {fileID: 3297487630234954672}
   - component: {fileID: 4729456718445527371}
+  - component: {fileID: 1884495362}
   - component: {fileID: 3297487630234954673}
+  - component: {fileID: 1336704805}
   - component: {fileID: 3297487630234954678}
   - component: {fileID: 2067884927}
   - component: {fileID: 488911057}
   - component: {fileID: 3297487630234954679}
   - component: {fileID: 3297487630234954676}
-  - component: {fileID: 8715768490026876800}
   - component: {fileID: 3297487630234954675}
   - component: {fileID: 3297487630234954674}
   - component: {fileID: 3297487630234954685}
   - component: {fileID: 6489626937573324851}
-  - component: {fileID: 1884495362}
-  - component: {fileID: 1336704805}
+  - component: {fileID: 8715768490026876800}
   - component: {fileID: 3094166134442810487}
   m_Layer: 10
   m_Name: Player
@@ -1335,6 +1335,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventorySize: 5
   inventory: []
+--- !u!114 &1884495362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3297487630234954667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd56cd1c03c75e6459e2fe3ab4d1ec1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 3648196329724760903}
+  AmmoUI: {fileID: 1211903474}
 --- !u!114 &3297487630234954673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1351,6 +1365,20 @@ MonoBehaviour:
   senX: 100
   senY: 100
   multiplier: 0.01
+--- !u!114 &1336704805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3297487630234954667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ae0fd9febe96894cb59587067fd512d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crosshair_Dot: {fileID: 748626743}
+  crosshair_Weapon: {fileID: 6005521099551321708}
 --- !u!114 &3297487630234954678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1448,22 +1476,6 @@ MonoBehaviour:
   isGrounded: 0
   jumpForce: 2000
   velDiv: 1.5
---- !u!114 &8715768490026876800
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3297487630234954667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa978aab2a21ad6438d03e8607a5965c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactiveMask:
-    serializedVersion: 2
-    m_Bits: 8192
-  rayLength: 5
 --- !u!114 &3297487630234954675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1494,7 +1506,7 @@ MonoBehaviour:
   cameraTransform: {fileID: 3297487630538489608}
   itemMask:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 15104
   itemPrefab: {fileID: 8270332264307256688, guid: 445d518733da0984595164b2ca86f8d1,
     type: 3}
 --- !u!114 &3297487630234954685
@@ -1527,7 +1539,7 @@ MonoBehaviour:
   gunHolder: {fileID: 3297487629207671530}
   smooth: 8
   swayMultiplier: 2
---- !u!114 &1884495362
+--- !u!114 &8715768490026876800
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1536,25 +1548,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 3297487630234954667}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd56cd1c03c75e6459e2fe3ab4d1ec1b, type: 3}
+  m_Script: {fileID: 11500000, guid: fa978aab2a21ad6438d03e8607a5965c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 3648196329724760903}
-  AmmoUI: {fileID: 1211903474}
---- !u!114 &1336704805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3297487630234954667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ae0fd9febe96894cb59587067fd512d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  crosshair_Dot: {fileID: 748626743}
-  crosshair_Weapon: {fileID: 6005521099551321708}
+  interactiveMask:
+    serializedVersion: 2
+    m_Bits: 15104
+  rayLength: 5
 --- !u!114 &3094166134442810487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1569,7 +1569,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layersToRead:
     serializedVersion: 2
-    m_Bits: 12800
+    m_Bits: 15104
   displayText: {fileID: 4412135926740607820}
   playerCamera: {fileID: 3297487630538489608}
 --- !u!1 &3297487630268299270

@@ -142,7 +142,7 @@ public class interactive : MonoBehaviour
         GetComponent<Name>().text = "";
         interactiveTypes = InteractiveTypes.None;
         yield return new WaitForSeconds(3);
-        FindObjectOfType<gameManagent>().StartCoroutine("NextLevel");
+        FindObjectOfType<GameManagent>().StartCoroutine("NextLevel");
         yield return new WaitForSeconds(3);
         elevatorAnimator.SetTrigger("Open Door");
         elevatorAnimator.ResetTrigger("Close Door");

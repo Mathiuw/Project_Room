@@ -13,7 +13,6 @@ public class Items : ScriptableObject
         blueKeycard,
         yellowKeycard,
         greenKeycard,
-        SMGMag,
         PistolMag,
         RecoverHealth,
         RecoverStamina,
