@@ -2,15 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelectItem : MonoBehaviour
+public class SelectItem : MonoBehaviour,ICanDo
 {
+    private bool canDo = true;
+
     [SerializeField] private GameObject hotbarSlots;
     [SerializeField] private GameObject itemSelected;
     public static int index;
 
-    private void Update()
+    void Awake()
     {
-        ChangeSlot();
+        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
+    }
+
+    void Update()
+    {
+        if (canDo)
+        {
+            ChangeSlot();
+        }
     }
 
     private void ChangeSlot()
@@ -22,7 +32,7 @@ public class SelectItem : MonoBehaviour
             {
                 index = 0;
             }
-            itemSelected.transform.GetComponent<RectTransform>().anchoredPosition = hotbarSlots.transform.GetChild(index).GetComponent<RectTransform>().anchoredPosition; 
+            itemSelected.transform.GetComponent<RectTransform>().anchoredPosition = hotbarSlots.transform.GetChild(index).GetComponent<RectTransform>().anchoredPosition;
         }
         else if (Input.mouseScrollDelta.y > 0)
         {
@@ -33,5 +43,14 @@ public class SelectItem : MonoBehaviour
             }
             itemSelected.transform.GetComponent<RectTransform>().anchoredPosition = hotbarSlots.transform.GetChild(index).GetComponent<RectTransform>().anchoredPosition;
         }
+    }
+
+    public void CheckIfCanDo(bool check)
+    {
+        if (check)
+        {
+            canDo = false;
+        }
+        else canDo = true;
     }
 }

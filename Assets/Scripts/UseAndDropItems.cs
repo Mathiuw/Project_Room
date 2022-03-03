@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UseAndDropItems : MonoBehaviour
+public class UseAndDropItems : MonoBehaviour,ICanDo
 {
+    private bool canDo = true;
+
     [Header("Pickup item")]
     [SerializeField] private float rayLenght;
     [SerializeField] private Transform cameraTransform;
@@ -20,13 +22,18 @@ public class UseAndDropItems : MonoBehaviour
 
         inventory = GetComponent<Inventory>();
         uiInventory = playerRoot.GetComponentInChildren<UI_Inventory>();
+
+        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
 
     private void Update()
     {
-        DropItem();
-        UseItem();
-        pickupItem();
+        if (canDo)
+        {
+            DropItem();
+            UseItem();
+            pickupItem();
+        }
     }
 
     private void pickupItem()
@@ -110,5 +117,14 @@ public class UseAndDropItems : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void CheckIfCanDo(bool check)
+    {
+        if (check)
+        {
+            canDo = false;
+        }
+        else canDo = true;
     }
 }

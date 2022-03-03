@@ -8,7 +8,7 @@ public class CamFollowAndShake : MonoBehaviour
 
     public float shakeDuration = 0f;
 
-	[SerializeField]private float shakeAmount;
+    [SerializeField] private float shakeDistance, smooth;
 
 	private float decreaseFactor = 1.0f;
 
@@ -16,13 +16,16 @@ public class CamFollowAndShake : MonoBehaviour
     {
 		if (shakeDuration > 0)
 		{
-			transform.position = Vector3.Lerp(transform.position, camPlace.position + Random.insideUnitSphere * shakeAmount, 1f);
+			Vector3 targetRotation = camPlace.position + Random.insideUnitSphere * shakeDistance;
+
+            transform.position = Vector3.Lerp(transform.position, targetRotation, smooth);
 
 			shakeDuration -= Time.deltaTime * decreaseFactor;
 		}
 		else
 		{
 			shakeDuration = 0f;
+
 			transform.position = camPlace.position;
 		}
 	}

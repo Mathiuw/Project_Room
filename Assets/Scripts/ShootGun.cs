@@ -91,7 +91,7 @@ public class ShootGun : MonoBehaviour, ICanDo
                 Debug.Log(hit.transform.name + "life = " + hit.transform.GetComponent<EnemyAi>().health);
             }
             FindObjectOfType<AudioManager>().Play("Smg Shot");
-            playerCamera.GetComponent<CamFollowAndShake>().shakeDuration += 0.1f;
+            playerCamera.GetComponentInParent<CamFollowAndShake>().shakeDuration += 0.1f;
             muzzleFlash.Play(true);
             ammo--;
         }

@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Jump : MonoBehaviour, ICanDo
 {
-    [Header("Can Do?")]
-    [SerializeField] private bool canDo = true;
+    private bool canDo = true;
 
     [Header("Jump cost")]
     private Rigidbody rb;

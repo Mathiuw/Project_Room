@@ -2,31 +2,47 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interact : MonoBehaviour
+public class Interact : MonoBehaviour,ICanDo
 {
+    private bool canDo = true;
+
     [SerializeField] private LayerMask interactiveMask;
     [SerializeField] private float rayLength = 5;
     private Transform cameraTransform;
     private RaycastHit hit;
 
-    private void Awake()
+    void Awake()
     {
         cameraTransform = GameObject.Find("Main Camera").transform;
+
+        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
 
-    private void Update()
+    void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (canDo)
         {
-            if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, rayLength, interactiveMask))
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                interactive interactive = hit.transform.GetComponentInParent<interactive>();
-
-                if (interactive)
+                if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, rayLength, interactiveMask))
                 {
-                    interactive.Interact();
+                    interactive interactive = hit.transform.GetComponentInParent<interactive>();
+
+                    if (interactive)
+                    {
+                        interactive.Interact();
+                    }
                 }
             }
         }
+    }
+
+    public void CheckIfCanDo(bool check)
+    {
+        if (check)
+        {
+            canDo = false;
+        }
+        else canDo = true;
     }
 }

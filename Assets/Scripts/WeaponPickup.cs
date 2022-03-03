@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class WeaponPickup : MonoBehaviour
+public class WeaponPickup : MonoBehaviour,ICanDo
 {
+    private bool canDo = true;
+
     [SerializeField] private static Transform gunHolder;
     [SerializeField] private Transform Camera;
     [SerializeField] private int maxItemDistance = 5;
@@ -14,23 +16,28 @@ public class WeaponPickup : MonoBehaviour
     private MeshCollider[] cols;
     private RaycastHit hit;
 
-    private void Awake()
+    void Awake()
     {
         gunHolder = GameObject.Find("Gun_holder").transform;
 
         animator = GetComponentInParent<Animator>();
+
+        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
 
-    private void Update()
+    void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (canDo)
         {
-            PickUpGun();
-        }
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                PickUpGun();
+            }
 
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            DropGun();
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                DropGun();
+            }
         }
     }
 
@@ -88,5 +95,14 @@ public class WeaponPickup : MonoBehaviour
         }
         else
             return false;
+    }
+
+    public void CheckIfCanDo(bool check)
+    {
+        if (check)
+        {
+            canDo = false;
+        }
+        else canDo = true;
     }
 }
