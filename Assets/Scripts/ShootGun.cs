@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShootGun : MonoBehaviour
+public class ShootGun : MonoBehaviour, ICanDo
 {
+    [SerializeField] private bool canDo = true;
+
     [SerializeField] private GameObject playerCamera;
     [SerializeField] private LayerMask shootLayer;
     [SerializeField] private LayerMask playerLayer;
@@ -29,6 +31,7 @@ public class ShootGun : MonoBehaviour
         playerAnimator = playerRef.GetComponentInParent<Animator>();
         rb = GetComponent<Rigidbody>();
 
+        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
 
     private void Update()
@@ -37,7 +40,7 @@ public class ShootGun : MonoBehaviour
         {
             if (!Health.playerDead)
             {
-                if (Input.GetKey(KeyCode.Mouse0))
+                if (Input.GetKey(KeyCode.Mouse0) && canDo)
                 {
                     if (ammo > 0)
                     {
@@ -117,5 +120,14 @@ public class ShootGun : MonoBehaviour
     private void Reload()
     {
         ammo = maximumAmmo;
+    }
+
+    public void CheckIfCanDo(bool check)
+    {
+        if (check)
+        {
+            canDo = false;
+        }
+        else canDo = true;
     }
 }

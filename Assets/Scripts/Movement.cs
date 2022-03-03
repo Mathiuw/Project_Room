@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class Movement : MonoBehaviour,ICanDo
 {
+    [Header("Can Move?")]
+    [SerializeField] private bool canDo = true;
+
     [Header("Movimento")]
     private Rigidbody rb;
     public float moveSpeed = 2000f;
@@ -20,10 +23,14 @@ public class Movement : MonoBehaviour
     public float inAir;
     Jump jumpScript;
 
+
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         jumpScript = GetComponent<Jump>();
+
+        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
 
     void Update()
@@ -33,8 +40,11 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        Move();
-        MaxSpeedCheck();
+        if (canDo)
+        {
+            Move();
+            MaxSpeedCheck();
+        }
     }
 
     void Move()
@@ -83,5 +93,15 @@ public class Movement : MonoBehaviour
             airMultiplier = inAir;
             Debug.Log("!Grounded");
         }
+    }
+
+    public void CheckIfCanDo(bool check)
+    {
+        if (check)
+        {
+            rb.velocity = Vector3.zero;
+            canDo = false;
+        }
+        else canDo = true;
     }
 }

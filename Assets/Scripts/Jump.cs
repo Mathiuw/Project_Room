@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Jump : MonoBehaviour
+public class Jump : MonoBehaviour, ICanDo
 {
+    [Header("Can Do?")]
+    [SerializeField] private bool canDo = true;
+
     [Header("Jump cost")]
     private Rigidbody rb;
     [SerializeField] private float jumpCost = 10;
@@ -17,6 +20,8 @@ public class Jump : MonoBehaviour
     void Start()
     {
         rb = GameObject.Find("Player").GetComponent<Rigidbody>();
+
+        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
 
     void Update()
@@ -32,13 +37,19 @@ public class Jump : MonoBehaviour
 
     void Jumping()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded == true && Sprint.playerStamina - jumpCost >= 0)
+        if (canDo)
         {
-            Debug.Log("Pulo");
-            rb.velocity /= velDiv;
-            rb.AddForce(transform.up * jumpForce);
-            Sprint.playerStamina -= jumpCost;
-            isGrounded = false;
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                if (isGrounded == true && Sprint.playerStamina - jumpCost >= 0)
+                {
+                    Debug.Log("Pulo");
+                    rb.velocity /= velDiv;
+                    rb.AddForce(transform.up * jumpForce);
+                    Sprint.playerStamina -= jumpCost;
+                    isGrounded = false;
+                }
+            }
         }
     }
 
@@ -51,5 +62,14 @@ public class Jump : MonoBehaviour
     {
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(checkSphereLocation.position, sphereRadius);
+    }
+
+    public void CheckIfCanDo(bool check)
+    {
+        if (check)
+        {
+            canDo = false;
+        }
+        else canDo = true;
     }
 }

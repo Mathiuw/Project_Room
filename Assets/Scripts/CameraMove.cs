@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMove : MonoBehaviour
+public class CameraMove : MonoBehaviour,ICanDo
 {
+    [Header("Can Look?")]
+    [SerializeField]private bool canDo = true;
+
     [Header("Camera")]
     [SerializeField] private Camera cam;
 
@@ -13,19 +16,27 @@ public class CameraMove : MonoBehaviour
     private float mouseX, mouseY;    
     private float xRotation, yRotation;
 
-    private void Start()
+    private void Awake()
     {
         CursorState.CursorLock();
+
+        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
 
     void Update()
     {
-        camMove();
+        if (canDo)
+        {
+            camMove();
+        }
     }
 
     void FixedUpdate()
     {
-        bodyRot();
+        if (canDo)
+        {
+            bodyRot();
+        }
     }
 
     void camMove()
@@ -46,5 +57,11 @@ public class CameraMove : MonoBehaviour
     void bodyRot()
     {
         transform.localRotation = Quaternion.Euler(0, yRotation, 0);
+    }
+
+    public void CheckIfCanDo(bool check)
+    {
+        if (check) canDo = false;
+        else canDo = true;
     }
 }

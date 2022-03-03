@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponSway : MonoBehaviour
+public class WeaponSway : MonoBehaviour,ICanDo
 {
+    [SerializeField]private bool canDo = true;
+
     private Animator animator;
 
     [SerializeField] private Transform gunHolder;
@@ -14,21 +16,26 @@ public class WeaponSway : MonoBehaviour
     private void Awake()
     {
         animator = GameObject.Find("Player_And_Camera").GetComponent<Animator>();
+
+        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
 
     private void Update()
     {
-        if (WeaponPickup.IsHoldingWeapon())
+        if (canDo)
         {
-            Sway();
+            if (WeaponPickup.IsHoldingWeapon())
+            {
+                Sway();
 
-            if (animator.GetBool("isAiming") == true)
-            {
-                swayMultiplier = 0.2f;
-            }
-            else
-            {
-                swayMultiplier = 2f;
+                if (animator.GetBool("isAiming") == true)
+                {
+                    swayMultiplier = 0.2f;
+                }
+                else
+                {
+                    swayMultiplier = 2f;
+                }
             }
         }
     }
@@ -47,5 +54,14 @@ public class WeaponSway : MonoBehaviour
 
         //Rotate
         gunHolder.localRotation = Quaternion.Slerp(gunHolder.localRotation, targetRotation, smooth * Time.deltaTime);
+    }
+
+    public void CheckIfCanDo(bool check)
+    {
+        if (check)
+        {
+            canDo = false;
+        }
+        else canDo = true;
     }
 }

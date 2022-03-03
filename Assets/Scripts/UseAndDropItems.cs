@@ -36,14 +36,12 @@ public class UseAndDropItems : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, rayLenght, itemMask))
-            {
-                if (hit.transform.TryGetComponent(out SetItem item))
+            {             
+                if (hit.transform.GetComponent<SetItem>() && inventory.AddItem(hit.transform.GetComponent<SetItem>()))
                 {
-                    inventory.AddItem(item);
                     uiInventory.RefreshInventory();
                     Destroy(hit.transform.gameObject);
                     Debug.Log("Picked item");
-                    return;
                 }
             }
         }
