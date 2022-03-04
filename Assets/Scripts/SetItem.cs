@@ -10,10 +10,12 @@ public class SetItem : MonoBehaviour
 
     private void Start()
     {
+        Transform itemTransform = item.itemPrefab.GetComponent<Transform>();
+
         amount = 1;
         gameObject.name = item.itemName;
-        transform.rotation = item.itemPrefab.GetComponent<Transform>().localRotation;
-        transform.localScale = item.itemPrefab.GetComponent<Transform>().localScale;
+        transform.eulerAngles = new Vector3(itemTransform.eulerAngles.x, transform.eulerAngles.y, itemTransform.eulerAngles.z);
+        transform.localScale = itemTransform.localScale;
         GetComponent<Name>().text = item.itemName;
         GetComponent<MeshFilter>().sharedMesh = item.itemPrefab.GetComponentInChildren<MeshFilter>().sharedMesh;
         GetComponent<MeshCollider>().cookingOptions = item.itemPrefab.GetComponentInChildren<MeshCollider>().cookingOptions;

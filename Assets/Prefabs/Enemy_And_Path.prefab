@@ -362,6 +362,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7f14512deb876544bf5e20aa31cf842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 0
+  health: 100
+  burst: 5
+  nextBurst: 1
+  timeBetweenBullets: 0.1
   player: {fileID: 0}
   agent: {fileID: 4139558382295038299}
   whatIsGround:
@@ -383,10 +388,6 @@ MonoBehaviour:
     m_Bits: 8448
   canSeePlayer: 0
   canAttackPlayer: 0
-  health: 100
-  burst: 5
-  nextBurst: 1
-  timeBetweenBullets: 0.1
 --- !u!1 &4139558383484913994
 GameObject:
   m_ObjectHideFlags: 0

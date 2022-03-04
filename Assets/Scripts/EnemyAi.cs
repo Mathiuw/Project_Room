@@ -6,7 +6,19 @@ using UnityEngine.AI;
 
 public class EnemyAi : MonoBehaviour
 {
-    public GameObject player;
+    [Header("Enemy Type")]
+    [SerializeField] private EnemyType enemyType;
+
+    [Header("Health")]
+    public int health = 100;
+
+    [Header("Attack")]
+    [SerializeField] private int burst = 5, nextBurst = 2;
+    [SerializeField] private float timeBetweenBullets = 0.1f;
+    private bool startedAttacking = false;
+    private ShootGun gunScript;
+
+    [HideInInspector]public GameObject player;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] private LayerMask whatIsGround, whatIsPlayer;
     private Rigidbody rb;
@@ -28,15 +40,11 @@ public class EnemyAi : MonoBehaviour
     public bool canSeePlayer;
     public bool canAttackPlayer;
 
-
-    [Header("Health")]    
-    public int health = 100;
-
-    [Header("Attack")]
-    [SerializeField] private int burst = 5, nextBurst = 2;
-    [SerializeField] private float timeBetweenBullets = 0.1f;
-    private bool startedAttacking = false;
-    private ShootGun gunScript;
+    private enum EnemyType
+    {
+        Patroling,
+        Standing,
+    }
 
     private void Awake()
     {
@@ -49,12 +57,15 @@ public class EnemyAi : MonoBehaviour
     {
         rb.isKinematic = true;
 
-        waypoints = new Vector3[pathHolder.childCount];
-
-        for (int i = 0; i < pathHolder.childCount; i++)
+        if (enemyType != EnemyType.Standing)
         {
-            waypoints[i] = pathHolder.GetChild(i).position;
-            waypoints[i] = new Vector3(waypoints[i].x, transform.position.y ,waypoints[i].z);
+            waypoints = new Vector3[pathHolder.childCount];
+
+            for (int i = 0; i < pathHolder.childCount; i++)
+            {
+                waypoints[i] = pathHolder.GetChild(i).position;
+                waypoints[i] = new Vector3(waypoints[i].x, transform.position.y, waypoints[i].z);
+            }
         }
 
         StartCoroutine(FOVRoutine());
@@ -64,8 +75,11 @@ public class EnemyAi : MonoBehaviour
     {
         if (!IsDead())
         {
-            if (!canSeePlayer && !canAttackPlayer) Patroling();
-            if (canSeePlayer && !canAttackPlayer || health < 100 && !canAttackPlayer) ChasePlayer();
+            if (enemyType != EnemyType.Standing)
+            {
+                if (!canSeePlayer && !canAttackPlayer) Patroling();
+            }
+            if (canSeePlayer && !canAttackPlayer || health < 100) ChasePlayer();
             if (canSeePlayer && canAttackPlayer) AttackPlayer();
         }
         else
@@ -101,6 +115,12 @@ public class EnemyAi : MonoBehaviour
                 yield return new WaitForSeconds(waitTime);
                 agent.SetDestination(waypoints[waypointIndex]);
             }
+
+            if (canSeePlayer)
+            {
+                yield break;
+            }
+
             yield return null;
         }
     }
@@ -113,6 +133,7 @@ public class EnemyAi : MonoBehaviour
         {
             yield return wait;
             FieldOfViewCheck();
+            yield return null;
         }
     }
 
@@ -133,16 +154,12 @@ public class EnemyAi : MonoBehaviour
                 {
                     canSeePlayer = true;
 
-                    if (distanceToTarget < radius / 1.1f)
-                        canAttackPlayer = true;
-                    else
-                        canAttackPlayer = false;
+                    if (distanceToTarget < radius / 1.1f) canAttackPlayer = true;
+                    else canAttackPlayer = false;
                 }
-                else
-                    canSeePlayer = false;                            
+                else canSeePlayer = false;
             }
-            else
-                canSeePlayer = false;
+            else canSeePlayer = false;
         }
         else if (canSeePlayer)
         {
@@ -153,7 +170,6 @@ public class EnemyAi : MonoBehaviour
 
     private void ChasePlayer()
     {
-        ResetCoRoutines();
         agent.SetDestination(player.transform.position);
     }
 
@@ -168,9 +184,13 @@ public class EnemyAi : MonoBehaviour
             gunScript.EnemyShoot(transform);
             yield return new WaitForSeconds(timeBetweenBullets);
         }
-        yield return new WaitForSeconds(nextBurst);
         startedAttacking = false;
-        yield return null;
+
+        if (!canAttackPlayer)
+        {
+            yield break;
+        }
+        yield return new WaitForSeconds(nextBurst);
     }
 
     private void AttackPlayer()
@@ -188,20 +208,8 @@ public class EnemyAi : MonoBehaviour
 
     public bool IsDead()
     {
-        if (health <= 0)
-        {
-            return true;
-        }
+        if (health <= 0) return true;
         else return false;
-    }
-
-    private void ResetCoRoutines()
-    {
-        StopCoroutine(PatrolRoute());
-        StopCoroutine(AttackRoutine());
-
-        startedAttacking = false;
-        startedPatroling = false;
     }
 
     public void TakeDamage(int amount)
