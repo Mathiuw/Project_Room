@@ -106,13 +106,16 @@ public class ShootGun : MonoBehaviour, ICanDo
 
         if (Physics.Raycast(enemyTransfom.position, enemyTransfom.forward, out hit, bulletMaxDistace, playerLayer))
         {
-            Health.RemoveHealth(damage/2);
-            Debug.Log("Player hit");
-
-            if (Health.playerDead)
+            if (hit.transform.name == "Player")
             {
-                Rigidbody playerRB = playerRef.GetComponent<Rigidbody>();
-                playerRB.AddForce(enemyTransfom.forward * 2, ForceMode.VelocityChange);
+                Health.RemoveHealth(damage / 3);
+                Debug.Log("Player hit");
+
+                if (Health.playerDead)
+                {
+                    Rigidbody playerRB = playerRef.GetComponent<Rigidbody>();
+                    playerRB.AddForce(enemyTransfom.forward * 2, ForceMode.VelocityChange);
+                }
             }
         }
     }

@@ -378,7 +378,7 @@ MonoBehaviour:
   pathHolder: {fileID: 722774377399166054}
   waypoints: []
   waitTime: 0.1
-  radius: 25
+  radius: 24
   angle: 135
   targetMask:
     serializedVersion: 2

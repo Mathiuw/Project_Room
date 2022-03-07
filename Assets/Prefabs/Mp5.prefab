@@ -5069,7 +5069,7 @@ MonoBehaviour:
     m_Bits: 11008
   playerLayer:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 11520
   muzzleFlash: {fileID: 2911870034229631284}
   beingHold: 0
   fireRate: 10

@@ -37,7 +37,7 @@ public class EnemyAi : MonoBehaviour
     public LayerMask targetMask;
     public LayerMask obstructionMask;
 
-    public bool canSeePlayer;
+    public bool SawPlayer;
     public bool canAttackPlayer;
 
     private enum EnemyType
@@ -77,51 +77,16 @@ public class EnemyAi : MonoBehaviour
         {
             if (enemyType != EnemyType.Standing)
             {
-                if (!canSeePlayer && !canAttackPlayer) Patroling();
+                if (!SawPlayer && !canAttackPlayer) Patroling();
             }
-            if (canSeePlayer && !canAttackPlayer || health < 100) ChasePlayer();
-            if (canSeePlayer && canAttackPlayer) AttackPlayer();
+            if ((SawPlayer && !canAttackPlayer) || health < 100) ChasePlayer();
+            if (SawPlayer && canAttackPlayer) AttackPlayer();
         }
         else
         {
             StopAllCoroutines();
             agent.enabled = false;
             rb.isKinematic = false;
-        }
-    }
-
-    private void Patroling()
-    {
-        if (!startedPatroling) StartCoroutine(PatrolRoute());
-    }
-
-    IEnumerator PatrolRoute()
-    {
-        startedPatroling = true;
-
-        int waypointIndex = 0;
-
-        agent.SetDestination(waypoints[waypointIndex]);
-
-        while (true)
-        {
-            if (transform.position.x == waypoints[waypointIndex].x && transform.position.z == waypoints[waypointIndex].z)
-            {
-                waypointIndex++;
-                if (waypointIndex == waypoints.Length)
-                {
-                    waypointIndex = 0;
-                }
-                yield return new WaitForSeconds(waitTime);
-                agent.SetDestination(waypoints[waypointIndex]);
-            }
-
-            if (canSeePlayer)
-            {
-                yield break;
-            }
-
-            yield return null;
         }
     }
 
@@ -152,25 +117,75 @@ public class EnemyAi : MonoBehaviour
 
                 if (!Physics.Raycast(transform.position, directtionToTarget, distanceToTarget, obstructionMask))
                 {
-                    canSeePlayer = true;
+                    SawPlayer = true;
 
                     if (distanceToTarget < radius / 1.1f) canAttackPlayer = true;
                     else canAttackPlayer = false;
                 }
-                else canSeePlayer = false;
+                else canAttackPlayer = false;
+                //else SawPlayer = false;
             }
-            else canSeePlayer = false;
+            //else SawPlayer = false;
         }
-        else if (canSeePlayer)
+        else if (SawPlayer)
         {
-            canSeePlayer = false;
             canAttackPlayer = false;
+            //SawPlayer = false;
+        }
+    }
+
+    private void Patroling()
+    {
+        if (!startedPatroling) StartCoroutine(PatrolRoute());
+    }
+
+    IEnumerator PatrolRoute()
+    {
+        startedPatroling = true;
+
+        int waypointIndex = 0;
+
+        agent.SetDestination(waypoints[waypointIndex]);
+
+        while (true)
+        {
+            if (transform.position.x == waypoints[waypointIndex].x && transform.position.z == waypoints[waypointIndex].z)
+            {
+                waypointIndex++;
+                if (waypointIndex == waypoints.Length)
+                {
+                    waypointIndex = 0;
+                }
+                yield return new WaitForSeconds(waitTime);
+                agent.SetDestination(waypoints[waypointIndex]);
+            }
+
+            if (SawPlayer)
+            {
+                startedPatroling = false;
+                yield break;
+            }
+
+            yield return null;
         }
     }
 
     private void ChasePlayer()
     {
         agent.SetDestination(player.transform.position);
+    }
+
+    private void AttackPlayer()
+    {
+        gunScript = GetComponentInChildren<ShootGun>();
+
+        agent.SetDestination(transform.position);
+        transform.LookAt(player.transform);
+
+        if (gunScript != null)
+        {
+            if (!startedAttacking) StartCoroutine(AttackRoutine());
+        }
     }
 
     IEnumerator AttackRoutine()
@@ -191,19 +206,6 @@ public class EnemyAi : MonoBehaviour
             yield break;
         }
         yield return new WaitForSeconds(nextBurst);
-    }
-
-    private void AttackPlayer()
-    {
-        gunScript = GetComponentInChildren<ShootGun>();
-
-        agent.SetDestination(transform.position);
-        transform.LookAt(player.transform);
-
-        if (gunScript != null)
-        {
-            if (!startedAttacking) StartCoroutine(AttackRoutine());
-        }
     }
 
     public bool IsDead()
