@@ -31,12 +31,13 @@ public class AudioManager : MonoBehaviour
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;           
             s.source.loop = s.loop;
+            s.source.spatialBlend = s.spatialBlend;
         }
     }
 
-    public void Play(string name)
+    public void Play(string name,Vector3 location)
     {
         Sound s = Array.Find(sounds, sound => sound.name == name);
-        s.source.Play();
+        AudioSource.PlayClipAtPoint(s.source.clip, location);
     }
 }

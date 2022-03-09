@@ -2327,7 +2327,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 2
+  m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -2468,6 +2468,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactiveTypes: 2
   necessaryItem: {fileID: 0}
+  objectDoor: Door
 --- !u!1 &6801573463023315316
 GameObject:
   m_ObjectHideFlags: 0

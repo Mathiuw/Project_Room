@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class ShootGun : MonoBehaviour, ICanDo
 {
-    [SerializeField] private bool canDo = true;
+    private bool canDo = true;
 
-    [SerializeField] private GameObject playerCamera;
+    [SerializeField] private Transform playerCamera;
     [SerializeField] private LayerMask shootLayer;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private ParticleSystem muzzleFlash;
+    [SerializeField] private Transform soundTransform;
+
     private Animator playerAnimator;
     private Rigidbody rb;
     private GameObject playerRef;
@@ -27,7 +29,7 @@ public class ShootGun : MonoBehaviour, ICanDo
     private void Awake()
     {
         playerRef = GameObject.Find("Player");
-        playerCamera = GameObject.Find("Main Camera");
+        playerCamera = GameObject.Find("Main Camera").transform;
         playerAnimator = playerRef.GetComponentInParent<Animator>();
         rb = GetComponent<Rigidbody>();
 
@@ -82,15 +84,14 @@ public class ShootGun : MonoBehaviour, ICanDo
     {
         RaycastHit hit;  
         
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, bulletMaxDistace, shootLayer))
+        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, bulletMaxDistace, shootLayer))
         {
             if (hit.transform.GetComponent<EnemyAi>())
             {
                 hit.transform.GetComponent<EnemyAi>().TakeDamage(damage);
-                Debug.Log("Enemy hit");
                 Debug.Log(hit.transform.name + "life = " + hit.transform.GetComponent<EnemyAi>().health);
             }
-            FindObjectOfType<AudioManager>().Play("Smg Shot");
+            FindObjectOfType<AudioManager>().Play("Smg Shot", soundTransform.position);
             playerCamera.GetComponentInParent<CamFollowAndShake>().shakeDuration += 0.1f;
             muzzleFlash.Play(true);
             ammo--;
@@ -101,11 +102,11 @@ public class ShootGun : MonoBehaviour, ICanDo
     {
         RaycastHit hit;
 
-        muzzleFlash.Play(true);
-        FindObjectOfType<AudioManager>().Play("Smg Shot");
-
         if (Physics.Raycast(enemyTransfom.position, enemyTransfom.forward, out hit, bulletMaxDistace, playerLayer))
         {
+            muzzleFlash.Play(true);
+            FindObjectOfType<AudioManager>().Play("Smg Shot", soundTransform.position);
+
             if (hit.transform.name == "Player")
             {
                 Health.RemoveHealth(damage / 3);

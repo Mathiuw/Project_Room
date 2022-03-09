@@ -6,7 +6,11 @@ public class interactive : MonoBehaviour
 {
     public InteractiveTypes interactiveTypes;
 
+    [Header("KeyCard Reader")]
     public Items necessaryItem;
+
+    [Header("Doors")]
+    [SerializeField] private string objectDoor;
 
     private Puzzle_1 puzzleScript;
 
@@ -33,7 +37,7 @@ public class interactive : MonoBehaviour
             DoorAnimator.SetBool("Close Door", true);
             foreach (Name name in GetComponentsInChildren<Name>())
             {
-                name.text = "Open Door";
+                name.text = "Open " + objectDoor;
             }  
         }
     }
@@ -73,7 +77,7 @@ public class interactive : MonoBehaviour
             DoorAnimator.SetBool("Close Door",true);
             foreach (Name name in GetComponentsInChildren<Name>())
             {
-                name.text = "Open Door";
+                name.text = "Open " + objectDoor;
             }
         }
         else if (DoorAnimator.GetBool("Close Door") == true)
@@ -82,7 +86,7 @@ public class interactive : MonoBehaviour
             DoorAnimator.SetBool("Open Door", true);
             foreach (Name name in GetComponentsInChildren<Name>())
             {
-                name.text = "Close Door";
+                name.text = "Close " + objectDoor;
             }
         }
     }
@@ -92,7 +96,6 @@ public class interactive : MonoBehaviour
         Animator elevatorAnimator = GetComponentInParent<Animator>();
         Elevator elevatorScript = GetComponentInParent<Elevator>();
         MeshRenderer panelMesh = elevatorScript.elevatorPanels[0].GetComponentInChildren<MeshRenderer>();
-
         Material[] changeGlows = new Material[panelMesh.materials.Length];
 
         for (int i = 0; i < panelMesh.materials.Length; i++)
@@ -106,8 +109,8 @@ public class interactive : MonoBehaviour
                 changeGlows[i] = panelMesh.materials[i];
             }
         }
-        panelMesh.materials = changeGlows;
 
+        panelMesh.materials = changeGlows;
         elevatorAnimator.SetTrigger("Open Door");
         elevatorAnimator.ResetTrigger("Close Door");
         elevatorAnimator.Play("Elevator_ExteriorDownButtom");
@@ -141,11 +144,7 @@ public class interactive : MonoBehaviour
         elevatorAnimator.Play("Elevator_InteriorDownButtom");
         GetComponent<Name>().text = "";
         interactiveTypes = InteractiveTypes.None;
-        yield return new WaitForSeconds(3);
-        FindObjectOfType<GameManagent>().StartCoroutine("NextLevel");
-        yield return new WaitForSeconds(3);
-        elevatorAnimator.SetTrigger("Open Door");
-        elevatorAnimator.ResetTrigger("Close Door");
+        yield return new WaitForSeconds(6);
         yield break;
     }
 }

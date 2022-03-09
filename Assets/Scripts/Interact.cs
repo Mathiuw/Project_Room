@@ -28,7 +28,7 @@ public class Interact : MonoBehaviour,ICanDo
                 {
                     interactive interactive = hit.transform.GetComponentInParent<interactive>();
 
-                    if (interactive)
+                    if (interactive && interactive.enabled)
                     {
                         interactive.Interact();
                     }

@@ -15,6 +15,9 @@ public class Sound
     [Range(-3, 3)]
     public float pitch;
 
+    [Range(0, 1)]
+    public float spatialBlend;
+
     public bool loop;
 
     [HideInInspector]

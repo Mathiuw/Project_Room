@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactiveTypes: 2
   necessaryItem: {fileID: 0}
+  objectDoor: Locker
 --- !u!1 &5836845077845719551
 GameObject:
   m_ObjectHideFlags: 0

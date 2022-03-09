@@ -46,13 +46,15 @@ MonoBehaviour:
   sounds:
   - name: Smg Shot
     clip: {fileID: 8300000, guid: 039ad0fbe0f91294b80aa198a8d33e3e, type: 3}
-    volume: 0.5
+    volume: 1
     pitch: 1
+    spatialBlend: 0.6
     loop: 0
     source: {fileID: 0}
   - name: FootStep
     clip: {fileID: 8300000, guid: b3e2aaed5a7370840903992e44d1dbad, type: 3}
     volume: 1
     pitch: 1
+    spatialBlend: 0
     loop: 0
     source: {fileID: 0}
