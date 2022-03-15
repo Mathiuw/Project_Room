@@ -123,14 +123,11 @@ public class EnemyAi : MonoBehaviour
                     else canAttackPlayer = false;
                 }
                 else canAttackPlayer = false;
-                //else SawPlayer = false;
             }
-            //else SawPlayer = false;
         }
         else if (SawPlayer)
         {
             canAttackPlayer = false;
-            //SawPlayer = false;
         }
     }
 

@@ -31,7 +31,7 @@ public class WeaponPickup : MonoBehaviour,ICanDo
         {
             if (Input.GetKeyDown(KeyCode.E))
             {
-                PickUpGun();
+                StartCoroutine(PickUpGun());
             }
 
             if (Input.GetKeyDown(KeyCode.G))
@@ -41,27 +41,39 @@ public class WeaponPickup : MonoBehaviour,ICanDo
         }
     }
 
-    private void PickUpGun()
+    private IEnumerator PickUpGun()
     {
-        if (!IsHoldingWeapon())
+        if (!IsHoldingWeapon() && Physics.Raycast(Camera.position, Camera.forward, out hit, maxItemDistance) && hit.transform.GetComponentInParent<ShootGun>())
         {
-            if (Physics.Raycast(Camera.position, Camera.forward, out hit, maxItemDistance) && hit.transform.tag == "Gun")
+            hit.transform.SetParent(gunHolder);
+
+            Vector3 startPosition = hit.transform.localPosition;
+            Quaternion startRotation = hit.transform.localRotation;
+            float elapsedTime = 0;
+            float waitTime = 0.2f;
+
+            hit.transform.GetComponent<Name>().enabled = false;
+            hit.rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            hit.rigidbody.isKinematic = true;
+            cols = hit.transform.GetComponentsInChildren<MeshCollider>();
+            for (int i = 0; i < cols.Length; i++)
             {
-                hit.transform.gameObject.GetComponent<ShootGun>().beingHold = true;
-                hit.transform.GetComponent<Name>().enabled = false;
-                hit.transform.SetParent(gunHolder);
-                hit.rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-                hit.rigidbody.isKinematic = true;
-                cols = hit.transform.GetComponentsInChildren<MeshCollider>();
-                for (int i = 0; i < cols.Length; i++)
-                {
-                    cols[i].isTrigger = true;
-                }
-                hit.transform.GetComponentInChildren<MeshCollider>().isTrigger = true;
-                hit.transform.localPosition = Vector3.zero;
-                hit.transform.localRotation = Quaternion.Euler(Vector3.zero);
-                Debug.Log("Picked up gun");
+                cols[i].isTrigger = true;
             }
+            hit.transform.GetComponentInChildren<MeshCollider>().isTrigger = true;
+
+            while (hit.transform.localPosition != Vector3.zero && hit.transform.localRotation != Quaternion.identity)
+            {
+                hit.transform.localPosition = Vector3.Lerp(startPosition, Vector3.zero, elapsedTime / waitTime);
+                hit.transform.localRotation = Quaternion.Lerp(startRotation, Quaternion.identity, elapsedTime / waitTime);
+                hit.transform.localScale = Vector3.one;
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            hit.transform.gameObject.GetComponent<ShootGun>().beingHold = true;
+            Debug.Log("Picked up gun");
+            yield break;
         }
     }
 
@@ -76,11 +88,11 @@ public class WeaponPickup : MonoBehaviour,ICanDo
             hit.rigidbody.isKinematic = false;
             hit.rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
             cols = hit.transform.GetComponentsInChildren<MeshCollider>();
-            SceneManager.MoveGameObjectToScene(hit.transform.gameObject, SceneManager.GetActiveScene());
             for (int i = 0; i < cols.Length; i++)
             {
                 cols[i].isTrigger = false;
             }
+
             animator.Rebind();
             hit.rigidbody.AddForce(Camera.forward * dropForce, ForceMode.VelocityChange);
             Debug.Log("Dropped gun");
@@ -93,8 +105,7 @@ public class WeaponPickup : MonoBehaviour,ICanDo
         {
             return true;
         }
-        else
-            return false;
+        else return false;
     }
 
     public void CheckIfCanDo(bool check)

@@ -137,8 +137,8 @@ public class interactive : MonoBehaviour
                 changeGlows[i] = panelMesh.materials[i];
             }
         }
-        panelMesh.materials = changeGlows;
 
+        panelMesh.materials = changeGlows;
         elevatorAnimator.SetTrigger("Close Door");
         elevatorAnimator.ResetTrigger("Open Door");
         elevatorAnimator.Play("Elevator_InteriorDownButtom");
