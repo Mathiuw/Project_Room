@@ -24,22 +24,21 @@ public class UI_PlayerStats : MonoBehaviour
     {
         StaminaUI();
         HealthUI();
-
-        Debug.Log("Health =" + Health.playerHealth + " Max Health =" + Health.maxHealth);
     }
 
     private void StaminaUI()
     {
         staminaBarSlider.value = Sprint.playerStamina;
 
-        if (Sprint.playerStamina == Sprint.maximumStamina)
-            staminaBar.SetActive(false);
-        else
-            staminaBar.SetActive(true);
+        if (Sprint.playerStamina == Sprint.maximumStamina) staminaBar.SetActive(false);
+        else staminaBar.SetActive(true);
     }
 
     private void HealthUI()
     {
         healthBarSlider.value = Health.playerHealth;
+
+        if (healthBarSlider.value == Health.maxHealth) healthBar.SetActive(false);
+        else healthBar.SetActive(true);
     }
 }

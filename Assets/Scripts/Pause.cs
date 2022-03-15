@@ -9,10 +9,13 @@ public class Pause : MonoBehaviour
 
     public event Action<bool> changePauseState;
 
-    [SerializeField]private GameObject[] uiElements;
-
     private void Awake()
     {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+
         isPaused = false;
 
         CheckUIElementsAndCursorState(isPaused);
@@ -39,19 +42,19 @@ public class Pause : MonoBehaviour
     {
         if (paused)
         {
-            foreach (GameObject ui in uiElements)
+            for (int i = 0; i < transform.childCount; i++)
             {
-                ui.SetActive(true);
+                transform.GetChild(i).gameObject.SetActive(true);
             }
             CursorState.CursorUnlock();
         }
         else
         {
-            foreach (GameObject ui in uiElements)
+            for (int i = 0; i < transform.childCount; i++)
             {
-                ui.SetActive(false);
+                transform.GetChild(i).gameObject.SetActive(false);
             }
             CursorState.CursorLock();
-        }
+        }    
     }
 }

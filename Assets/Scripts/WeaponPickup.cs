@@ -65,7 +65,7 @@ public class WeaponPickup : MonoBehaviour,ICanDo
             while (hit.transform.localPosition != Vector3.zero && hit.transform.localRotation != Quaternion.identity)
             {
                 hit.transform.localPosition = Vector3.Lerp(startPosition, Vector3.zero, elapsedTime / waitTime);
-                hit.transform.localRotation = Quaternion.Lerp(startRotation, Quaternion.identity, elapsedTime / waitTime);
+                hit.transform.localRotation = Quaternion.Slerp(startRotation, Quaternion.identity, elapsedTime / waitTime);
                 hit.transform.localScale = Vector3.one;
                 elapsedTime += Time.deltaTime;
                 yield return null;

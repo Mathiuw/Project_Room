@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class ShootGun : MonoBehaviour, ICanDo
 {
@@ -16,6 +17,7 @@ public class ShootGun : MonoBehaviour, ICanDo
     private Rigidbody rb;
     private GameObject playerRef;
     [HideInInspector] public bool beingHold;
+    private AudioSource gunSound;
 
     [Header("Weapon config")]
     public float fireRate;
@@ -32,6 +34,7 @@ public class ShootGun : MonoBehaviour, ICanDo
         playerCamera = GameObject.Find("Main Camera").transform;
         playerAnimator = playerRef.GetComponentInParent<Animator>();
         rb = GetComponent<Rigidbody>();
+        gunSound = GetComponent<AudioSource>();
 
         FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
@@ -58,7 +61,7 @@ public class ShootGun : MonoBehaviour, ICanDo
                 }
                 else playerAnimator.ResetTrigger("isShooting");
 
-                if (Input.GetKeyDown(KeyCode.R))
+                if (Input.GetKeyDown(KeyCode.R) && canDo)
                 {
                     Reload();
                 }
@@ -91,7 +94,8 @@ public class ShootGun : MonoBehaviour, ICanDo
                 hit.transform.GetComponent<EnemyAi>().TakeDamage(damage);
                 Debug.Log(hit.transform.name + "life = " + hit.transform.GetComponent<EnemyAi>().health);
             }
-            FindObjectOfType<AudioManager>().Play("Smg Shot", soundTransform.position);
+            //FindObjectOfType<AudioManager>().Play("Smg Shot", soundTransform.position);
+            gunSound.Play();
             playerCamera.GetComponentInParent<CamFollowAndShake>().shakeDuration += 0.1f;
             muzzleFlash.Play(true);
             ammo--;
@@ -105,7 +109,8 @@ public class ShootGun : MonoBehaviour, ICanDo
         if (Physics.Raycast(enemyTransfom.position, enemyTransfom.forward, out hit, bulletMaxDistace, playerLayer))
         {
             muzzleFlash.Play(true);
-            FindObjectOfType<AudioManager>().Play("Smg Shot", soundTransform.position);
+            //FindObjectOfType<AudioManager>().Play("Smg Shot", soundTransform.position);
+            gunSound.Play();
 
             if (hit.transform.name == "Player")
             {
