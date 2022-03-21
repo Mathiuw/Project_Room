@@ -27,17 +27,16 @@ public class WeaponPickup : MonoBehaviour,ICanDo
 
     void Update()
     {
-        if (canDo)
-        {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                StartCoroutine(PickUpGun());
-            }
+        if (!canDo) return;
 
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                DropGun();
-            }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            StartCoroutine(PickUpGun());
+        }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            DropGun();
         }
     }
 
@@ -93,7 +92,7 @@ public class WeaponPickup : MonoBehaviour,ICanDo
                 cols[i].isTrigger = false;
             }
 
-            animator.Rebind();
+            animator.Play("Not Holding Weapon");
             hit.rigidbody.AddForce(Camera.forward * dropForce, ForceMode.VelocityChange);
             Debug.Log("Dropped gun");
         }

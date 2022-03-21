@@ -14,17 +14,21 @@ public class interactive : MonoBehaviour
 
     private Puzzle_1 puzzleScript;
 
+    private Transform player;
+
     public enum InteractiveTypes
     {
         None,
         keycard,
         Door,
         OpenElevator,
-        CloseElevatorAndSwitchLevel,
+        CloseElevatorAndEndGame,
     }
 
     private void Awake()
     {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+
         if (interactiveTypes == InteractiveTypes.keycard)
         {
             puzzleScript = GetComponentInParent<Puzzle_1>();
@@ -61,8 +65,8 @@ public class interactive : MonoBehaviour
                 OpenElevator();
                 break;
 
-            case InteractiveTypes.CloseElevatorAndSwitchLevel:
-                StartCoroutine(CloseElevatorAndSwitchLevel());
+            case InteractiveTypes.CloseElevatorAndEndGame:
+                StartCoroutine(CloseElevatorAndEndGame());
                 break;
         }
     }
@@ -118,9 +122,10 @@ public class interactive : MonoBehaviour
         interactiveTypes = InteractiveTypes.None;
     }
 
-    IEnumerator CloseElevatorAndSwitchLevel()
+    IEnumerator CloseElevatorAndEndGame()
     {
         Animator elevatorAnimator = GetComponentInParent<Animator>();
+        Animator playerAnimator = player.GetComponent<Animator>();
         Elevator elevatorScript = GetComponentInParent<Elevator>();
         MeshRenderer panelMesh = elevatorScript.elevatorPanels[1].GetComponentInChildren<MeshRenderer>();
 
@@ -144,7 +149,8 @@ public class interactive : MonoBehaviour
         elevatorAnimator.Play("Elevator_InteriorDownButtom");
         GetComponent<Name>().text = "";
         interactiveTypes = InteractiveTypes.None;
-        yield return new WaitForSeconds(6);
+        yield return new WaitForSeconds(0.5f);
+        playerAnimator.SetFloat("FadeSpeed",-1);
         yield break;
     }
 }

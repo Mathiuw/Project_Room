@@ -19,7 +19,7 @@ public class Elevator : MonoBehaviour
             {
                 panel.GetComponentInChildren<Name>().text = "Open Elevator";
             }
-            else if (panel.GetComponentInChildren<interactive>().interactiveTypes == interactive.InteractiveTypes.CloseElevatorAndSwitchLevel)
+            else if (panel.GetComponentInChildren<interactive>().interactiveTypes == interactive.InteractiveTypes.CloseElevatorAndEndGame)
             {
                 panel.GetComponentInChildren<Name>().text = "Close Elevator";
             }
