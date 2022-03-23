@@ -8,7 +8,17 @@ public class SetItem : MonoBehaviour
 
     public Items item;
 
+    private void OnValidate()
+    {
+        SpawnItem();
+    }
+
     private void Start()
+    {
+        SpawnItem();
+    }
+
+    private void SpawnItem()
     {
         Transform itemTransform = item.itemPrefab.GetComponent<Transform>();
 

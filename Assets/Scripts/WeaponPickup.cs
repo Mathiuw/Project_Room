@@ -13,7 +13,7 @@ public class WeaponPickup : MonoBehaviour,ICanDo
     [SerializeField] private float dropForce = 10;
     private Animator animator;
 
-    private MeshCollider[] cols;
+    private Collider[] cols;
     private RaycastHit hit;
 
     void Awake()
@@ -33,7 +33,6 @@ public class WeaponPickup : MonoBehaviour,ICanDo
         {
             StartCoroutine(PickUpGun());
         }
-
         if (Input.GetKeyDown(KeyCode.G))
         {
             DropGun();
@@ -44,33 +43,37 @@ public class WeaponPickup : MonoBehaviour,ICanDo
     {
         if (!IsHoldingWeapon() && Physics.Raycast(Camera.position, Camera.forward, out hit, maxItemDistance) && hit.transform.GetComponentInParent<ShootGun>())
         {
-            hit.transform.SetParent(gunHolder);
+            Transform gun = hit.transform;
+            Name gunName = gun.GetComponent<Name>();
 
-            Vector3 startPosition = hit.transform.localPosition;
-            Quaternion startRotation = hit.transform.localRotation;
+            gun.SetParent(gunHolder);
+
+            Vector3 startPosition = gun.localPosition;
+            Quaternion startRotation = gun.localRotation;
             float elapsedTime = 0;
             float waitTime = 0.2f;
 
-            hit.transform.GetComponent<Name>().enabled = false;
-            hit.rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            gunName.enabled = false;
+            animator.SetTrigger(gunName.text);
+            hit.rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
             hit.rigidbody.isKinematic = true;
-            cols = hit.transform.GetComponentsInChildren<MeshCollider>();
+
+            cols = gun.GetComponentsInChildren<Collider>();
             for (int i = 0; i < cols.Length; i++)
             {
                 cols[i].isTrigger = true;
             }
-            hit.transform.GetComponentInChildren<MeshCollider>().isTrigger = true;
 
-            while (hit.transform.localPosition != Vector3.zero && hit.transform.localRotation != Quaternion.identity)
+            while (gun.localPosition != Vector3.zero && gun.localRotation != Quaternion.identity)
             {
-                hit.transform.localPosition = Vector3.Lerp(startPosition, Vector3.zero, elapsedTime / waitTime);
-                hit.transform.localRotation = Quaternion.Slerp(startRotation, Quaternion.identity, elapsedTime / waitTime);
-                hit.transform.localScale = Vector3.one;
+                gun.localPosition = Vector3.Lerp(startPosition, Vector3.zero, elapsedTime / waitTime);
+                gun.localRotation = Quaternion.Slerp(startRotation, Quaternion.identity, elapsedTime / waitTime);
+                gun.localScale = Vector3.one;
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
 
-            hit.transform.gameObject.GetComponent<ShootGun>().beingHold = true;
+            gun.GetComponent<ShootGun>().beingHold = true;
             Debug.Log("Picked up gun");
             yield break;
         }
@@ -80,20 +83,24 @@ public class WeaponPickup : MonoBehaviour,ICanDo
     {
         if (IsHoldingWeapon())
         {
-            hit.transform.gameObject.GetComponent<ShootGun>().beingHold = false;
-            hit.transform.GetComponent<Name>().enabled = true;
-            hit.transform.SetParent(null);
-            hit.transform.localPosition = Camera.position + Camera.forward * 1.5f;
-            hit.rigidbody.isKinematic = false;
-            hit.rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            cols = hit.transform.GetComponentsInChildren<MeshCollider>();
+            Transform gun = hit.transform;
+
+            gun.gameObject.GetComponent<ShootGun>().beingHold = false;
+            gun.GetComponent<Name>().enabled = true;
+            gun.SetParent(null);
+            gun.localPosition = Camera.position + Camera.forward * 1.5f;
+
+            cols = gun.GetComponentsInChildren<Collider>();
             for (int i = 0; i < cols.Length; i++)
             {
                 cols[i].isTrigger = false;
             }
 
-            animator.Play("Not Holding Weapon");
+            hit.rigidbody.isKinematic = false;
+            hit.rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             hit.rigidbody.AddForce(Camera.forward * dropForce, ForceMode.VelocityChange);
+
+            animator.Play("Not Holding Weapon");
             Debug.Log("Dropped gun");
         }
     }

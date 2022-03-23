@@ -11,12 +11,11 @@ public class ShootGun : MonoBehaviour, ICanDo
     [SerializeField] private LayerMask shootLayer;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private ParticleSystem muzzleFlash;
-    [SerializeField] private Transform soundTransform;
 
+    [HideInInspector] public bool beingHold;
     private Animator playerAnimator;
     private Rigidbody rb;
     private GameObject playerRef;
-    [HideInInspector] public bool beingHold;
     private AudioSource gunSound;
 
     [Header("Weapon config")]
@@ -43,42 +42,42 @@ public class ShootGun : MonoBehaviour, ICanDo
     {
         if (beingHold)
         {
-            if (!Health.playerDead)
+            if (Health.playerDead) return;
+            if (!canDo) return;
+
+            if (Input.GetKey(KeyCode.Mouse0))
             {
-                if (Input.GetKey(KeyCode.Mouse0) && canDo)
+                if (ammo > 0)
                 {
-                    if (ammo > 0)
+                    playerAnimator.SetBool("isShooting", true);
+
+                    if (Time.time > +nextTimeToFire)
                     {
-                        playerAnimator.SetBool("isShooting", true);
-
-                        if (Time.time > +nextTimeToFire)
-                        {
-                            nextTimeToFire = Time.time + (1f / fireRate);
-                            Shoot();
-                        }
+                        nextTimeToFire = Time.time + (1f / fireRate);
+                        Shoot();
                     }
-                    else playerAnimator.SetBool("isShooting", false);
                 }
-                else playerAnimator.ResetTrigger("isShooting");
+                else playerAnimator.SetBool("isShooting", false);
+            }
+            else playerAnimator.SetBool("isShooting", false);
 
-                if (Input.GetKeyDown(KeyCode.R) && canDo)
-                {
-                    Reload();
-                }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                Reload();
             }
         }
         else if (transform.parent != null && transform.parent.CompareTag("Enemy"))
         {
             if (!GetComponentInParent<EnemyAi>().IsDead())
             {
-                rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                 rb.isKinematic = true;
             }
             else
             {
                 transform.parent = null;
                 rb.isKinematic = false;
-                rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+                rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             }
         }
     }
@@ -94,10 +93,9 @@ public class ShootGun : MonoBehaviour, ICanDo
                 hit.transform.GetComponent<EnemyAi>().TakeDamage(damage);
                 Debug.Log(hit.transform.name + "life = " + hit.transform.GetComponent<EnemyAi>().health);
             }
-            //FindObjectOfType<AudioManager>().Play("Smg Shot", soundTransform.position);
-            gunSound.Play();
             playerCamera.GetComponentInParent<CamFollowAndShake>().shakeDuration += 0.1f;
             muzzleFlash.Play(true);
+            gunSound.Play();
             ammo--;
         }
     }
@@ -109,7 +107,6 @@ public class ShootGun : MonoBehaviour, ICanDo
         if (Physics.Raycast(enemyTransfom.position, enemyTransfom.forward, out hit, bulletMaxDistace, playerLayer))
         {
             muzzleFlash.Play(true);
-            //FindObjectOfType<AudioManager>().Play("Smg Shot", soundTransform.position);
             gunSound.Play();
 
             if (hit.transform.name == "Player")
@@ -133,10 +130,7 @@ public class ShootGun : MonoBehaviour, ICanDo
 
     public void CheckIfCanDo(bool check)
     {
-        if (check)
-        {
-            canDo = false;
-        }
+        if (check) canDo = false;
         else canDo = true;
     }
 }
