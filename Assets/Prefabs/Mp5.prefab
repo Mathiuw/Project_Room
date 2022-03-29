@@ -5086,7 +5086,7 @@ MonoBehaviour:
   muzzleFlash: {fileID: 2911870034229631284}
   beingHold: 0
   fireRate: 10
-  damage: 20
+  damage: 15
   bulletMaxDistace: 500
   ammo: 30
   maximumAmmo: 30
