@@ -2,16 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteAlways]
 public class SetItem : MonoBehaviour
 {
     public int amount = 1;
 
     public Items item;
-
-    private void OnValidate()
-    {
-        SpawnItem();
-    }
 
     private void Start()
     {

@@ -32,7 +32,7 @@ public class CrossHairController : MonoBehaviour
                 crosshair_Weapon.SetActive(true);
             }
         }
-        else if (!WeaponPickup.IsHoldingWeapon())
+        else
         {
             crosshair_Dot.SetActive(true);
             crosshair_Weapon.SetActive(false);

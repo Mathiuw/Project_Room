@@ -5,12 +5,11 @@ using UnityEngine;
 public class CamFollowAndShake : MonoBehaviour
 {
 	[SerializeField] private Transform camPlace;
-
-    public float shakeDuration = 0f;
-
-    [SerializeField] private float shakeDistance, smooth;
+	[SerializeField] private float shakeDistance, smooth;
 
 	private float decreaseFactor = 1.0f;
+
+	public float shakeDuration = 0f;
 
 	void Update()
     {

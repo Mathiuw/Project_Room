@@ -20,5 +20,7 @@ MonoBehaviour:
   isStackable: 1
   maxStack: 2
   isConsumable: 1
+  canInfiniteSprint: 1
+  infiniteAdrenalineDuration: 8
   recoverHealth: 0
   recoverStamina: 20

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Item")]
@@ -31,6 +32,7 @@ public class Items : ScriptableObject
 
     [Header("Item effects")]
     public bool isConsumable;
+    public bool canInfiniteSprint;
+    public float infiniteAdrenalineDuration;
     public int recoverHealth;
-    public float recoverStamina;
 }

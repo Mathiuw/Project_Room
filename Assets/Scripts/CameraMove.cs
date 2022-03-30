@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class CameraMove : MonoBehaviour,ICanDo
 {
-    [Header("Can Look?")]
-    [SerializeField]private bool canDo = true;
-
-    [Header("Camera")]
-    [SerializeField] private Camera cam;
+    private bool canDo = true;
+    private Camera cam;
 
     [Header("Camera Settings")]
     public float senX, senY;
@@ -20,23 +17,21 @@ public class CameraMove : MonoBehaviour,ICanDo
     {
         CursorState.CursorLock();
 
+        cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+
         FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
 
     void Update()
     {
-        if (canDo)
-        {
-            camMove();
-        }
+        if (!canDo)return;
+        camMove();
     }
 
     void FixedUpdate()
     {
-        if (canDo)
-        {
-            bodyRot();
-        }
+        if (!canDo)return;
+        bodyRot();
     }
 
     void camMove()

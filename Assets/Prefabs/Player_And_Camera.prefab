@@ -298,7 +298,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 0.8235294}
+  m_Color: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 0.5019608}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -582,6 +582,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1647074599}
+  - component: {fileID: 6596702033261614114}
   m_Layer: 10
   m_Name: Crosshair
   m_TagString: Untagged
@@ -610,6 +611,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6596702033261614114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647074598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ae0fd9febe96894cb59587067fd512d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  crosshair_Dot: {fileID: 748626743}
+  crosshair_Weapon: {fileID: 6005521099551321708}
 --- !u!1 &46285461960039880
 GameObject:
   m_ObjectHideFlags: 0
@@ -1028,9 +1043,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camPlace: {fileID: 3297487630335051389}
-  shakeDuration: 0
   shakeDistance: 0.1
   smooth: 0.5
+  shakeDuration: 0
 --- !u!1 &892690372407775161
 GameObject:
   m_ObjectHideFlags: 0
@@ -1841,7 +1856,6 @@ GameObject:
   - component: {fileID: 4729456718445527371}
   - component: {fileID: 1884495362}
   - component: {fileID: 3297487630234954673}
-  - component: {fileID: 1336704805}
   - component: {fileID: 3297487630234954678}
   - component: {fileID: 2067884927}
   - component: {fileID: 488911057}
@@ -1933,25 +1947,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a002d8afed135429f4dbc7e9123143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canDo: 1
-  cam: {fileID: 3297487630538489615}
   senX: 100
   senY: 100
   multiplier: 0.01
---- !u!114 &1336704805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3297487630234954667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ae0fd9febe96894cb59587067fd512d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  crosshair_Dot: {fileID: 748626743}
-  crosshair_Weapon: {fileID: 6005521099551321708}
 --- !u!114 &3297487630234954678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2282,8 +2280,8 @@ GameObject:
   - component: {fileID: 3297487630538489608}
   - component: {fileID: 3297487630538489615}
   - component: {fileID: 3297487630538489609}
-  - component: {fileID: 873953769447634050}
-  - component: {fileID: 5948477062283732659}
+  - component: {fileID: 4768019215278580172}
+  - component: {fileID: 4769280008701211086}
   m_Layer: 10
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2315,7 +2313,7 @@ Camera:
   m_GameObject: {fileID: 3297487630538489612}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 4
+  m_ClearFlags: 3
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -2334,7 +2332,7 @@ Camera:
   field of view: 70
   orthographic: 0
   orthographic size: 5
-  m_Depth: -1
+  m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -2357,7 +2355,7 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3297487630538489612}
   m_Enabled: 1
---- !u!114 &873953769447634050
+--- !u!114 &4768019215278580172
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2417,7 +2415,7 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
---- !u!114 &5948477062283732659
+--- !u!114 &4769280008701211086
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

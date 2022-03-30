@@ -11,15 +11,19 @@ public class UI_Inventory : MonoBehaviour
     [Header("Margin")]
     [SerializeField] private float uiMargin = 95;
     private float uiSlotOffset = 0;
+
     [Header("Parents")]
     [SerializeField] private Transform SlotContainer;
     [SerializeField] private Transform itemContainer;
+
     [Header("Sprites")]
     [SerializeField] private GameObject uiSlotSprite;
     [SerializeField] private GameObject itemSprite;
+
     [Header("Arrays")]
     [SerializeField] private GameObject[] uiSlots;
     [SerializeField] private GameObject[] items;
+
     [Header("Show ammo in UI")]
     [SerializeField] private GameObject gunHolder;
     [SerializeField] private TextMeshProUGUI ammoUI;
