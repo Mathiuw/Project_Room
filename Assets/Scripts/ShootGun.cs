@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Audio;
 
 public class ShootGun : MonoBehaviour, ICanDo
 {
     private bool canDo = true;
 
-    [SerializeField] private Transform playerCamera;
+    private Transform playerCamera;
     [SerializeField] private LayerMask shootLayer;
     [SerializeField] private LayerMask playerLayer;
     [SerializeField] private ParticleSystem muzzleFlash;
@@ -47,15 +48,17 @@ public class ShootGun : MonoBehaviour, ICanDo
 
             if (Input.GetKey(KeyCode.Mouse0))
             {
-                if (ammo > 0)
+                if (ammo == 0)
+                {
+                    playerAnimator.SetBool("isShooting", false);
+                    return;
+                }
+
+                if (Time.time > +nextTimeToFire && !playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Shooting") && !playerAnimator.IsInTransition(0))
                 {
                     playerAnimator.SetBool("isShooting", true);
-
-                    if (Time.time > +nextTimeToFire)
-                    {
-                        nextTimeToFire = Time.time + (1f / fireRate);
-                        Shoot();
-                    }
+                    nextTimeToFire = Time.time + (1f / fireRate);
+                    Shoot();
                 }
                 else playerAnimator.SetBool("isShooting", false);
             }
