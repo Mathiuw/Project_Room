@@ -42,7 +42,7 @@ public class UseAndDropItems : MonoBehaviour,ICanDo
 
         if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, rayLenght, itemMask))
         {
-            if (hit.transform.GetComponent<SetItem>() && inventory.AddItem(hit.transform.GetComponent<SetItem>()))
+            if (hit.transform.GetComponent<SetItem>() && inventory.CheckAndAddItem(hit.transform.GetComponent<SetItem>()))
             {
                 uiInventory.RefreshInventory();
                 Destroy(hit.transform.gameObject);

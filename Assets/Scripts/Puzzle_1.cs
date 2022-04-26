@@ -59,7 +59,7 @@ public class Puzzle_1 : MonoBehaviour
     {
         for (int i = 0; i < keyCards.Length; i++)
         {
-            if (inventory.hasItem(keycard) && keycardReaderUsed[i] == false)
+            if (inventory.HasItemOnIndex(keycard) && keycardReaderUsed[i] == false)
             {
                 inventory.inventory.RemoveAt(SelectItem.index);
                 keycardReaderUsed[i] = true;

@@ -100,7 +100,11 @@ public class WeaponPickup : MonoBehaviour,ICanDo
             hit.rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
             hit.rigidbody.AddForce(Camera.forward * dropForce, ForceMode.VelocityChange);
 
+            animator.SetBool("isAiming",false);
+            animator.SetBool("isShooting",false);
+            animator.ResetTrigger("ReloadEnd");
             animator.Play("Not Holding Weapon");
+
             Debug.Log("Dropped gun");
         }
     }

@@ -5084,9 +5084,11 @@ MonoBehaviour:
     m_Bits: 11520
   muzzleFlash: {fileID: 2911870034229631284}
   beingHold: 0
-  fireRate: 9
+  reloading: 0
+  reloadTime: 2
   damage: 15
   bulletMaxDistace: 500
+  fireRate: 9
   ammo: 30
   maximumAmmo: 30
 --- !u!82 &7982326377564497876
@@ -5101,7 +5103,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 039ad0fbe0f91294b80aa198a8d33e3e, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.6
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0

@@ -39,7 +39,9 @@ public class AnimationStateController : MonoBehaviour
     {
         if (WeaponPickup.IsHoldingWeapon())
         {
-            if (Input.GetKeyDown(KeyCode.Mouse1))
+            ShootGun weaponScript = transform.parent.GetComponentInChildren<ShootGun>();
+
+            if (Input.GetKeyDown(KeyCode.Mouse1) && !weaponScript.reloading)
             {
                 animator.SetBool("isAiming", true);
             }
