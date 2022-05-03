@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1147156835586349329}
   - component: {fileID: 2886651615108525531}
   - component: {fileID: 6459563449080516855}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Keycard_Red(Model)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6264022357317993070}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Keycard_Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3540948957737496866}
   - component: {fileID: 1641294990555170280}
   - component: {fileID: 993027676753421346}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Adrenaline(Model)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6826346342204076689}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Adrenaline
   m_TagString: Untagged
   m_Icon: {fileID: 0}

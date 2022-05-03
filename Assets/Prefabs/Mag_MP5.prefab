@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 973543696061279381}
   - component: {fileID: 4560937622343510304}
   - component: {fileID: 8419569069660542052}
-  m_Layer: 12
+  m_Layer: 9
   m_Name: Mag_MP5_Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7705229488791342913}
-  m_Layer: 12
+  m_Layer: 9
   m_Name: Mag_MP5
   m_TagString: Untagged
   m_Icon: {fileID: 0}

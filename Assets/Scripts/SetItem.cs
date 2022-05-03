@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[ExecuteAlways]
 public class SetItem : MonoBehaviour
 {
     public int amount = 1;
@@ -21,11 +20,9 @@ public class SetItem : MonoBehaviour
         amount = 1;
         gameObject.name = item.itemName;
         transform.eulerAngles = new Vector3(itemTransform.eulerAngles.x, transform.eulerAngles.y, itemTransform.eulerAngles.z);
-        transform.localScale = itemTransform.localScale;
         GetComponent<Name>().text = item.itemName;
-        GetComponent<MeshFilter>().sharedMesh = item.itemPrefab.GetComponentInChildren<MeshFilter>().sharedMesh;
-        GetComponent<MeshCollider>().cookingOptions = item.itemPrefab.GetComponentInChildren<MeshCollider>().cookingOptions;
-        GetComponent<MeshCollider>().sharedMesh = item.itemPrefab.GetComponentInChildren<MeshCollider>().sharedMesh;
-        GetComponent<MeshRenderer>().sharedMaterials = item.itemPrefab.GetComponentInChildren<MeshRenderer>().sharedMaterials;
+        GameObject prefab = Instantiate(item.itemPrefab,gameObject.transform);
+        prefab.transform.localPosition = Vector3.zero;
+        prefab.transform.rotation = item.itemPrefab.transform.rotation;
     }
 }

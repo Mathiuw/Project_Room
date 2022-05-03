@@ -21,7 +21,7 @@ public class ShootGun : MonoBehaviour, ICanDo
 
     [Header("Weapon config")]
     public bool reloading = false;
-    [SerializeField] private GameObject reloadMag;
+    [SerializeField] private Items reloadMag;
     [SerializeField] float reloadTime = 4;
     [SerializeField] private int damage;
     [SerializeField] private int bulletMaxDistace = 100;
@@ -71,12 +71,14 @@ public class ShootGun : MonoBehaviour, ICanDo
 
             if (Input.GetKeyDown(KeyCode.R))
             {
-                Inventory inventoryScript = transform.parent.GetComponentInChildren<Inventory>();
+                Inventory inventoryScript = playerRef.GetComponent<Inventory>();
+                UI_Inventory uiIventoryScript = playerRef.transform.parent.GetComponentInChildren<UI_Inventory>();
 
-                if (inventoryScript.HasItemOnInventory(reloadMag.GetComponent<SetItem>().item))
+                if (inventoryScript.HasItemOnInventory(reloadMag) && !playerAnimator.GetBool("isAiming") && !playerAnimator.GetBool("isShooting") && !reloading && ammo != maximumAmmo)
                 {
-                    inventoryScript.CheckAndRemoveItem(reloadMag.GetComponent<SetItem>());
-                    if (!playerAnimator.IsInTransition(0) && !reloading && ammo != maximumAmmo) StartCoroutine(Reload());
+                    inventoryScript.CheckAndRemoveItem(reloadMag);
+                    uiIventoryScript.RefreshInventory();
+                    StartCoroutine(Reload());
                 }
             }
         }
@@ -139,12 +141,16 @@ public class ShootGun : MonoBehaviour, ICanDo
 
     IEnumerator Reload()
     {
+        string gunName = GetComponent<Name>().text;
+
         Debug.Log("Start Reload");
         playerAnimator.SetBool("isShooting",false);
         playerAnimator.SetBool("isAiming", false);
         reloading = true;
-        playerAnimator.Play("Start Reloading", 0);
+        playerAnimator.Play(gunName + " Start Reloading", 0);
+
         yield return new WaitForSeconds(reloadTime);
+
         playerAnimator.SetTrigger("ReloadEnd");
         ammo = maximumAmmo;
         reloading = false;

@@ -5085,6 +5085,7 @@ MonoBehaviour:
   muzzleFlash: {fileID: 2911870034229631284}
   beingHold: 0
   reloading: 0
+  reloadMag: {fileID: 11400000, guid: cfa922a2daac2e341a46f6ac8c735ce2, type: 2}
   reloadTime: 2
   damage: 15
   bulletMaxDistace: 500

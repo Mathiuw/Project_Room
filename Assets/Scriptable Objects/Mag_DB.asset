@@ -15,7 +15,7 @@ MonoBehaviour:
   itemType: 0
   itemName: Shotgun Shells
   hotbarSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  itemPrefab: {fileID: 7705229488791342926, guid: e381d6a1140892e45ba75d9cae9935ce,
+  itemPrefab: {fileID: 6148441810737694698, guid: e8c16d8eb98e3c144ac469d5ae9b5719,
     type: 3}
   isStackable: 0
   maxStack: 0

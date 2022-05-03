@@ -15,7 +15,7 @@ MonoBehaviour:
   itemType: 0
   itemName: Pistol Mag
   hotbarSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  itemPrefab: {fileID: 7705229488791342926, guid: e381d6a1140892e45ba75d9cae9935ce,
+  itemPrefab: {fileID: 545270055337143121, guid: 19561f4ceb8d84642ae431580e524ba0,
     type: 3}
   isStackable: 0
   maxStack: 0
