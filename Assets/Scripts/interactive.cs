@@ -149,8 +149,9 @@ public class interactive : MonoBehaviour
         elevatorAnimator.Play("Elevator_InteriorDownButtom");
         GetComponent<Name>().text = "";
         interactiveTypes = InteractiveTypes.None;
-        yield return new WaitForSeconds(0.5f);
-        playerAnimator.SetFloat("FadeSpeed",-1);
+        yield return new WaitForSeconds(2f);
+        playerAnimator.Play("Fade Out", 1);
+        Debug.Log("End Cutscene");
         yield break;
     }
 }
