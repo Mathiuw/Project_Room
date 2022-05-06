@@ -20,9 +20,9 @@ public class ShootGun : MonoBehaviour, ICanDo
     private AudioSource gunSound;
 
     [Header("Weapon config")]
-    public bool reloading = false;
     [SerializeField] private Items reloadMag;
-    [SerializeField] float reloadTime = 4;
+    public bool reloading = false;
+    public float reloadTime = 4;
     [SerializeField] private int damage;
     [SerializeField] private int bulletMaxDistace = 100;
     public float fireRate;
