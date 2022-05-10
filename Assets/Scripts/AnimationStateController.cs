@@ -16,7 +16,6 @@ public class AnimationStateController : MonoBehaviour
     private void Update()
     {
         animator.SetFloat("RbVelocity", rb.velocity.magnitude);
-
         HoldWeaponAnimation();
         AimingAnimation();
     }
@@ -41,14 +40,8 @@ public class AnimationStateController : MonoBehaviour
         {
             ShootGun weaponScript = transform.parent.GetComponentInChildren<ShootGun>();
 
-            if (Input.GetKeyDown(KeyCode.Mouse1) && !weaponScript.reloading)
-            {
-                animator.SetBool("isAiming", true);
-            }
-            if (!Input.GetKey(KeyCode.Mouse1))
-            {
-                animator.SetBool("isAiming", false);
-            }
+            if (Input.GetKeyDown(KeyCode.Mouse1) && !weaponScript.reloading) animator.SetBool("isAiming", true);
+            if (!Input.GetKey(KeyCode.Mouse1)) animator.SetBool("isAiming", false);
         }
     }
 }

@@ -10,9 +10,15 @@ public class CrossHairController : MonoBehaviour
     [SerializeField] private GameObject crosshair_Weapon;
     [SerializeField] private GameObject crosshair_ReloadRing;
 
+    float timeStartedLerp = 0;
+    float percentageComplete = 0;
+    float duration;
+    Image ring;
+
     private void Awake()
     {
         animator = GetComponentInParent<Animator>();
+        ring = crosshair_ReloadRing.GetComponent<Image>();
     }
     private void Update()
     {
@@ -30,6 +36,9 @@ public class CrossHairController : MonoBehaviour
         }
 
         ShootGun gunScript = transform.root.GetComponentInChildren<ShootGun>();
+        gunScript.OnReloadStart += StartRingFill;
+        gunScript.OnReloadEnd += EndRingFill;
+        duration = gunScript.reloadTime;
 
         if (animator.GetBool("isAiming"))
         {
@@ -44,7 +53,7 @@ public class CrossHairController : MonoBehaviour
             crosshair_Dot.SetActive(false);
             crosshair_Weapon.SetActive(false);
             crosshair_ReloadRing.SetActive(true);
-            StartCoroutine(FillReloadRing(gunScript));
+            ring.fillAmount = ReloadRingLerp();
             return;
         }
 
@@ -53,20 +62,24 @@ public class CrossHairController : MonoBehaviour
         crosshair_ReloadRing.SetActive(false);
     }
 
-    IEnumerator FillReloadRing(ShootGun gunScript)
+    float ReloadRingLerp()
     {
-        Image ring = crosshair_ReloadRing.GetComponent<Image>();
-        float timeElapsed = 0;
-        float duration = gunScript.reloadTime * 25;
+        float timeSinceStarted = Time.time - timeStartedLerp;
+        percentageComplete = timeSinceStarted / duration;
 
-        ring.fillAmount = 0f;
+        var result = Mathf.Lerp(0, 1f, percentageComplete);
+        return result;
+    }
 
-        while (timeElapsed < duration )
-        {
-            ring.fillAmount = Mathf.Lerp(ring.fillAmount, 1f, timeElapsed / duration);
-            timeElapsed += Time.deltaTime;
-            yield return null;
-        }
-        ring.fillAmount = 1f;
+    private void StartRingFill()
+    {
+        ring.fillAmount = 0;
+        timeStartedLerp = Time.time;
+    }
+
+    private void EndRingFill()
+    {
+        ring.fillAmount = 1;
+        percentageComplete = 0;
     }
 }

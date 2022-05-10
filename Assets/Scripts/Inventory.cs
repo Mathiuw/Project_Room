@@ -59,13 +59,13 @@ public class Inventory : MonoBehaviour
     {
         foreach (SetItem i in inventory)
         {
-            if (inventory.IndexOf(i) == SelectItem.index && item.itemType == i.item.itemType)
+            if (inventory.IndexOf(i) == SelectItem.index && item.itemName == i.item.itemName)
             {
-                Debug.Log("Player has " + item.itemType + "in the inventory");
+                Debug.Log("Player has " + item.itemType + "in the Index");
                 return true;
             }
         }
-        Debug.LogError("Player has not " + item.itemName + "in the inventory");
+        Debug.LogError("Player has not " + item.itemName + "in the Index");
         return false;
     }
 

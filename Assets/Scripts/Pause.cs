@@ -11,10 +11,7 @@ public class Pause : MonoBehaviour
 
     private void Awake()
     {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            transform.GetChild(i).gameObject.SetActive(false);
-        }
+        for (int i = 0; i < transform.childCount; i++) transform.GetChild(i).gameObject.SetActive(false);
 
         isPaused = false;
 
@@ -25,10 +22,7 @@ public class Pause : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            PauseOrUnpauseGame();
-        }
+        if (Input.GetKeyDown(KeyCode.Escape)) PauseOrUnpauseGame();
     }
 
     public void PauseOrUnpauseGame()
@@ -42,18 +36,12 @@ public class Pause : MonoBehaviour
     {
         if (paused)
         {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                transform.GetChild(i).gameObject.SetActive(true);
-            }
+            for (int i = 0; i < transform.childCount; i++) transform.GetChild(i).gameObject.SetActive(true);
             CursorState.CursorUnlock();
         }
         else
         {
-            for (int i = 0; i < transform.childCount; i++)
-            {
-                transform.GetChild(i).gameObject.SetActive(false);
-            }
+            for (int i = 0; i < transform.childCount; i++) transform.GetChild(i).gameObject.SetActive(false);
             CursorState.CursorLock();
         }    
     }

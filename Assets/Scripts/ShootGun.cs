@@ -30,6 +30,10 @@ public class ShootGun : MonoBehaviour, ICanDo
     public int maximumAmmo;
     private float nextTimeToFire = 0;
 
+    public delegate void Reload();
+    public event Reload OnReloadStart;
+    public event Reload OnReloadEnd;
+
     private void Awake()
     {
         playerRef = GameObject.Find("Player");
@@ -78,7 +82,7 @@ public class ShootGun : MonoBehaviour, ICanDo
                 {
                     inventoryScript.CheckAndRemoveItem(reloadMag);
                     uiIventoryScript.RefreshInventory();
-                    StartCoroutine(Reload());
+                    StartCoroutine(ReloadGun());
                 }
             }
         }
@@ -139,11 +143,12 @@ public class ShootGun : MonoBehaviour, ICanDo
         }
     }
 
-    IEnumerator Reload()
+    IEnumerator ReloadGun()
     {
         string gunName = GetComponent<Name>().text;
 
-        Debug.Log("Start Reload");
+        Debug.Log("Reload Start");
+        OnReloadStart?.Invoke();
         playerAnimator.SetBool("isShooting",false);
         playerAnimator.SetBool("isAiming", false);
         reloading = true;
@@ -154,7 +159,8 @@ public class ShootGun : MonoBehaviour, ICanDo
         playerAnimator.SetTrigger("ReloadEnd");
         ammo = maximumAmmo;
         reloading = false;
-        Debug.Log("Reload Finished");
+        OnReloadEnd?.Invoke();
+        Debug.Log("Reload End");
         yield break;
     }
 
