@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraRotateSideways : MonoBehaviour
+public class CameraRotateSideways : MonoBehaviour, ICanDo
 {
+    bool canDo = true;
+
     [SerializeField] float angleLimit;
     [SerializeField] float smooth;
     [Header("Angle")]
@@ -16,12 +18,14 @@ public class CameraRotateSideways : MonoBehaviour
     {
         rb = transform.root.GetComponentInChildren<Rigidbody>();
         playerCamera = GameObject.Find("Main Camera");
+
+        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
 
     void Update()
     {
+        if (!canDo) return;
         Transform cameraTransform = playerCamera.transform;
-
         cameraTransform.eulerAngles = new Vector3(cameraTransform.eulerAngles.x, cameraTransform.eulerAngles.y, RotateVector());
     }
 
@@ -31,13 +35,17 @@ public class CameraRotateSideways : MonoBehaviour
         else if (Input.GetKey(KeyCode.D)) angle -= smooth;
         else
         {
-            if (angle > 0) angle -= smooth;
-            else if (angle < 0) angle += smooth;
+            if (angle > 0f) angle -= smooth;
+            else if (angle < 0f) angle += smooth;
         }
-
         if (angle > angleLimit) angle = angleLimit;
         else if (angle < -angleLimit) angle = -angleLimit;
-
         return angle;
+    }
+
+    public void CheckIfCanDo(bool check)
+    {
+        if (check) canDo = false;
+        else canDo = true;
     }
 }

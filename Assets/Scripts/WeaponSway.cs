@@ -22,21 +22,14 @@ public class WeaponSway : MonoBehaviour,ICanDo
 
     private void Update()
     {
-        if (canDo)
-        {
-            if (WeaponPickup.IsHoldingWeapon())
-            {
-                Sway();
+        if (!canDo) return;
 
-                if (animator.GetBool("isAiming") == true)
-                {
-                    swayMultiplier = 0.2f;
-                }
-                else
-                {
-                    swayMultiplier = 2f;
-                }
-            }
+        if (WeaponPickup.IsHoldingWeapon)
+        {
+            Sway();
+
+            if (animator.GetBool("isAiming") == true) swayMultiplier = 0.2f;
+            else swayMultiplier = 2f;
         }
     }
 

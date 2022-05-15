@@ -27,7 +27,7 @@ public class CrossHairController : MonoBehaviour
 
     private void CrossHairCheck()
     {
-        if (!WeaponPickup.IsHoldingWeapon())
+        if (!WeaponPickup.IsHoldingWeapon)
         {
             crosshair_Dot.SetActive(true);
             crosshair_Weapon.SetActive(false);

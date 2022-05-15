@@ -20,7 +20,7 @@ public class ShootGun : MonoBehaviour, ICanDo
     private AudioSource gunSound;
 
     [Header("Weapon config")]
-    [SerializeField] private Items reloadMag;
+    public Items reloadMag;
     public bool reloading = false;
     public float reloadTime = 4;
     [SerializeField] private int damage;

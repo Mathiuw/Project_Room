@@ -25,9 +25,8 @@ public class UI_Inventory : MonoBehaviour
     [SerializeField] private GameObject[] items;
 
     [Header("Show ammo in UI")]
-    [SerializeField] private GameObject gunHolder;
-    [SerializeField] private TextMeshProUGUI ammoUI;
-
+    [SerializeField] GameObject gunHolder;
+    [SerializeField] TextMeshProUGUI ammoUI;
     private void Awake()
     {
         inventory = GameObject.Find("Player").GetComponent<Inventory>();
@@ -81,7 +80,7 @@ public class UI_Inventory : MonoBehaviour
 
     private void ShowAmmoInUI()
     {
-        if (WeaponPickup.IsHoldingWeapon())
+        if (WeaponPickup.IsHoldingWeapon)
         {
             ShootGun gunScript = gunHolder.GetComponentInChildren<ShootGun>();
             ammoUI.SetText(gunScript.ammo.ToString() + "/" + gunScript.maximumAmmo.ToString());

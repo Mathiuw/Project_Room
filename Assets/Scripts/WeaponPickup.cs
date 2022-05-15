@@ -7,6 +7,8 @@ public class WeaponPickup : MonoBehaviour,ICanDo
 {
     private bool canDo = true;
 
+    public static bool IsHoldingWeapon;
+
     [SerializeField] private static Transform gunHolder;
     [SerializeField] private Transform Camera;
     [SerializeField] private int maxItemDistance = 5;
@@ -16,10 +18,12 @@ public class WeaponPickup : MonoBehaviour,ICanDo
     private Collider[] cols;
     private RaycastHit hit;
 
+    public delegate void WeaponInteraction();
+    public event WeaponInteraction OnWeaponPickup;
+    public event WeaponInteraction OnWeaponDrop;
     void Awake()
     {
         gunHolder = GameObject.Find("Gun_holder").transform;
-
         animator = GetComponentInParent<Animator>();
 
         FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
@@ -28,20 +32,13 @@ public class WeaponPickup : MonoBehaviour,ICanDo
     void Update()
     {
         if (!canDo) return;
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            StartCoroutine(PickUpGun());
-        }
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            DropGun();
-        }
+        if (Input.GetKeyDown(KeyCode.E)) StartCoroutine(PickUpGun());
+        if (Input.GetKeyDown(KeyCode.G)) DropGun();
     }
 
     private IEnumerator PickUpGun()
     {
-        if (!IsHoldingWeapon() && Physics.Raycast(Camera.position, Camera.forward, out hit, maxItemDistance) && hit.transform.GetComponentInParent<ShootGun>())
+        if (gunHolder.childCount == 0 && Physics.Raycast(Camera.position, Camera.forward, out hit, maxItemDistance) && hit.transform.GetComponentInParent<ShootGun>())
         {
             Transform gun = hit.transform;
             Name gunName = gun.GetComponent<Name>();
@@ -74,6 +71,8 @@ public class WeaponPickup : MonoBehaviour,ICanDo
             }
 
             gun.GetComponent<ShootGun>().beingHold = true;
+            CheckHoldingWeapon();
+            OnWeaponPickup?.Invoke();
             Debug.Log("Picked up gun");
             yield break;
         }
@@ -81,11 +80,12 @@ public class WeaponPickup : MonoBehaviour,ICanDo
 
     private void DropGun()
     {
-        if (IsHoldingWeapon())
-        {
-            Transform gun = hit.transform;
+        Transform gun = hit.transform;
+        ShootGun gunScript = gun.GetComponent<ShootGun>();
 
-            gun.gameObject.GetComponent<ShootGun>().beingHold = false;
+        if (IsHoldingWeapon && !gunScript.reloading)
+        {
+            gunScript.beingHold = false;
             gun.GetComponent<Name>().enabled = true;
             gun.SetParent(null);
             gun.localPosition = Camera.position + Camera.forward * 1.5f;
@@ -105,25 +105,21 @@ public class WeaponPickup : MonoBehaviour,ICanDo
             animator.ResetTrigger("ReloadEnd");
             animator.Play("Not Holding Weapon");
 
+            CheckHoldingWeapon();
+            OnWeaponDrop?.Invoke();
             Debug.Log("Dropped gun");
         }
     }
 
-    public static bool IsHoldingWeapon()
+    void CheckHoldingWeapon()
     {
-        if (gunHolder.childCount > 0)
-        {
-            return true;
-        }
-        else return false;
+        if (gunHolder.childCount > 0) IsHoldingWeapon = true;
+        else IsHoldingWeapon = false;
     }
 
     public void CheckIfCanDo(bool check)
     {
-        if (check)
-        {
-            canDo = false;
-        }
+        if (check) canDo = false;
         else canDo = true;
     }
 }
