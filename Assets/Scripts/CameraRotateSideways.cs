@@ -5,8 +5,9 @@ using UnityEngine;
 public class CameraRotateSideways : MonoBehaviour, ICanDo
 {
     bool canDo = true;
-
+    [Range(1,5)]
     [SerializeField] float angleLimit;
+    [Range(0.05f,0.25f)]
     [SerializeField] float smooth;
     [Header("Angle")]
     [SerializeField]float angle;
@@ -35,8 +36,8 @@ public class CameraRotateSideways : MonoBehaviour, ICanDo
         else if (Input.GetKey(KeyCode.D)) angle -= smooth;
         else
         {
-            if (angle > 0f) angle -= smooth;
-            else if (angle < 0f) angle += smooth;
+            if (angle > 0) angle -= smooth;
+            else if (angle < 0) angle += smooth;
         }
         if (angle > angleLimit) angle = angleLimit;
         else if (angle < -angleLimit) angle = -angleLimit;

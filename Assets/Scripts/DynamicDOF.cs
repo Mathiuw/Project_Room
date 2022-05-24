@@ -6,6 +6,7 @@ using UnityEngine.Animations;
 
 public class DynamicDOF : MonoBehaviour
 {
+    [Range(1,10)]
     [SerializeField] float focusSpeed;
     float maxDistance = 5f;
     float distance;
@@ -28,6 +29,6 @@ public class DynamicDOF : MonoBehaviour
             distance = Vector3.Distance(transform.position, hit.point);
         }
         else distance = maxDistance;
-        dof.focusDistance.value = distance;//Mathf.Lerp(dof.focusDistance.value, distance, Time.deltaTime * focusSpeed);
+        dof.focusDistance.value = Mathf.Lerp(dof.focusDistance.value, distance, Time.deltaTime * focusSpeed);
     }
 }

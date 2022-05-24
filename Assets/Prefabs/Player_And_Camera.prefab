@@ -1080,8 +1080,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5dbd1ff61fdcd429eb748b257dc053, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  angleLimit: 2
-  smooth: 0.15
+  angleLimit: 1.5
+  smooth: 0.25
   angle: 0
 --- !u!1 &892690372407775161
 GameObject:
@@ -2558,6 +2558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaa1de5a22330d3419e24c1e131eecc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  focusSpeed: 4.5
 --- !u!1 &3348716874169796827
 GameObject:
   m_ObjectHideFlags: 0
