@@ -2,50 +2,69 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Animations;
+using System;
 
 public class AnimationStateController : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
-    [SerializeField] private GameObject AmmoUI;
+    [SerializeField] GameObject ammoUI;
     [SerializeField] Image ammoType;
-    private Rigidbody rb;
 
-    private void Awake()
+    void Start() 
     {
-        rb = GetComponent<Rigidbody>();       
+        Player.Instance.WeaponPickup.onPickupCoroutineStart += SetWeaponAnimations;
+        Player.Instance.WeaponPickup.onPickupCoroutineEnd += PickupWeaponAnimation;
+        Player.Instance.WeaponPickup.onPickupCoroutineEnd += HoldWeaponAnimation;
+        Player.Instance.WeaponPickup.weaponDrop += DropWeaponAnimation;
+        Player.Instance.WeaponPickup.weaponDrop += HoldWeaponAnimation;
+
+        HoldWeaponAnimation(transform);        
     }
 
-    private void Update()
+    void Update() 
     {
-        animator.SetFloat("RbVelocity", rb.velocity.magnitude);
-        HoldWeaponAnimation();
-        AimingAnimation();
+        Player.Instance.Animator.SetFloat("RbVelocity", Player.Instance.RigidBody.velocity.magnitude);
+
+        if (Player.Instance.WeaponPickup.IsholdingWeapon()) Player.Instance.GetPlayerGun().OnShoot += ShootWeaponAnimation;
     }
 
-    private void HoldWeaponAnimation()
+    void SetWeaponAnimations(Transform gun) 
     {
-        if (WeaponPickup.IsHoldingWeapon)
+        Player.Instance.Animator.runtimeAnimatorController = gun.GetComponent<WeaponAnimations>().WeaponOverrideController;
+    }
+
+    void ShootWeaponAnimation() => Player.Instance.Animator.SetTrigger("isShooting");
+
+    void HoldWeaponAnimation(Transform gun)
+    {
+        if (Player.Instance.WeaponPickup.IsholdingWeapon())
         {
-            animator.SetBool("isHoldingWeapon", true);
-            AmmoUI.SetActive(true);
+            Player.Instance.Animator.SetBool("isHoldingWeapon", true);
+            ammoUI.SetActive(true);
             ammoType.gameObject.SetActive(true);
+            return;
         }
-        else
-        {
-            animator.SetBool("isHoldingWeapon", false);
-            AmmoUI.SetActive(false);
-            ammoType.gameObject.SetActive(false);
-        }
+
+        Player.Instance.Animator.SetBool("isHoldingWeapon", false);
+        ammoUI.SetActive(false);
+        ammoType.gameObject.SetActive(false);
     }
 
-    private void AimingAnimation()
-    {
-        if (WeaponPickup.IsHoldingWeapon)
-        {
-            ShootGun weaponScript = transform.parent.GetComponentInChildren<ShootGun>();
+    void PickupWeaponAnimation(Transform gun) => Player.Instance.Animator.SetBool("isHoldingWeapon", true);
 
-            if (Input.GetKeyDown(KeyCode.Mouse1) && !weaponScript.reloading) animator.SetBool("isAiming", true);
-            if (!Input.GetKey(KeyCode.Mouse1)) animator.SetBool("isAiming", false);
-        }
+    void DropWeaponAnimation(Transform gun) 
+    {
+        Player.Instance.Animator.SetBool("isHoldingWeapon", false);
+        Player.Instance.Animator.SetBool("isAiming", false);
+        Player.Instance.Animator.SetBool("isShooting", false);
+        Player.Instance.Animator.ResetTrigger("ReloadEnd");
+        Player.Instance.Animator.Play("Not Holding Weapon");
+    }
+
+    public void AimingWeaponAnimation(bool input)
+    {
+        if (!Player.Instance.WeaponPickup.IsholdingWeapon()) return;
+        if (input && !Player.Instance.GetPlayerGun().ReloadGun.reloading) Player.Instance.Animator.SetBool("isAiming", true);
+        else Player.Instance.Animator.SetBool("isAiming", false);
     }
 }

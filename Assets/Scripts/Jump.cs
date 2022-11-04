@@ -1,61 +1,44 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class Jump : MonoBehaviour, ICanDo
 {
     private bool canDo = true;
 
-    [Header("Jump cost")]
-    private Rigidbody rb;
-    [SerializeField] private float jumpCost = 10;
-
-    [Header("Ground Check")]
-    public Transform checkSphereLocation;
-    public LayerMask groundMask;
-    public float sphereRadius;
-    public bool isGrounded;
-
-    void Start()
-    {
-        rb = GameObject.Find("Player").GetComponent<Rigidbody>();
-
-        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
-    }
-
-    void Update()
-    {
-        groundCheck();
-        Jumping();
-    }
-
-    //Jump
     [Header("Jump")]
     public float jumpForce;
     public float velDiv;
 
+    [Header("Stamina Jump Cost")]
+    [SerializeField] private float jumpCost = 10;
+
+    [Header("Ground Check")]
+    [SerializeField] Transform checkSphereLocation;
+    [SerializeField] LayerMask groundMask;
+    [SerializeField] float sphereRadius;
+
+    void Awake() => FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
+
+    void Update()
+    {
+        if (!canDo) return;
+        if (Input.GetKeyDown(KeyCode.Space)) Jumping();
+    }
+
     void Jumping()
     {
-        if (canDo)
+        if (IsGrounded() && Player.Instance.Sprint.stamina - jumpCost >= 0)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                if (isGrounded == true && Sprint.playerStamina - jumpCost >= 0)
-                {
-                    Debug.Log("Pulo");
-                    rb.velocity /= velDiv;
-                    rb.AddForce(transform.up * jumpForce);
-                    Sprint.playerStamina -= jumpCost;
-                    isGrounded = false;
-                }
-            }
+            Debug.Log("Pulo");
+            Player.Instance.RigidBody.velocity /= velDiv;
+            Player.Instance.RigidBody.AddForce(transform.up * jumpForce);
+            Player.Instance.Sprint.RemoveStamina(jumpCost);
         }
     }
 
-    void groundCheck()
-    {
-        isGrounded = Physics.CheckSphere(checkSphereLocation.position, sphereRadius, groundMask);
-    }
+    public bool IsGrounded() => Physics.CheckSphere(checkSphereLocation.position, sphereRadius, groundMask);
 
     void OnDrawGizmos()
     {

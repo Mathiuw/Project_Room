@@ -21,14 +21,10 @@ public class Movement : MonoBehaviour,ICanDo
     [Header("Drag control")]
     public float rbDrag;
     public float inAir;
-    Jump jumpScript;
-
-
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        jumpScript = GetComponent<Jump>();
 
         FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
@@ -40,11 +36,9 @@ public class Movement : MonoBehaviour,ICanDo
 
     void FixedUpdate()
     {
-        if (canDo)
-        {
-            Move();
-            MaxSpeedCheck();
-        }
+        if (!canDo) return;
+        Move();
+        MaxSpeedCheck();
     }
 
     void Move()
@@ -61,14 +55,8 @@ public class Movement : MonoBehaviour,ICanDo
 
     float MaxSpeed()
     {
-        if (sprintMultiplier > 1)
-        {
-            return maxRunningSpeed;
-        }
-        else
-        {
-            return maxWalkingSpeed;
-        }       
+        if (sprintMultiplier > 1) return maxRunningSpeed;
+        return maxWalkingSpeed;       
     }
 
     void MaxSpeedCheck()
@@ -81,7 +69,7 @@ public class Movement : MonoBehaviour,ICanDo
 
     void DragControl()
     {
-        if (jumpScript.isGrounded)
+        if (Player.Instance.Jump.IsGrounded())
         {
             rb.drag = rbDrag;
             airMultiplier = 1;
@@ -91,7 +79,7 @@ public class Movement : MonoBehaviour,ICanDo
         {
             rb.drag = 0;
             airMultiplier = inAir;
-            Debug.Log("!Grounded");
+            Debug.Log("Not Grounded");
         }
     }
 

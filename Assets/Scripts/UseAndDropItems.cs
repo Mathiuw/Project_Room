@@ -2,76 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UseAndDropItems : MonoBehaviour,ICanDo
+public class UseAndDropItems : MonoBehaviour
 {
-    private bool canDo = true;
-
     [Header("Pickup item")]
     [SerializeField] private float rayLenght;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private LayerMask itemMask;
-    Inventory inventory;
-    UI_Inventory uiInventory;
 
     [Header("Drop item")]
     [SerializeField] private GameObject itemPrefab;
 
-    private void Awake()
+    public void pickupItem()
     {
-        GameObject playerRoot = transform.parent.gameObject;
-
-        inventory = GetComponent<Inventory>();
-        uiInventory = playerRoot.GetComponentInChildren<UI_Inventory>();
-
-        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
-    }
-
-    private void Update()
-    {
-        if (!canDo) return;
-        DropItem();
-        UseItem();
-        pickupItem();
-    }
-
-    private void pickupItem()
-    {
-        RaycastHit hit;
-
-        if (!Input.GetKeyDown(KeyCode.E)) return;
+        RaycastHit hit;      
 
         if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, rayLenght, itemMask))
         {
-            if (hit.transform.GetComponent<SetItem>() && inventory.CheckAndAddItem(hit.transform.GetComponent<SetItem>()))
+            if (hit.transform.GetComponent<SetItem>() && Player.Instance.Inventory.CheckAndAddItem(hit.transform.GetComponent<SetItem>()))
             {
-                uiInventory.RefreshInventory();
+                Player.Instance.UIInventory.RefreshInventory();
                 Destroy(hit.transform.gameObject);
                 Debug.Log("Picked item");
             }
         }
     }
 
-    private void UseItem()
+    public void UseItem()
     {
-        if (!Input.GetKeyDown(KeyCode.F)) return;
-
-        foreach (SetItem item in inventory.inventory)
+        foreach (SetItem item in Player.Instance.Inventory.inventory)
         {
-            if (inventory.inventory.IndexOf(item) == SelectItem.index && item.item.isConsumable)
+            if (Player.Instance.Inventory.inventory.IndexOf(item) == SelectItem.index && item.item.isConsumable)
             {
-                Health.AddHealth(item.item.recoverHealth);
+                GetComponent<Health>().AddHealth(item.item.recoverHealth);
 
                 if (item.item.canInfiniteSprint)
                 {               
-                    Sprint sprintScript = GetComponent<Sprint>();
-                    sprintScript.infiniteSprintEvent += OnAdrenalineUsed;
-                    sprintScript.InfiniteSprint(item.item.infiniteAdrenalineDuration);
+                    Player.Instance.Sprint.infiniteSprint += OnAdrenalineUsed;
+                    Player.Instance.Sprint.InfiniteSprintEvent(item.item.infiniteAdrenalineDuration);
                 }
 
                 if (item.amount > 1) item.amount--;
-                else inventory.inventory.Remove(item);
+                else Player.Instance.Inventory.inventory.Remove(item);
 
-                uiInventory.RefreshInventory();
+                Player.Instance.UIInventory.RefreshInventory();
                 Debug.Log(item.item.name + " used and removed");
                 break;
             }
@@ -92,22 +65,20 @@ public class UseAndDropItems : MonoBehaviour,ICanDo
         yield break;
     }
 
-    private void DropItem()
+    public void DropItem()
     {
-        if (!Input.GetKeyDown(KeyCode.Q)) return;
-
         SpawnDropItem();
-        uiInventory.RefreshInventory();
-        Debug.Log("Drop item");
+        Player.Instance.UIInventory.RefreshInventory();
+        Debug.Log("Item Droped");
     }
 
-    private void SpawnDropItem()
+    void SpawnDropItem()
     {
-        foreach (SetItem item in inventory.inventory)
+        foreach (SetItem item in Player.Instance.Inventory.inventory)
         {
-            if (inventory.inventory.IndexOf(item) == SelectItem.index)
+            if (Player.Instance.Inventory.inventory.IndexOf(item) == SelectItem.index)
             {
-                if (item.amount == 1) inventory.inventory.RemoveAt(SelectItem.index);
+                if (item.amount == 1) Player.Instance.Inventory.inventory.RemoveAt(SelectItem.index);
                 else item.amount--;
                 GameObject itemSpawned = Instantiate(itemPrefab, cameraTransform.position + cameraTransform.forward * 1.5f, cameraTransform.rotation);
                 itemSpawned.GetComponent<SetItem>().item = item.item;
@@ -115,11 +86,5 @@ public class UseAndDropItems : MonoBehaviour,ICanDo
                 break;
             }
         }
-    }
-
-    public void CheckIfCanDo(bool check)
-    {
-        if (check) canDo = false;
-        else canDo = true;
     }
 }

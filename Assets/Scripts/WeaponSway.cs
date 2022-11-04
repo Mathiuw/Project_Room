@@ -24,7 +24,7 @@ public class WeaponSway : MonoBehaviour,ICanDo
     {
         if (!canDo) return;
 
-        if (WeaponPickup.IsHoldingWeapon)
+        if (Player.Instance.WeaponPickup.IsholdingWeapon())
         {
             Sway();
 

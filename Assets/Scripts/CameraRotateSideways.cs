@@ -9,16 +9,15 @@ public class CameraRotateSideways : MonoBehaviour, ICanDo
     [SerializeField] float angleLimit;
     [Range(0.05f,0.25f)]
     [SerializeField] float smooth;
+
     [Header("Angle")]
     [SerializeField]float angle;
 
-    GameObject playerCamera;
-    Rigidbody rb;
+    Transform cameraTransform;
 
     void Awake()
     {
-        rb = transform.root.GetComponentInChildren<Rigidbody>();
-        playerCamera = GameObject.Find("Main Camera");
+        cameraTransform = GameObject.Find("Main Camera").transform;
 
         FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
     }
@@ -26,18 +25,17 @@ public class CameraRotateSideways : MonoBehaviour, ICanDo
     void Update()
     {
         if (!canDo) return;
-        Transform cameraTransform = playerCamera.transform;
         cameraTransform.eulerAngles = new Vector3(cameraTransform.eulerAngles.x, cameraTransform.eulerAngles.y, RotateVector());
     }
 
     float RotateVector()
     {
-        if (Input.GetKey(KeyCode.A)) angle += smooth;    
+        if (Input.GetKey(KeyCode.A)) angle += smooth;
         else if (Input.GetKey(KeyCode.D)) angle -= smooth;
         else
         {
-            if (angle > 0) angle -= smooth;
-            else if (angle < 0) angle += smooth;
+            if (angle > 0f) angle -= smooth;
+            else if (angle < 0f) angle += smooth;
         }
         if (angle > angleLimit) angle = angleLimit;
         else if (angle < -angleLimit) angle = -angleLimit;

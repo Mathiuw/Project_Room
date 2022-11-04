@@ -5011,9 +5011,11 @@ GameObject:
   - component: {fileID: 956243267408335609}
   - component: {fileID: 5327390562014500009}
   - component: {fileID: -6412683801309833417}
+  - component: {fileID: 3108757238293499845}
+  - component: {fileID: 5520242545948811480}
   - component: {fileID: 7982326377564497876}
   m_Layer: 12
-  m_Name: Mp5
+  m_Name: Gun_Mp5
   m_TagString: Gun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5079,19 +5081,44 @@ MonoBehaviour:
   shootLayer:
     serializedVersion: 2
     m_Bits: 11008
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 11520
   muzzleFlash: {fileID: 2911870034229631284}
   beingHold: 0
-  reloading: 0
-  reloadMag: {fileID: 11400000, guid: cfa922a2daac2e341a46f6ac8c735ce2, type: 2}
-  reloadTime: 2
   damage: 15
   bulletMaxDistace: 500
   fireRate: 9
   ammo: 30
   maximumAmmo: 30
+--- !u!114 &3108757238293499845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5565268791908116749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5953c966cfd43c4d8069d93146dbe5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reloadMag: {fileID: 11400000, guid: cfa922a2daac2e341a46f6ac8c735ce2, type: 2}
+--- !u!114 &5520242545948811480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5565268791908116749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d69444c37e6c2a4ca82f674c75707e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponAnims:
+  - {fileID: 7400000, guid: 855df7e2273d0414b915d7e9e4d61b0c, type: 2}
+  - {fileID: 7400000, guid: 94f6a67629c925048935d1a4dce5520d, type: 2}
+  - {fileID: 7400000, guid: a8ede0cf6812a214280589e188a33cee, type: 2}
+  weaponOverrideController: {fileID: 22100000, guid: fbebefe81c98f69478c2bc336d7b4261,
+    type: 2}
 --- !u!82 &7982326377564497876
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5104,7 +5131,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 039ad0fbe0f91294b80aa198a8d33e3e, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
+  m_Volume: 0.4
   m_Pitch: 1
   Loop: 0
   Mute: 0

@@ -8,7 +8,7 @@ public class CameraMove : MonoBehaviour,ICanDo
     private Camera cam;
 
     [Header("Camera Settings")]
-    public float senX, senY;
+    [SerializeField] float senX, senY;
     public float multiplier;
     private float mouseX, mouseY;    
     private float xRotation, yRotation;
@@ -44,15 +44,12 @@ public class CameraMove : MonoBehaviour,ICanDo
         yRotation = rot.y + mouseX;
         xRotation -= mouseY;
 
-        xRotation = Mathf.Clamp(xRotation, -90, 90);
+        xRotation = Mathf.Clamp(xRotation, -89, 89);
 
         cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
     }
 
-    void bodyRot()
-    {
-        transform.localRotation = Quaternion.Euler(0, yRotation, 0);
-    }
+    void bodyRot() => transform.localRotation = Quaternion.Euler(0, yRotation, 0);
 
     public void CheckIfCanDo(bool check)
     {

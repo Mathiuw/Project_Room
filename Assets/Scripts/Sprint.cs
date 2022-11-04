@@ -3,71 +3,62 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class Sprint : MonoBehaviour,ICanDo
+public class Sprint : MonoBehaviour, ICanDo
 {
     private bool canDo = true;
 
     public bool isInfinite = false;
 
     [Header("Sprinting")]
-    private Movement moveScript;
-    private Jump jumpScript;
-    public float SprintMultiplier;
-    [SerializeField] private int staminaLoss = 6;
+    [SerializeField] private int staminaLoss = 10;
     [SerializeField] private int staminaRecover = 8;
+    [SerializeField] private float sprintMultiplier = 1.5f;
 
-    public static float playerStamina = 30;
-    public static float maximumStamina = 30;
+    public float GetSprintMultiplier { get => sprintMultiplier; private set => sprintMultiplier = value; }
 
-    public delegate IEnumerator InfiniteSprintDelegate(float time);
-    public event InfiniteSprintDelegate infiniteSprintEvent;
+    public float stamina { get; private set; } = 30;
+    public float maximumStamina { get; private set; } = 30;
 
-    public void Awake()
-    {
-        moveScript = GetComponent<Movement>();
-        jumpScript = GetComponent<Jump>();
-    }
+    public delegate IEnumerator OnInfiniteSprint(float time);
+    public event OnInfiniteSprint infiniteSprint;
 
     void Update()
     {
         if (!canDo) return;
-
         Sprinting();
-        if (playerStamina > maximumStamina) playerStamina = maximumStamina;
     }
+
+    public void InfiniteSprintEvent(float time) => infiniteSprint?.Invoke(time);
 
     void Sprinting()
     {
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W))
         {
-            if (playerStamina > 0 && jumpScript.isGrounded)
+            if (stamina > 0 && Player.Instance.Jump.IsGrounded())
             {
-                moveScript.sprintMultiplier = SprintMultiplier;
+                Player.Instance.Movement.sprintMultiplier = sprintMultiplier;
 
                 if (isInfinite)
                 {
-                    playerStamina = maximumStamina;
+                    stamina = maximumStamina;
                     Debug.Log("Infinite Sprinting");
-                } 
-                else playerStamina -= staminaLoss * Time.deltaTime;
+                }
+                else stamina -= staminaLoss * Time.deltaTime;
                 Debug.Log("Sprinting");
             }
-            else moveScript.sprintMultiplier = 1;
+            else Player.Instance.Movement.sprintMultiplier = 1;
         }
         else
         {
-            moveScript.sprintMultiplier = 1;
-            if (playerStamina <= maximumStamina) playerStamina += staminaRecover * Time.deltaTime;
-        }        
+            Player.Instance.Movement.sprintMultiplier = 1;
+            if (stamina <= maximumStamina) stamina += staminaRecover * Time.deltaTime;
+        }
+        StaminaConstraintCheck();
     }
 
-    public void InfiniteSprint(float time)
-    {
-        if (infiniteSprintEvent != null)
-        {
-            StartCoroutine(infiniteSprintEvent(time));
-        }       
-    }
+    public void RemoveStamina(float amomunt) { stamina -= amomunt; }
+
+    void StaminaConstraintCheck() { if (stamina > maximumStamina) stamina = maximumStamina; }
 
     public void CheckIfCanDo(bool check)
     {

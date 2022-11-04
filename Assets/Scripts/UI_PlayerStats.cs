@@ -14,31 +14,34 @@ public class UI_PlayerStats : MonoBehaviour
     private void Awake()
     {
         staminaBarSlider = staminaBar.GetComponent<Slider>();
-        staminaBarSlider.maxValue = Sprint.maximumStamina;
-
         healthBarSlider = healthBar.GetComponent<Slider>();
-        healthBarSlider.maxValue = Health.maxHealth;
     }
 
-    private void Update()
+    void Start() 
     {
-        StaminaUI();
-        HealthUI();
+        staminaBarSlider.maxValue = Player.Instance.Sprint.maximumStamina;
+        healthBarSlider.maxValue = Player.Instance.Health.maxHealth;
     }
 
-    private void StaminaUI()
+    void Update()
     {
-        staminaBarSlider.value = Sprint.playerStamina;
+        SetStaminaUI();
+        SetHealthUI();
+    }
 
-        if (Sprint.playerStamina == Sprint.maximumStamina) staminaBar.SetActive(false);
+    void SetStaminaUI()
+    {
+        staminaBarSlider.value = Player.Instance.Sprint.stamina;
+
+        if (Player.Instance.Sprint.stamina == Player.Instance.Sprint.maximumStamina) staminaBar.SetActive(false);
         else staminaBar.SetActive(true);
     }
 
-    private void HealthUI()
+    private void SetHealthUI()
     {
-        healthBarSlider.value = Health.playerHealth;
+        healthBarSlider.value = Player.Instance.Health.health;
 
-        if (healthBarSlider.value == Health.maxHealth) healthBar.SetActive(false);
+        if (healthBarSlider.value == Player.Instance.Health.maxHealth) healthBar.SetActive(false);
         else healthBar.SetActive(true);
     }
 }

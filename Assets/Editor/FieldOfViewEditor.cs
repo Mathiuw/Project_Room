@@ -24,7 +24,7 @@ public class FIeldOfViewEditor : Editor
         if (fov.SawPlayer)
         {
             Handles.color = Color.green;
-            Handles.DrawLine(fov.transform.position, fov.player.transform.position);
+            Handles.DrawLine(fov.transform.position, Player.Instance.transform.position) ;
         }
     }
 

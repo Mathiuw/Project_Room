@@ -257,7 +257,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5898751178688358236}
   m_Layer: 11
-  m_Name: Enemy_Gun_slot
+  m_Name: Enemy_Gun_Holder
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -289,6 +289,9 @@ GameObject:
   - component: {fileID: 4022069405703874257}
   - component: {fileID: 4139558382295038299}
   - component: {fileID: 4139558382295038298}
+  - component: {fileID: 2948793439278539193}
+  - component: {fileID: 4821427471960173829}
+  - component: {fileID: 6403617266352639273}
   m_Layer: 11
   m_Name: Enemy
   m_TagString: Enemy
@@ -363,12 +366,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 0
-  health: 100
+  raycastPos: {fileID: 4139558383533268654}
   burst: 5
   nextBurst: 1
   timeBetweenBullets: 0.1
-  player: {fileID: 0}
-  agent: {fileID: 4139558382295038299}
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
@@ -386,8 +387,52 @@ MonoBehaviour:
   obstructionMask:
     serializedVersion: 2
     m_Bits: 8448
-  canSeePlayer: 0
+  SawPlayer: 0
   canAttackPlayer: 0
+--- !u!114 &2948793439278539193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4139558382295038296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed21208b4193ee247bcd10eddf3c4d77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthAmount: 100
+  maxHealthAmount: 100
+--- !u!114 &4821427471960173829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4139558382295038296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7d98112ba722c40a3ae4c9fa98ab28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  components:
+  - {fileID: 4139558382295038298}
+--- !u!114 &6403617266352639273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4139558382295038296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50fd90712edb43349b1f7bb11326a5ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunHolder: {fileID: 5898751178688358236}
+  Camera: {fileID: 0}
+  maxItemDistance: 5
+  dropForce: 10
 --- !u!1 &4139558383484913994
 GameObject:
   m_ObjectHideFlags: 0

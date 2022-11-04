@@ -12,9 +12,11 @@ GameObject:
   - component: {fileID: 7753315164419991497}
   - component: {fileID: 1830547555977088245}
   - component: {fileID: 541013020259382555}
+  - component: {fileID: 5514343440331723490}
+  - component: {fileID: -6196181425649279609}
   - component: {fileID: 584032758333625060}
   m_Layer: 12
-  m_Name: Pistol
+  m_Name: Gun_Pistol
   m_TagString: Gun
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,19 +82,44 @@ MonoBehaviour:
   shootLayer:
     serializedVersion: 2
     m_Bits: 11008
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 11520
   muzzleFlash: {fileID: 5671447419204676612}
   beingHold: 0
-  reloading: 0
-  reloadMag: {fileID: 11400000, guid: f3a15256ebc23754dba563d6c9b03a55, type: 2}
-  reloadTime: 4
   damage: 20
   bulletMaxDistace: 500
   fireRate: 5
   ammo: 15
   maximumAmmo: 15
+--- !u!114 &5514343440331723490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3163711967376219197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5953c966cfd43c4d8069d93146dbe5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reloadMag: {fileID: 11400000, guid: f3a15256ebc23754dba563d6c9b03a55, type: 2}
+--- !u!114 &-6196181425649279609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3163711967376219197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d69444c37e6c2a4ca82f674c75707e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponAnims:
+  - {fileID: 7400000, guid: 60f4cc76c6353a843839db8fbab46d34, type: 2}
+  - {fileID: 7400000, guid: 58df7c0a063fde242a30a177f9d7289a, type: 2}
+  - {fileID: 7400000, guid: 41475884d2f8732458726b8f75311a9d, type: 2}
+  weaponOverrideController: {fileID: 22100000, guid: 4f547759e1dd5c041b6017e80dc64ee7,
+    type: 2}
 --- !u!82 &584032758333625060
 AudioSource:
   m_ObjectHideFlags: 0

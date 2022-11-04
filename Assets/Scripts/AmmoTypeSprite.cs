@@ -6,24 +6,18 @@ using UnityEngine.UI;
 public class AmmoTypeSprite : MonoBehaviour
 {
     [SerializeField] Image ammoType;
-    [SerializeField]Sprite[] ammoTypeSprite;
+    [SerializeField] Sprite[] ammoTypeSprite;
 
-    void Update()
+    void Start() => Player.Instance.WeaponPickup.onPickupCoroutineEnd += SetSprite;
+
+    void SetSprite(Transform gun) => ammoType.sprite = ammoTypeSprite[whichSpriteReturn(gun)];
+
+    int whichSpriteReturn(Transform gun)
     {
-        FindObjectOfType<WeaponPickup>().OnWeaponPickup += SetSprite;
-    }
+        string gunName = gun.GetComponent<Name>().text;
 
-    void SetSprite()
-    {
-        ammoType.sprite = ammoTypeSprite[whichSpriteReturn()];
-    }
-
-    int whichSpriteReturn()
-    {
-        string gunName = GameObject.Find("Gun_holder").transform.GetChild(0).transform.name;
-
-        if (gunName == "DoubleBarrel") return 0;
-        else if (gunName == "Mp5") return 1;
+        if (gunName == "Double Barrel") return 0;
+        else if (gunName == "MP5") return 1;
         else return 2;
     }
 }

@@ -6,8 +6,6 @@ using TMPro;
 
 public class UI_Inventory : MonoBehaviour
 {
-    private Inventory inventory;
-
     [Header("Margin")]
     [SerializeField] private float uiMargin = 95;
     private float uiSlotOffset = 0;
@@ -25,16 +23,14 @@ public class UI_Inventory : MonoBehaviour
     [SerializeField] private GameObject[] items;
 
     [Header("Show ammo in UI")]
-    [SerializeField] GameObject gunHolder;
     [SerializeField] TextMeshProUGUI ammoUI;
-    private void Awake()
+
+    void Start() 
     {
-        inventory = GameObject.Find("Player").GetComponent<Inventory>();
+        uiSlots = new GameObject[Player.Instance.Inventory.InventorySize];
+        items = new GameObject[Player.Instance.Inventory.InventorySize];
 
-        uiSlots = new GameObject[inventory.inventorySize];
-        items = new GameObject[inventory.inventorySize];
-
-        for (int i = 0; i < inventory.inventorySize; i++)
+        for (int i = 0; i < Player.Instance.Inventory.InventorySize; i++)
         {
             GameObject slot = Instantiate(uiSlotSprite, Vector2.zero, Quaternion.identity, SlotContainer);
             RectTransform spriteTransform = slot.GetComponent<RectTransform>();
@@ -46,22 +42,17 @@ public class UI_Inventory : MonoBehaviour
         RefreshInventory();
     }
 
-    private void Update()
-    {
-        ShowAmmoInUI();
-    }
+    void Update() {  ShowAmmoInUI(); }
 
     public void RefreshInventory()
     {
-        foreach (GameObject item in items)
+        foreach (GameObject item in items) Destroy(item);
+
+        for (int i = 0; i < Player.Instance.Inventory.InventorySize; i++)
         {
-            Destroy(item);
-        }
-        for (int i = 0; i < inventory.inventorySize; i++)
-        {
-            foreach (SetItem itemComp in inventory.inventory)
+            foreach (SetItem itemComp in Player.Instance.Inventory.inventory)
             {
-                if (inventory.inventory.IndexOf(itemComp) == i)
+                if (Player.Instance.Inventory.inventory.IndexOf(itemComp) == i)
                 {
                     GameObject item = Instantiate(itemSprite, uiSlots[i].transform.position, Quaternion.identity, itemContainer);
                     item.GetComponentInChildren<Image>().sprite = itemComp.item.hotbarSprite;
@@ -78,12 +69,11 @@ public class UI_Inventory : MonoBehaviour
         }
     }
 
-    private void ShowAmmoInUI()
+    void ShowAmmoInUI()
     {
-        if (WeaponPickup.IsHoldingWeapon)
-        {
-            ShootGun gunScript = gunHolder.GetComponentInChildren<ShootGun>();
-            ammoUI.SetText(gunScript.ammo.ToString() + "/" + gunScript.maximumAmmo.ToString());
-        }
+        if (!Player.Instance.WeaponPickup.IsholdingWeapon()) return;
+
+        ShootGun shootGun = Player.Instance.GetPlayerGun();
+        ammoUI.SetText(shootGun.ammo.ToString() + "/" + shootGun.maximumAmmo.ToString());
     }
 }

@@ -2,86 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Die))]
 public class Health : MonoBehaviour
 {
-    public static int playerHealth = 100;
-    public static int maxHealth = 100;
+    [SerializeField] private int healthAmount = 100;
+    [SerializeField] private int maxHealthAmount = 100;
 
-    public static bool playerDead = false;
+    public int health { get => healthAmount; private set => healthAmount = value; }
+    public int maxHealth { get => maxHealthAmount; private set => maxHealthAmount = value; }
 
-    private Rigidbody rb;
-
-    [Header("Components that will be disabled")]
-    [SerializeField] private Component[] components;
-
-    [Header("Hud Elements that will be disabled")]
-    [SerializeField] private GameObject[] HUDElements;
-
-    private void Awake()
+    //Adiciona Vida
+    public void AddHealth(int amount)
     {
-        rb = GetComponent<Rigidbody>();
+        health += amount;
+        MaxConstraintCheck();
     }
 
-    private void Update()
+    //Remove Vida e Checa Morte
+    public void RemoveHealth(int amount)
     {
-        if (playerDead)
-        {
-            Die();          
-        }
-    }
-
-    //Adiciona vida ao Player
-    public static void AddHealth(int amount)
-    {
-        playerHealth += amount;
-        MaxHealthCheck();
-    }
-
-    //Remove vida do Player e checa se ele esta morto 
-    public static void RemoveHealth(int amount)
-    {
-        playerHealth -= amount;
-        MaxHealthCheck();
+        health -= amount;
+        MaxConstraintCheck();
         Isdead();
     }
 
-    //Morre(Obvio)
-    void Die()
+    //Checa Se a Vida Esta Fora Dos Parametros
+    void MaxConstraintCheck()
     {
-        rb.freezeRotation = false;
-
-        CursorState.CursorUnlock();
-
-        foreach (MonoBehaviour c in components)
-        {
-            c.enabled = false;
-        }
-
-        foreach (GameObject g in HUDElements)
-        {
-            g.SetActive(false);
-        }
+        if (health > maxHealth) health = maxHealth;
+        else if (health < 0) health = 0;
     }
 
-    private static void MaxHealthCheck()
+    //Checa Morte
+    public bool Isdead()
     {
-        if (playerHealth > maxHealth)
+        if (health <= 0)
         {
-            playerHealth = maxHealth;
+            GetComponent<Die>().Dead();
+            return true;
         }
-        if (playerHealth < 0)
-        {
-            playerHealth = 0;
-        }
-    }
-
-    public static void Isdead()
-    {
-        if (playerHealth <= 0)
-        {
-            playerDead = true;
-        }           
-        else
-            return;
+        else return false;
     }
 }

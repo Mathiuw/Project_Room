@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class CrossHairController : MonoBehaviour
 {
-    private Animator animator;
     [SerializeField] private GameObject crosshair_Dot;
     [SerializeField] private GameObject crosshair_Weapon;
     [SerializeField] private GameObject crosshair_ReloadRing;
@@ -15,19 +14,13 @@ public class CrossHairController : MonoBehaviour
     float duration;
     Image ring;
 
-    private void Awake()
-    {
-        animator = GetComponentInParent<Animator>();
-        ring = crosshair_ReloadRing.GetComponent<Image>();
-    }
-    private void Update()
-    {
-        CrossHairCheck();
-    }
+    private void Awake() => ring = crosshair_ReloadRing.GetComponent<Image>();
+
+    private void Update() => CrossHairCheck();
 
     private void CrossHairCheck()
     {
-        if (!WeaponPickup.IsHoldingWeapon)
+        if (!Player.Instance.WeaponPickup.IsholdingWeapon())
         {
             crosshair_Dot.SetActive(true);
             crosshair_Weapon.SetActive(false);
@@ -35,12 +28,13 @@ public class CrossHairController : MonoBehaviour
             return;
         }
 
-        ShootGun gunScript = transform.root.GetComponentInChildren<ShootGun>();
-        gunScript.OnReloadStart += StartRingFill;
-        gunScript.OnReloadEnd += EndRingFill;
-        duration = gunScript.reloadTime;
+        ReloadGun reloadGun = Player.Instance.GetComponentInChildren<ReloadGun>();
 
-        if (animator.GetBool("isAiming"))
+        reloadGun.OnReloadStart += StartRingFill;
+        reloadGun.OnReloadEnd += EndRingFill;
+        duration = reloadGun.reloadTime;
+
+        if (Player.Instance.Animator.GetBool("isAiming"))
         {
             crosshair_Dot.SetActive(false);
             crosshair_Weapon.SetActive(false);
@@ -48,7 +42,7 @@ public class CrossHairController : MonoBehaviour
             return;
         }
 
-        if (gunScript.reloading)
+        if (reloadGun.reloading)
         {
             crosshair_Dot.SetActive(false);
             crosshair_Weapon.SetActive(false);
@@ -67,7 +61,7 @@ public class CrossHairController : MonoBehaviour
         float timeSinceStarted = Time.time - timeStartedLerp;
         percentageComplete = timeSinceStarted / duration;
 
-        var result = Mathf.Lerp(0, 1f, percentageComplete);
+        float result = Mathf.Lerp(0, 1f, percentageComplete);
         return result;
     }
 

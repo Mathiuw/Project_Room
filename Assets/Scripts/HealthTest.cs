@@ -11,20 +11,21 @@ public class HealthTest : MonoBehaviour
     }
 
     [SerializeField] private Type type;
-    [SerializeField] private LayerMask playermask;
     [SerializeField] private int amount;
 
     private void OnCollisionEnter(Collision collision)
     {
+        Health health = collision.gameObject.GetComponent<Health>();
+
+        if (!collision.gameObject.GetComponent<Health>()) return;
+
         switch (type)
         {
             case Type.Remove:
-                Health.RemoveHealth(amount);
-                Debug.Log("Player Health = " + Health.playerHealth);
+                health.RemoveHealth(amount);
                 break;
             case Type.add:
-                Health.AddHealth(amount);
-                Debug.Log("Player Health = " + Health.playerHealth);
+                health.AddHealth(amount);
                 break;
         }
     }

@@ -1,172 +1,88 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Audio;
 
-public class ShootGun : MonoBehaviour, ICanDo
+[RequireComponent(typeof(WeaponAnimations))]
+[RequireComponent(typeof(ReloadGun))]
+public class ShootGun : MonoBehaviour
 {
-    private bool canDo = true;
+    [SerializeField] LayerMask shootLayer;
+    [SerializeField] ParticleSystem muzzleFlash;
 
-    private Transform playerCamera;
-    [SerializeField] private LayerMask shootLayer;
-    [SerializeField] private LayerMask playerLayer;
-    [SerializeField] private ParticleSystem muzzleFlash;
-
-    [HideInInspector] public bool beingHold;
-    private Animator playerAnimator;
-    private Rigidbody rb;
-    private GameObject playerRef;
-    private AudioSource gunSound;
+    AudioSource gunSound;
+    Health health;
+    public ReloadGun ReloadGun { get; private set; }
 
     [Header("Weapon config")]
-    public Items reloadMag;
-    public bool reloading = false;
-    public float reloadTime = 4;
-    [SerializeField] private int damage;
-    [SerializeField] private int bulletMaxDistace = 100;
-    public float fireRate;
+    [HideInInspector] public bool beingHold;
+    [SerializeField] int damage;
+    [SerializeField] int bulletMaxDistace = 100;
+    [SerializeField] float fireRate;
     public int ammo;
     public int maximumAmmo;
-    private float nextTimeToFire = 0;
+    float nextTimeToFire = 0;
 
-    public delegate void Reload();
-    public event Reload OnReloadStart;
-    public event Reload OnReloadEnd;
+    public event Action OnShoot;
 
-    private void Awake()
+    void Start() 
     {
-        playerRef = GameObject.Find("Player");
-        playerCamera = GameObject.Find("Main Camera").transform;
-        playerAnimator = playerRef.GetComponentInParent<Animator>();
-        rb = GetComponent<Rigidbody>();
+        ReloadGun = GetComponent<ReloadGun>();
         gunSound = GetComponent<AudioSource>();
-        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
+
+        ammo = maximumAmmo; 
     }
 
-    private void Update()
+    //Adicionar Munição
+    public void AddAmmo(int amount)
     {
-        if (beingHold)
-        {
-            if (Health.playerDead) return;
-            if (!canDo) return;
-
-            if (Input.GetKey(KeyCode.Mouse0))
-            {
-                AnimatorStateInfo animatorState = playerAnimator.GetCurrentAnimatorStateInfo(0);
-
-                if (reloading) return;
-                if (animatorState.IsName("Start Reloading") || animatorState.IsName("End Reloading")) return;
-
-                if (ammo == 0)
-                {
-                    playerAnimator.SetBool("isShooting", false);
-                    return;
-                }
-                if (Time.time > +nextTimeToFire && !playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Shooting") && !playerAnimator.IsInTransition(0))
-                {
-                    playerAnimator.SetBool("isShooting", true);
-                    nextTimeToFire = Time.time + (1f / fireRate);
-                    Shoot();
-                }
-                else playerAnimator.SetBool("isShooting", false);
-            }
-            else playerAnimator.SetBool("isShooting", false);
-
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                Inventory inventoryScript = playerRef.GetComponent<Inventory>();
-                UI_Inventory uiIventoryScript = playerRef.transform.parent.GetComponentInChildren<UI_Inventory>();
-
-                if (inventoryScript.HasItemOnInventory(reloadMag) && !playerAnimator.GetBool("isAiming") && !playerAnimator.GetBool("isShooting") && !reloading && ammo != maximumAmmo)
-                {
-                    inventoryScript.CheckAndRemoveItem(reloadMag);
-                    uiIventoryScript.RefreshInventory();
-                    StartCoroutine(ReloadGun());
-                }
-            }
-        }
-        else if (transform.parent != null && transform.parent.CompareTag("Enemy"))
-        {
-            if (!GetComponentInParent<EnemyAi>().IsDead())
-            {
-                rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
-                rb.isKinematic = true;
-            }
-            else
-            {
-                transform.parent = null;
-                rb.isKinematic = false;
-                rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-            }
-        }
+        ammo += amount;
+        if (ammo > maximumAmmo) ammo = maximumAmmo;
     }
 
-    private void Shoot()
+    //Remover Munição
+    public void RemoveAmmo(int amount) => ammo -= amount;
+
+    //Ação de atirar
+    public void Shooting(Transform raycastPos)
     {
-        RaycastHit hit;  
-        
-        if (Physics.Raycast(playerCamera.position, playerCamera.forward, out hit, bulletMaxDistace, shootLayer))
+        if (ReloadGun.reloading) return;
+        if (ammo == 0) return;
+
+        if (Time.time > +nextTimeToFire)
         {
-            if (hit.transform.GetComponent<EnemyAi>())
-            {
-                hit.transform.GetComponent<EnemyAi>().TakeDamage(damage);
-                Debug.Log(hit.transform.name + "life = " + hit.transform.GetComponent<EnemyAi>().health);
-            }
-            playerCamera.GetComponentInParent<CamFollowAndShake>().shakeDuration += 0.1f;
-            muzzleFlash.Play(true);
-            gunSound.Play();
-            ammo--;
+            OnShoot?.Invoke();           
+            GunEffects();
+            RemoveAmmo(1);
+            Bullet(raycastPos);
         }
     }
 
-    public void EnemyShoot(Transform enemyTransfom)
+    //Define a Bala da Arma e o Firerate
+    void Bullet(Transform raycastPos)
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(enemyTransfom.position, enemyTransfom.forward, out hit, bulletMaxDistace, playerLayer))
+        if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, bulletMaxDistace, shootLayer))
         {
-            muzzleFlash.Play(true);
-            gunSound.Play();
-
-            if (hit.transform.name == "Player")
+            if (health = hit.transform.root.GetComponentInChildren<Health>())
             {
-                Health.RemoveHealth(damage / 3);
-                Debug.Log("Player hit");
-
-                if (Health.playerDead)
-                {
-                    Rigidbody playerRB = playerRef.GetComponent<Rigidbody>();
-                    playerRB.AddForce(enemyTransfom.forward * 2, ForceMode.VelocityChange);
-                }
+                health.RemoveHealth(damage);
+                Debug.Log(hit.transform.name + " - life = " + health.health);
             }
+            nextTimeToFire = Time.time + (1f / fireRate);
         }
     }
 
-    IEnumerator ReloadGun()
+    //Muzzle Flash e Som da Arma
+    void GunEffects()
     {
-        string gunName = GetComponent<Name>().text;
-
-        Debug.Log("Reload Start");
-        OnReloadStart?.Invoke();
-        playerAnimator.SetBool("isShooting",false);
-        playerAnimator.SetBool("isAiming", false);
-        reloading = true;
-        playerAnimator.Play(gunName + " Start Reloading", 0);
-
-        yield return new WaitForSeconds(reloadTime);
-
-        playerAnimator.SetTrigger("ReloadEnd");
-        ammo = maximumAmmo;
-        reloading = false;
-        OnReloadEnd?.Invoke();
-        Debug.Log("Reload End");
-        yield break;
+        muzzleFlash.Play(true);
+        gunSound.Play();
     }
 
-    public void CheckIfCanDo(bool check)
-    {
-        if (check) canDo = false;
-        else canDo = true;
-    }
+    //Reseta os Eventos da Arma
+    public void ResetGunEvents() => OnShoot = null;
 }

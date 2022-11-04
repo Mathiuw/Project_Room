@@ -2,124 +2,104 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
-public class WeaponPickup : MonoBehaviour,ICanDo
+public class WeaponPickup : MonoBehaviour
 {
-    private bool canDo = true;
-
-    public static bool IsHoldingWeapon;
-
-    [SerializeField] private static Transform gunHolder;
+    [SerializeField] private Transform gunHolder;
     [SerializeField] private Transform Camera;
     [SerializeField] private int maxItemDistance = 5;
     [SerializeField] private float dropForce = 10;
-    private Animator animator;
 
     private Collider[] cols;
     private RaycastHit hit;
 
-    public delegate void WeaponInteraction();
-    public event WeaponInteraction OnWeaponPickup;
-    public event WeaponInteraction OnWeaponDrop;
-    void Awake()
-    {
-        gunHolder = GameObject.Find("Gun_holder").transform;
-        animator = GetComponentInParent<Animator>();
+    public event Action<Transform> onPickupCoroutineStart;
+    public event Action<Transform> onPickupCoroutineEnd;
+    public event Action<Transform> weaponDrop;
 
-        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
+    void start() => HaveGunCheck();
+
+    public void PickupRaycast() 
+    {
+        if (gunHolder.childCount == 0 && Physics.Raycast(Camera.position, Camera.forward, out hit, maxItemDistance) &&
+            hit.transform.GetComponentInParent<ShootGun>()) PickupGun(hit.transform);
     }
 
-    void Update()
-    {
-        if (!canDo) return;
-        if (Input.GetKeyDown(KeyCode.E)) StartCoroutine(PickUpGun());
-        if (Input.GetKeyDown(KeyCode.G)) DropGun();
-    }
+    void PickupGun(Transform gun) => StartCoroutine(PickUpCoroutine(gun));
 
-    private IEnumerator PickUpGun()
+    IEnumerator PickUpCoroutine(Transform gun)
     {
-        if (gunHolder.childCount == 0 && Physics.Raycast(Camera.position, Camera.forward, out hit, maxItemDistance) && hit.transform.GetComponentInParent<ShootGun>())
+        Name gunName = gun.GetComponent<Name>();
+        Rigidbody GunRB = gun.GetComponent<Rigidbody>();
+
+        onPickupCoroutineStart?.Invoke(gun);
+        gun.SetParent(gunHolder);
+
+        Vector3 startPosition = gun.localPosition;
+        Quaternion startRotation = gun.localRotation;
+
+        float elapsedTime = 0;
+        float waitTime = 0.2f;
+
+        gunName.enabled = false;
+        GunRB.collisionDetectionMode = CollisionDetectionMode.Discrete;
+        GunRB.isKinematic = true;
+
+        cols = gun.GetComponentsInChildren<Collider>();
+        for (int i = 0; i < cols.Length; i++) cols[i].isTrigger = true;
+
+        while (gun.localPosition != Vector3.zero && gun.localRotation != Quaternion.identity)
         {
-            Transform gun = hit.transform;
-            Name gunName = gun.GetComponent<Name>();
-
-            gun.SetParent(gunHolder);
-
-            Vector3 startPosition = gun.localPosition;
-            Quaternion startRotation = gun.localRotation;
-            float elapsedTime = 0;
-            float waitTime = 0.2f;
-
-            gunName.enabled = false;
-            animator.SetTrigger(gunName.text);
-            hit.rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
-            hit.rigidbody.isKinematic = true;
-
-            cols = gun.GetComponentsInChildren<Collider>();
-            for (int i = 0; i < cols.Length; i++)
-            {
-                cols[i].isTrigger = true;
-            }
-
-            while (gun.localPosition != Vector3.zero && gun.localRotation != Quaternion.identity)
-            {
-                gun.localPosition = Vector3.Lerp(startPosition, Vector3.zero, elapsedTime / waitTime);
-                gun.localRotation = Quaternion.Slerp(startRotation, Quaternion.identity, elapsedTime / waitTime);
-                gun.localScale = Vector3.one;
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-
-            gun.GetComponent<ShootGun>().beingHold = true;
-            CheckHoldingWeapon();
-            OnWeaponPickup?.Invoke();
-            Debug.Log("Picked up gun");
-            yield break;
+            gun.localPosition = Vector3.Lerp(startPosition, Vector3.zero, elapsedTime / waitTime);
+            gun.localRotation = Quaternion.Slerp(startRotation, Quaternion.identity, elapsedTime / waitTime);
+            gun.localScale = Vector3.one;
+            elapsedTime += Time.deltaTime;
+            yield return null;
         }
+
+        gun.GetComponent<ShootGun>().beingHold = true;
+        onPickupCoroutineEnd?.Invoke(hit.transform);
+
+        Debug.Log("Picked up gun");
+        yield break;
     }
 
-    private void DropGun()
+    public void DropGun(Transform gun)
     {
-        Transform gun = hit.transform;
-        ShootGun gunScript = gun.GetComponent<ShootGun>();
+        ShootGun shootGun = gun.GetComponent<ShootGun>();
+        ReloadGun reloadGun = gun.GetComponent<ReloadGun>();
+        Rigidbody GunRB = gun.GetComponent<Rigidbody>();
 
-        if (IsHoldingWeapon && !gunScript.reloading)
+        if (IsholdingWeapon() && !reloadGun.reloading)
         {
-            gunScript.beingHold = false;
-            gun.GetComponent<Name>().enabled = true;
+            shootGun.beingHold = false;
+            shootGun.ResetGunEvents();
+            gun.GetComponent<Name>().enabled = true;  
             gun.SetParent(null);
             gun.localPosition = Camera.position + Camera.forward * 1.5f;
 
             cols = gun.GetComponentsInChildren<Collider>();
-            for (int i = 0; i < cols.Length; i++)
-            {
-                cols[i].isTrigger = false;
-            }
+            for (int i = 0; i < cols.Length; i++) cols[i].isTrigger = false;
 
-            hit.rigidbody.isKinematic = false;
-            hit.rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-            hit.rigidbody.AddForce(Camera.forward * dropForce, ForceMode.VelocityChange);
+            GunRB.isKinematic = false;
+            GunRB.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            GunRB.AddForce(Camera.forward * dropForce, ForceMode.VelocityChange);
 
-            animator.SetBool("isAiming",false);
-            animator.SetBool("isShooting",false);
-            animator.ResetTrigger("ReloadEnd");
-            animator.Play("Not Holding Weapon");
+            weaponDrop?.Invoke(gun);
 
-            CheckHoldingWeapon();
-            OnWeaponDrop?.Invoke();
             Debug.Log("Dropped gun");
         }
     }
 
-    void CheckHoldingWeapon()
+    void HaveGunCheck() 
     {
-        if (gunHolder.childCount > 0) IsHoldingWeapon = true;
-        else IsHoldingWeapon = false;
+        if (TryGetComponent(out ShootGun shootGun)) PickupGun(shootGun.transform);
     }
 
-    public void CheckIfCanDo(bool check)
+    public bool IsholdingWeapon()
     {
-        if (check) canDo = false;
-        else canDo = true;
+        if (gunHolder.childCount > 0) return true;
+        return false;
     }
 }

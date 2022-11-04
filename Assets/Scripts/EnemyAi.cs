@@ -4,24 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(Die))]
 public class EnemyAi : MonoBehaviour
 {
     [Header("Enemy Type")]
     [SerializeField] private EnemyType enemyType;
 
-    [Header("Health")]
-    public int health = 100;
-
     [Header("Attack")]
-    [SerializeField] private int burst = 5, nextBurst = 2;
-    [SerializeField] private float timeBetweenBullets = 0.1f;
-    private bool startedAttacking = false;
-    private ShootGun gunScript;
+    [SerializeField] Transform raycastPos;
+    [SerializeField] int burst = 5, nextBurst = 2;
+    [SerializeField] float timeBetweenBullets = 0.1f;
+    bool startedAttacking = false;
+    ShootGun shootGun;
 
-    [HideInInspector]public GameObject player;
-    [SerializeField] private NavMeshAgent agent;
     [SerializeField] private LayerMask whatIsGround, whatIsPlayer;
-    private Rigidbody rb;
+    NavMeshAgent agent;
+    Rigidbody rb;
+    Health health;
+    Die die;
 
     [Header("Patroling")]
     [SerializeField] private Transform pathHolder;
@@ -40,20 +41,21 @@ public class EnemyAi : MonoBehaviour
     public bool SawPlayer;
     public bool canAttackPlayer;
 
-    private enum EnemyType
+    enum EnemyType
     {
         Patroling,
         Standing,
     }
 
-    private void Awake()
+    void Awake()
     {
-        player = GameObject.Find("Player");
         agent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
+        health = GetComponent<Health>();
+        die = GetComponent<Die>();
     }
 
-    private void Start()
+    void Start()
     {
         rb.isKinematic = true;
 
@@ -67,28 +69,25 @@ public class EnemyAi : MonoBehaviour
                 waypoints[i] = new Vector3(waypoints[i].x, transform.position.y, waypoints[i].z);
             }
         }
-
         StartCoroutine(FOVRoutine());
+
+        die.OnDie += DisableRBKinematic;
+        die.OnDie += StopAllCoroutines;
     }
 
-    private void Update()
+    void Update()
     {
-        if (!IsDead())
-        {
-            if (enemyType != EnemyType.Standing)
-            {
-                if (!SawPlayer && !canAttackPlayer) Patroling();
-            }
-            if ((SawPlayer && !canAttackPlayer) || health < 100) ChasePlayer();
-            if (SawPlayer && canAttackPlayer) AttackPlayer();
-        }
-        else
-        {
-            StopAllCoroutines();
-            agent.enabled = false;
-            rb.isKinematic = false;
-        }
+        if (enemyType != EnemyType.Standing) if (!SawPlayer && !canAttackPlayer) Patroling();
+        if ((SawPlayer && !canAttackPlayer) || health.health < health.maxHealth ) ChasePlayer();
+        if (SawPlayer && canAttackPlayer) AttackPlayer();
     }
+
+    void OnDisable() 
+    {
+        StopAllCoroutines();
+    }
+
+    void DisableRBKinematic() => rb.isKinematic = false;
 
     IEnumerator FOVRoutine()
     {
@@ -102,7 +101,7 @@ public class EnemyAi : MonoBehaviour
         }
     }
 
-    private void FieldOfViewCheck()
+    void FieldOfViewCheck()
     {
         Collider[] rangeCheck = Physics.OverlapSphere(transform.position, radius, targetMask);
 
@@ -125,16 +124,10 @@ public class EnemyAi : MonoBehaviour
                 else canAttackPlayer = false;
             }
         }
-        else if (SawPlayer)
-        {
-            canAttackPlayer = false;
-        }
+        else if (SawPlayer) canAttackPlayer = false;       
     }
 
-    private void Patroling()
-    {
-        if (!startedPatroling) StartCoroutine(PatrolRoute());
-    }
+    void Patroling() { if (!startedPatroling) StartCoroutine(PatrolRoute()); }
 
     IEnumerator PatrolRoute()
     {
@@ -156,33 +149,25 @@ public class EnemyAi : MonoBehaviour
                 yield return new WaitForSeconds(waitTime);
                 agent.SetDestination(waypoints[waypointIndex]);
             }
-
             if (SawPlayer)
             {
                 startedPatroling = false;
                 yield break;
             }
-
             yield return null;
         }
     }
 
-    private void ChasePlayer()
-    {
-        agent.SetDestination(player.transform.position);
-    }
+    void ChasePlayer() => agent.SetDestination(Player.Instance.PlayerTransform().position);
 
-    private void AttackPlayer()
+    void AttackPlayer()
     {
-        gunScript = GetComponentInChildren<ShootGun>();
+        shootGun = GetComponentInChildren<ShootGun>();
 
         agent.SetDestination(transform.position);
-        transform.LookAt(player.transform);
+        transform.LookAt(Player.Instance.PlayerTransform().position);
 
-        if (gunScript != null)
-        {
-            if (!startedAttacking) StartCoroutine(AttackRoutine());
-        }
+        if (shootGun != null && !startedAttacking) StartCoroutine(AttackRoutine());
     }
 
     IEnumerator AttackRoutine()
@@ -193,31 +178,16 @@ public class EnemyAi : MonoBehaviour
 
         for (int i = 0; i < burst; i++)
         {
-            gunScript.EnemyShoot(transform);
+            shootGun.Shooting(raycastPos);
             yield return new WaitForSeconds(timeBetweenBullets);
         }
         startedAttacking = false;
 
-        if (!canAttackPlayer)
-        {
-            yield break;
-        }
+        if (!canAttackPlayer) yield break;
         yield return new WaitForSeconds(nextBurst);
     }
 
-    public bool IsDead()
-    {
-        if (health <= 0) return true;
-        else return false;
-    }
-
-    public void TakeDamage(int amount)
-    {
-        health -= amount;
-        if (health < 0) health = 0;
-    }
-
-    private void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         Vector3 startPosition = pathHolder.GetChild(0).position;
         Vector3 previousPosition = startPosition;
