@@ -78,13 +78,14 @@ public class EnemyAi : MonoBehaviour
     void Update()
     {
         if (enemyType != EnemyType.Standing) if (!SawPlayer && !canAttackPlayer) Patroling();
-        if ((SawPlayer && !canAttackPlayer) || health.health < health.maxHealth ) ChasePlayer();
+        if ((SawPlayer && !canAttackPlayer) || health.HealthAmount < health.MaxHealthAmount ) ChasePlayer();
         if (SawPlayer && canAttackPlayer) AttackPlayer();
     }
 
     void OnDisable() 
     {
         StopAllCoroutines();
+        GetComponent<NavMeshAgent>().enabled= false;
     }
 
     void DisableRBKinematic() => rb.isKinematic = false;

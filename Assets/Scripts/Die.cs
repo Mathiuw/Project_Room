@@ -22,8 +22,7 @@ public class Die : MonoBehaviour
     //Desativa os Componentes do Objeto
     private void DisableComponents()
     { 
-        foreach (MonoBehaviour c in components) c.enabled = false;
-        if (TryGetComponent(out NavMeshAgent n)) n.enabled = false;
+        foreach (MonoBehaviour c in components) c.enabled = false;     
     }
 
 }

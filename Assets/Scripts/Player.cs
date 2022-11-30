@@ -6,33 +6,19 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
-
     public Transform PlayerCamera { get; private set; }
-
     public Rigidbody RigidBody { get; private set; }
-
     public Animator Animator { get; private set; }
-
     public AnimationStateController AnimationStateController { get; private set; }
-
     public Transform GunHolder { get; private set; }
-
     public WeaponPickup WeaponPickup { get; private set; }
-
     public UseAndDropItems UseAndDropItems { get; private set; }
-
     public Inventory Inventory { get; private set; }
-
     public UI_Inventory UIInventory { get; private set; }
-
     public SelectItem selectItem { get; private set; }
-
     public Health Health { get; private set; }
-
     public Sprint Sprint { get; private set; }
-
     public Movement Movement { get; private set; }
-
     public Jump Jump { get; private set; }
 
     void Awake()

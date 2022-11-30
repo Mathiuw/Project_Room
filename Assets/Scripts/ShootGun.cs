@@ -13,11 +13,9 @@ public class ShootGun : MonoBehaviour
     [SerializeField] ParticleSystem muzzleFlash;
 
     AudioSource gunSound;
-    Health health;
     public ReloadGun ReloadGun { get; private set; }
 
     [Header("Weapon config")]
-    [HideInInspector] public bool beingHold;
     [SerializeField] int damage;
     [SerializeField] int bulletMaxDistace = 100;
     [SerializeField] float fireRate;
@@ -53,24 +51,21 @@ public class ShootGun : MonoBehaviour
 
         if (Time.time > +nextTimeToFire)
         {
+            RaycastHit hit;
+            Health health;
+
             OnShoot?.Invoke();           
             GunEffects();
             RemoveAmmo(1);
-            Bullet(raycastPos);
-        }
-    }
 
-    //Define a Bala da Arma e o Firerate
-    void Bullet(Transform raycastPos)
-    {
-        RaycastHit hit;
-
-        if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, bulletMaxDistace, shootLayer))
-        {
-            if (health = hit.transform.root.GetComponentInChildren<Health>())
+            if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, bulletMaxDistace, shootLayer))
             {
-                health.RemoveHealth(damage);
-                Debug.Log(hit.transform.name + " - life = " + health.health);
+                if (health = hit.transform.GetComponent<Enemy>().health)
+                {
+                    health.RemoveHealth(damage);
+                    Debug.Log(hit.transform.name + " - life = " + health.HealthAmount);
+                }
+                else Debug.LogError(hit.transform.name + " Doesnt Have Health");            
             }
             nextTimeToFire = Time.time + (1f / fireRate);
         }

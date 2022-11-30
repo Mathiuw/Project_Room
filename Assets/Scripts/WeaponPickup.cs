@@ -30,8 +30,13 @@ public class WeaponPickup : MonoBehaviour
 
     IEnumerator PickUpCoroutine(Transform gun)
     {
-        Name gunName = gun.GetComponent<Name>();
-        Rigidbody GunRB = gun.GetComponent<Rigidbody>();
+        weapon weapon = gun.GetComponent<weapon>();
+
+        if (weapon.IsBeingHold == true) 
+        {
+            Debug.LogError("Gun already Picked up");
+            yield break;
+        }
 
         onPickupCoroutineStart?.Invoke(gun);
         gun.SetParent(gunHolder);
@@ -41,10 +46,10 @@ public class WeaponPickup : MonoBehaviour
 
         float elapsedTime = 0;
         float waitTime = 0.2f;
-
-        gunName.enabled = false;
-        GunRB.collisionDetectionMode = CollisionDetectionMode.Discrete;
-        GunRB.isKinematic = true;
+        
+        weapon.weaponName.enabled = false;
+        weapon.rb.collisionDetectionMode = CollisionDetectionMode.Discrete;
+        weapon.rb.isKinematic = true;
 
         cols = gun.GetComponentsInChildren<Collider>();
         for (int i = 0; i < cols.Length; i++) cols[i].isTrigger = true;
@@ -57,9 +62,8 @@ public class WeaponPickup : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
-        gun.GetComponent<ShootGun>().beingHold = true;
         onPickupCoroutineEnd?.Invoke(hit.transform);
+        weapon.BeingHold(true);
 
         Debug.Log("Picked up gun");
         yield break;
@@ -67,26 +71,24 @@ public class WeaponPickup : MonoBehaviour
 
     public void DropGun(Transform gun)
     {
-        ShootGun shootGun = gun.GetComponent<ShootGun>();
-        ReloadGun reloadGun = gun.GetComponent<ReloadGun>();
-        Rigidbody GunRB = gun.GetComponent<Rigidbody>();
+        weapon weapon = gun.GetComponent<weapon>();
 
-        if (IsholdingWeapon() && !reloadGun.reloading)
+        if (IsholdingWeapon() && !weapon.reloadGun.reloading)
         {
-            shootGun.beingHold = false;
-            shootGun.ResetGunEvents();
-            gun.GetComponent<Name>().enabled = true;  
+            weapon.shootGun.ResetGunEvents();
+            weapon.weaponName.enabled = true;  
             gun.SetParent(null);
             gun.localPosition = Camera.position + Camera.forward * 1.5f;
 
             cols = gun.GetComponentsInChildren<Collider>();
             for (int i = 0; i < cols.Length; i++) cols[i].isTrigger = false;
 
-            GunRB.isKinematic = false;
-            GunRB.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-            GunRB.AddForce(Camera.forward * dropForce, ForceMode.VelocityChange);
-
+            weapon.rb.isKinematic = false;
+            weapon.rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            weapon.rb.AddForce(Camera.forward * dropForce, ForceMode.VelocityChange);
             weaponDrop?.Invoke(gun);
+
+            weapon.BeingHold(false);
 
             Debug.Log("Dropped gun");
         }
@@ -94,7 +96,7 @@ public class WeaponPickup : MonoBehaviour
 
     void HaveGunCheck() 
     {
-        if (TryGetComponent(out ShootGun shootGun)) PickupGun(shootGun.transform);
+        if (gunHolder.TryGetComponent(out ShootGun shootGun)) PickupGun(shootGun.transform);
     }
 
     public bool IsholdingWeapon()

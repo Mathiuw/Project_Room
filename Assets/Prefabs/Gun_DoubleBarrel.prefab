@@ -5010,6 +5010,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2640640005571256650}
   - component: {fileID: 3695096019320444430}
+  - component: {fileID: 8936124951102028240}
   - component: {fileID: 4736018918220528946}
   - component: {fileID: 6871579513818629340}
   - component: {fileID: 1074020496222657700}
@@ -5054,6 +5055,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 2
+--- !u!114 &8936124951102028240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8302687269831421434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7c124549f987ce449fa088a7acf2fc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isBeingHold: 0
 --- !u!114 &4736018918220528946
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5081,7 +5095,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootLayer:
     serializedVersion: 2
-    m_Bits: 11008
+    m_Bits: 12032
   muzzleFlash: {fileID: 1961095731343679995}
   beingHold: 0
   damage: 60
@@ -5114,10 +5128,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d69444c37e6c2a4ca82f674c75707e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponAnims:
-  - {fileID: 7400000, guid: 148ce0eed99c8384c9f475995c98de86, type: 2}
-  - {fileID: 7400000, guid: d6f2ff53141714447877e72d435037e2, type: 2}
-  - {fileID: 7400000, guid: c24032619feb66c48835478013cdcf8a, type: 2}
   weaponOverrideController: {fileID: 22100000, guid: 256889344a1820d4f9d9ad130e20a49a,
     type: 2}
 --- !u!82 &5819838069481923363

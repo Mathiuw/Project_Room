@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 722774377399166054}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Path
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 722774377857195855}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: waypoint (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 722774377917140392}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: waypoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 722774379086640249}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: waypoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -133,7 +133,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 722774379095640342}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: waypoint (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,6 +288,7 @@ GameObject:
   - component: {fileID: 4139558382295038297}
   - component: {fileID: 4022069405703874257}
   - component: {fileID: 4139558382295038299}
+  - component: {fileID: 5875310400643056241}
   - component: {fileID: 4139558382295038298}
   - component: {fileID: 2948793439278539193}
   - component: {fileID: 4821427471960173829}
@@ -353,6 +354,18 @@ NavMeshAgent:
   m_BaseOffset: 1.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &5875310400643056241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4139558382295038296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7bc94321d45a694ab09b7efd977abe7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4139558382295038298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -442,7 +455,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4139558383484913995}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Enemy_And_Path
   m_TagString: Enemy
   m_Icon: {fileID: 0}

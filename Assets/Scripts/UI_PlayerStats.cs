@@ -20,7 +20,7 @@ public class UI_PlayerStats : MonoBehaviour
     void Start() 
     {
         staminaBarSlider.maxValue = Player.Instance.Sprint.maximumStamina;
-        healthBarSlider.maxValue = Player.Instance.Health.maxHealth;
+        healthBarSlider.maxValue = Player.Instance.Health.MaxHealthAmount;
     }
 
     void Update()
@@ -39,9 +39,9 @@ public class UI_PlayerStats : MonoBehaviour
 
     private void SetHealthUI()
     {
-        healthBarSlider.value = Player.Instance.Health.health;
+        healthBarSlider.value = Player.Instance.Health.HealthAmount;
 
-        if (healthBarSlider.value == Player.Instance.Health.maxHealth) healthBar.SetActive(false);
+        if (healthBarSlider.value == Player.Instance.Health.MaxHealthAmount) healthBar.SetActive(false);
         else healthBar.SetActive(true);
     }
 }

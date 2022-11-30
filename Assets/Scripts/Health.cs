@@ -8,20 +8,20 @@ public class Health : MonoBehaviour
     [SerializeField] private int healthAmount = 100;
     [SerializeField] private int maxHealthAmount = 100;
 
-    public int health { get => healthAmount; private set => healthAmount = value; }
-    public int maxHealth { get => maxHealthAmount; private set => maxHealthAmount = value; }
+    public int HealthAmount { get => healthAmount; private set => healthAmount = value; }
+    public int MaxHealthAmount { get => maxHealthAmount; private set => maxHealthAmount = value; }
 
     //Adiciona Vida
     public void AddHealth(int amount)
     {
-        health += amount;
+        HealthAmount += amount;
         MaxConstraintCheck();
     }
 
     //Remove Vida e Checa Morte
     public void RemoveHealth(int amount)
     {
-        health -= amount;
+        HealthAmount -= amount;
         MaxConstraintCheck();
         Isdead();
     }
@@ -29,14 +29,14 @@ public class Health : MonoBehaviour
     //Checa Se a Vida Esta Fora Dos Parametros
     void MaxConstraintCheck()
     {
-        if (health > maxHealth) health = maxHealth;
-        else if (health < 0) health = 0;
+        if (HealthAmount > MaxHealthAmount) HealthAmount = MaxHealthAmount;
+        else if (HealthAmount < 0) HealthAmount = 0;
     }
 
     //Checa Morte
     public bool Isdead()
     {
-        if (health <= 0)
+        if (HealthAmount <= 0)
         {
             GetComponent<Die>().Dead();
             return true;
