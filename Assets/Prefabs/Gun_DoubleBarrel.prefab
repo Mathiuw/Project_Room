@@ -5097,8 +5097,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 12032
   muzzleFlash: {fileID: 1961095731343679995}
-  beingHold: 0
   damage: 60
+  bulletForce: 10
   bulletMaxDistace: 500
   fireRate: 3
   ammo: 2

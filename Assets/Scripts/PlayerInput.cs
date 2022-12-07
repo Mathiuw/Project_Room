@@ -22,7 +22,7 @@ public class PlayerInput : MonoBehaviour
             Player.Instance.UseAndDropItems.pickupItem();
         }
         //Drop Gun
-        if (Input.GetKeyDown(KeyCode.G)) Player.Instance.WeaponPickup.DropGun(Player.Instance.GetPlayerGun().transform);
+        if (Input.GetKeyDown(KeyCode.G)) Player.Instance.WeaponPickup.DropGun();
         //Drop Item
         if (Input.GetKeyDown(KeyCode.Q)) Player.Instance.UseAndDropItems.DropItem();
         //Use Item

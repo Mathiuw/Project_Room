@@ -69,8 +69,11 @@ public class WeaponPickup : MonoBehaviour
         yield break;
     }
 
-    public void DropGun(Transform gun)
+    public void DropGun()
     {
+        if (!IsholdingWeapon()) return;
+
+        Transform gun = GetGunInInventory();
         weapon weapon = gun.GetComponent<weapon>();
 
         if (IsholdingWeapon() && !weapon.reloadGun.reloading)
@@ -97,6 +100,11 @@ public class WeaponPickup : MonoBehaviour
     void HaveGunCheck() 
     {
         if (gunHolder.TryGetComponent(out ShootGun shootGun)) PickupGun(shootGun.transform);
+    }
+
+    Transform GetGunInInventory() 
+    {
+        return gunHolder.GetChild(0).transform;
     }
 
     public bool IsholdingWeapon()

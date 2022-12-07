@@ -17,6 +17,7 @@ public class ShootGun : MonoBehaviour
 
     [Header("Weapon config")]
     [SerializeField] int damage;
+    [SerializeField] float bulletForce = 1f;
     [SerializeField] int bulletMaxDistace = 100;
     [SerializeField] float fireRate;
     public int ammo;
@@ -60,15 +61,29 @@ public class ShootGun : MonoBehaviour
 
             if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, bulletMaxDistace, shootLayer))
             {
-                if (health = hit.transform.GetComponent<Enemy>().health)
+                if (hit.transform.TryGetComponent(out health))
                 {
                     health.RemoveHealth(damage);
+                    AddForceToDeadBodies(hit.transform, raycastPos, bulletForce,health);
                     Debug.Log(hit.transform.name + " - life = " + health.HealthAmount);
                 }
                 else Debug.LogError(hit.transform.name + " Doesnt Have Health");            
             }
             nextTimeToFire = Time.time + (1f / fireRate);
         }
+    }
+
+    void AddForceToDeadBodies(Transform t, Transform directionForce, float forceAmount, Health health) 
+    {
+        Rigidbody rb;
+
+        if (!health.Isdead()) 
+        {
+            Debug.Log(t.name + " is not dead");
+            return;
+        }
+        if (t.TryGetComponent(out rb)) rb.AddForce(directionForce.forward * forceAmount, ForceMode.VelocityChange);
+        else Debug.LogError("RB Not Found");
     }
 
     //Muzzle Flash e Som da Arma
