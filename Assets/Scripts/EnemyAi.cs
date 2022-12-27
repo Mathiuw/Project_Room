@@ -8,6 +8,8 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Die))]
 public class EnemyAi : MonoBehaviour
 {
+    Enemy enemy;
+
     [Header("Enemy Type")]
     [SerializeField] private EnemyType enemyType;
 
@@ -19,10 +21,6 @@ public class EnemyAi : MonoBehaviour
     ShootGun shootGun;
 
     [SerializeField] private LayerMask whatIsGround, whatIsPlayer;
-    NavMeshAgent agent;
-    Rigidbody rb;
-    Health health;
-    Die die;
 
     [Header("Patroling")]
     [SerializeField] private Transform pathHolder;
@@ -49,16 +47,11 @@ public class EnemyAi : MonoBehaviour
 
     void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
-        rb = GetComponent<Rigidbody>();
-        health = GetComponent<Health>();
-        die = GetComponent<Die>();
+        enemy= GetComponentInParent<Enemy>();
     }
 
     void Start()
     {
-        rb.isKinematic = true;
-
         if (enemyType != EnemyType.Standing)
         {
             waypoints = new Vector3[pathHolder.childCount];
@@ -70,15 +63,12 @@ public class EnemyAi : MonoBehaviour
             }
         }
         StartCoroutine(FOVRoutine());
-
-        die.OnDie += DisableRBKinematic;
-        die.OnDie += StopAllCoroutines;
     }
 
     void Update()
     {
         if (enemyType != EnemyType.Standing) if (!SawPlayer && !canAttackPlayer) Patroling();
-        if ((SawPlayer && !canAttackPlayer) || health.HealthAmount < health.MaxHealthAmount ) ChasePlayer();
+        if ((SawPlayer && !canAttackPlayer) || enemy.health.HealthAmount < enemy.health.MaxHealthAmount ) ChasePlayer();
         if (SawPlayer && canAttackPlayer) AttackPlayer();
     }
 
@@ -87,8 +77,6 @@ public class EnemyAi : MonoBehaviour
         StopAllCoroutines();
         GetComponent<NavMeshAgent>().enabled= false;
     }
-
-    void DisableRBKinematic() => rb.isKinematic = false;
 
     IEnumerator FOVRoutine()
     {
@@ -136,7 +124,7 @@ public class EnemyAi : MonoBehaviour
 
         int waypointIndex = 0;
 
-        agent.SetDestination(waypoints[waypointIndex]);
+        enemy.navMeshAgent.SetDestination(waypoints[waypointIndex]);
 
         while (true)
         {
@@ -148,7 +136,7 @@ public class EnemyAi : MonoBehaviour
                     waypointIndex = 0;
                 }
                 yield return new WaitForSeconds(waitTime);
-                agent.SetDestination(waypoints[waypointIndex]);
+                enemy.navMeshAgent.SetDestination(waypoints[waypointIndex]);
             }
             if (SawPlayer)
             {
@@ -159,13 +147,13 @@ public class EnemyAi : MonoBehaviour
         }
     }
 
-    void ChasePlayer() => agent.SetDestination(Player.Instance.PlayerTransform().position);
+    void ChasePlayer() => enemy.navMeshAgent.SetDestination(Player.Instance.PlayerTransform().position);
 
     void AttackPlayer()
     {
         shootGun = GetComponentInChildren<ShootGun>();
 
-        agent.SetDestination(transform.position);
+        enemy.navMeshAgent.SetDestination(transform.position);
         transform.LookAt(Player.Instance.PlayerTransform().position);
 
         if (shootGun != null && !startedAttacking) StartCoroutine(AttackRoutine());

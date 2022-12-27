@@ -45,9 +45,9 @@ public class Player : MonoBehaviour
         Movement = GetComponentInChildren<Movement>();
         Jump = GetComponentInChildren<Jump>();
 
-        die.OnDie += DisableFreezeRotation;
-        die.OnDie += WeaponPickup.DropGun;
-        die.OnDie += DisableUI;
+        die.OnDieAction += DisableFreezeRotation;
+        die.OnDieAction += WeaponPickup.DropGun;
+        die.OnDieAction += DisableUI;
     }
 
     public Transform PlayerTransform() => transform.Find("Player");

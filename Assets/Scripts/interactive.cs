@@ -26,9 +26,7 @@ public class interactive : MonoBehaviour
     }
 
     private void Awake()
-    {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-
+    {       
         if (interactiveTypes == InteractiveTypes.keycard)
         {
             puzzleScript = GetComponentInParent<Puzzle_1>();
@@ -45,6 +43,8 @@ public class interactive : MonoBehaviour
             }  
         }
     }
+
+    void start() { player = Player.Instance.transform; }
 
     public void Interact()
     {

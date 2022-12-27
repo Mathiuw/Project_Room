@@ -98,7 +98,7 @@ MonoBehaviour:
     m_Bits: 12032
   muzzleFlash: {fileID: 5671447419204676612}
   damage: 20
-  bulletForce: 1.5
+  bulletForce: 2.5
   bulletMaxDistace: 500
   fireRate: 5
   ammo: 15

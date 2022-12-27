@@ -61,7 +61,7 @@ public class ShootGun : MonoBehaviour
 
             if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, bulletMaxDistace, shootLayer))
             {
-                if (hit.transform.TryGetComponent(out health))
+                if (health = hit.transform.GetComponentInParent<Health>())
                 {
                     health.RemoveHealth(damage);
                     AddForceToDeadBodies(hit.transform, raycastPos, bulletForce,health);
@@ -83,7 +83,7 @@ public class ShootGun : MonoBehaviour
             return;
         }
         if (t.TryGetComponent(out rb)) rb.AddForce(directionForce.forward * forceAmount, ForceMode.VelocityChange);
-        else Debug.LogError("RB Not Found");
+        else Debug.LogError("rbs Not Found");
     }
 
     //Muzzle Flash e Som da Arma
