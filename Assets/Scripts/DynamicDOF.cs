@@ -29,6 +29,6 @@ public class DynamicDOF : MonoBehaviour
             distance = Vector3.Distance(transform.position, hit.point);
         }
         else distance = maxDistance;
-        dof.focusDistance.value = Mathf.Lerp(dof.focusDistance.value, distance, Time.deltaTime * focusSpeed);
+        dof.focusDistance.value = Mathf.Lerp(dof.focusDistance.value, distance, focusSpeed * Time.deltaTime);
     }
 }

@@ -37,7 +37,7 @@ public class UseAndDropItems : MonoBehaviour
 
                 if (item.item.canInfiniteSprint)
                 {               
-                    Player.Instance.Sprint.infiniteSprint += OnAdrenalineUsed;
+                    Player.Instance.Sprint.onInfiniteSprint += OnAdrenalineUsed;
                     Player.Instance.Sprint.InfiniteSprintEvent(item.item.infiniteAdrenalineDuration);
                 }
 

@@ -5,6 +5,11 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerInput))]
 public class Player : MonoBehaviour
 {
+    [Header("Grounded Check")]
+    [SerializeField] Transform checkSphereLocation;
+    [SerializeField] LayerMask groundMask;
+    [SerializeField] float sphereRadius;
+
     public static Player Instance { get; private set; }
     public Transform UI { get; private set; }
     public Transform PlayerCamera { get; private set; }
@@ -21,7 +26,6 @@ public class Player : MonoBehaviour
     public Die die { get; private set; }
     public Sprint Sprint { get; private set; }
     public Movement Movement { get; private set; }
-    public Jump Jump { get; private set; }
 
     void Awake()
     {
@@ -43,7 +47,6 @@ public class Player : MonoBehaviour
         die= GetComponentInChildren<Die>();
         Sprint = GetComponentInChildren<Sprint>();
         Movement = GetComponentInChildren<Movement>();
-        Jump = GetComponentInChildren<Jump>();
 
         die.OnDieAction += DisableFreezeRotation;
         die.OnDieAction += WeaponPickup.DropGun;
@@ -62,4 +65,12 @@ public class Player : MonoBehaviour
     void DisableFreezeRotation() => RigidBody.freezeRotation = false;
 
     void DisableUI() => UI.gameObject.SetActive(false);
+
+    public bool IsGrounded() => Physics.CheckSphere(checkSphereLocation.position, sphereRadius, groundMask);
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(checkSphereLocation.position, sphereRadius);
+    }
 }

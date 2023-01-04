@@ -25,7 +25,7 @@ public class AnimationStateController : MonoBehaviour
     {
         Player.Instance.Animator.SetFloat("RbVelocity", Player.Instance.RigidBody.velocity.magnitude);
 
-        if (Player.Instance.WeaponPickup.IsholdingWeapon()) Player.Instance.GetPlayerGun().OnShoot += ShootWeaponAnimation;
+        if (Player.Instance.WeaponPickup.IsholdingWeapon()) Player.Instance.GetPlayerGun().onShoot += ShootWeaponAnimation;
     }
 
     void SetWeaponAnimations(Transform gun) 

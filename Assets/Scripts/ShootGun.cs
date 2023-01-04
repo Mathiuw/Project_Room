@@ -18,13 +18,14 @@ public class ShootGun : MonoBehaviour
     [Header("Weapon config")]
     [SerializeField] int damage;
     [SerializeField] float bulletForce = 1f;
-    [SerializeField] int bulletMaxDistace = 100;
+    [SerializeField] int bulletMaxDistace = 10000;
     [SerializeField] float fireRate;
     public int ammo;
     public int maximumAmmo;
     float nextTimeToFire = 0;
 
-    public event Action OnShoot;
+    public event Action onShoot;
+    public event Action onHit;
 
     void Start() 
     {
@@ -55,7 +56,7 @@ public class ShootGun : MonoBehaviour
             RaycastHit hit;
             Health health;
 
-            OnShoot?.Invoke();           
+            onShoot?.Invoke();           
             GunEffects();
             RemoveAmmo(1);
 
@@ -65,6 +66,7 @@ public class ShootGun : MonoBehaviour
                 {
                     health.RemoveHealth(damage);
                     AddForceToDeadBodies(hit.transform, raycastPos, bulletForce,health);
+                    onHit?.Invoke();
                     Debug.Log(hit.transform.name + " - life = " + health.HealthAmount);
                 }
                 else Debug.LogError(hit.transform.name + " Doesnt Have Health");            
@@ -94,5 +96,5 @@ public class ShootGun : MonoBehaviour
     }
 
     //Reseta os Eventos da Arma
-    public void ResetGunEvents() => OnShoot = null;
+    public void ResetGunEvents() => onShoot = null;
 }

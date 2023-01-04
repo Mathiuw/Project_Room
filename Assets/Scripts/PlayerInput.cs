@@ -7,6 +7,8 @@ public class PlayerInput : MonoBehaviour
 {
     void Update() 
     {
+        //Run
+        Player.Instance.Sprint.Sprinting(KeyCode.LeftShift, KeyCode.W);
         //Shoot Gun
         if (Input.GetKey(KeyCode.Mouse0) && Player.Instance.WeaponPickup.IsholdingWeapon())
             Player.Instance.GetPlayerGun().Shooting(Player.Instance.PlayerCamera.transform);
@@ -31,4 +33,11 @@ public class PlayerInput : MonoBehaviour
         if (Input.mouseScrollDelta.y < 0) Player.Instance.selectItem.ChangeSlot(1);
         if (Input.mouseScrollDelta.y > 0) Player.Instance.selectItem.ChangeSlot(-1);
     }
+
+    void FixedUpdate() 
+    {
+        //Move Player
+        Player.Instance.Movement.Move(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
+    }
+
 }
