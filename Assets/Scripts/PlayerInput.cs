@@ -5,33 +5,37 @@ using UnityEngine;
 [RequireComponent(typeof(Player))]
 public class PlayerInput : MonoBehaviour
 {
+    Player player;
+
+    void Start() => player = Player.Instance; 
+
     void Update() 
     {
         //Run
-        Player.Instance.Sprint.Sprinting(KeyCode.LeftShift, KeyCode.W);
+        player.Sprint.Sprinting(KeyCode.LeftShift, KeyCode.W);
         //Shoot Gun
-        if (Input.GetKey(KeyCode.Mouse0) && Player.Instance.WeaponPickup.IsholdingWeapon())
-            Player.Instance.GetPlayerGun().Shooting(Player.Instance.PlayerCamera.transform);
+        if (Input.GetKey(KeyCode.Mouse0) && player.WeaponInteraction.IsholdingWeapon())
+            player.GetPlayerGun().Shooting(player.PlayerCamera.transform);
         //Aim Gun
-        Player.Instance.AnimationStateController.AimingWeaponAnimation(Input.GetKey(KeyCode.Mouse1));
+        player.PlayerAnimationManager.AimingWeaponAnimation(Input.GetKey(KeyCode.Mouse1));
         //Reload Gun
-        if (Input.GetKeyDown(KeyCode.R) && Player.Instance.WeaponPickup.IsholdingWeapon())
-            Player.Instance.GetPlayerGun().ReloadGun.Reloading();
+        if (Input.GetKeyDown(KeyCode.R) && player.WeaponInteraction.IsholdingWeapon())
+            player.GetPlayerGun().ReloadGun.Reloading();
         //Pickup Item or Gun
         if (Input.GetKeyDown(KeyCode.E))
         {
-            Player.Instance.WeaponPickup.PickupRaycast();
-            Player.Instance.UseAndDropItems.pickupItem();
+            player.WeaponInteraction.WeaponPickup();
+            player.UseAndDropItems.pickupItem();
         }
         //Drop Gun
-        if (Input.GetKeyDown(KeyCode.G)) Player.Instance.WeaponPickup.DropGun();
+        if (Input.GetKeyDown(KeyCode.G)) player.WeaponInteraction.DropGun();
         //Drop Item
-        if (Input.GetKeyDown(KeyCode.Q)) Player.Instance.UseAndDropItems.DropItem();
+        if (Input.GetKeyDown(KeyCode.Q)) player.UseAndDropItems.DropItem();
         //Use Item
-        if (Input.GetKeyDown(KeyCode.F)) Player.Instance.UseAndDropItems.UseItem();
+        if (Input.GetKeyDown(KeyCode.F)) player.UseAndDropItems.UseItem();
         //Change Inventory Slot
-        if (Input.mouseScrollDelta.y < 0) Player.Instance.selectItem.ChangeSlot(1);
-        if (Input.mouseScrollDelta.y > 0) Player.Instance.selectItem.ChangeSlot(-1);
+        if (Input.mouseScrollDelta.y < 0) player.selectItem.ChangeSlot(1);
+        if (Input.mouseScrollDelta.y > 0) player.selectItem.ChangeSlot(-1);
     }
 
     void FixedUpdate() 
@@ -40,4 +44,5 @@ public class PlayerInput : MonoBehaviour
         Player.Instance.Movement.Move(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
     }
 
+    public void OnEnableDisable(bool b) => enabled = !b;
 }

@@ -20,7 +20,7 @@ public class CrossHairController : MonoBehaviour
 
     private void CrossHairCheck()
     {
-        if (!Player.Instance.WeaponPickup.IsholdingWeapon())
+        if (!Player.Instance.WeaponInteraction.IsholdingWeapon())
         {
             crosshair_Dot.SetActive(true);
             crosshair_Weapon.SetActive(false);
@@ -30,8 +30,8 @@ public class CrossHairController : MonoBehaviour
 
         ReloadGun reloadGun = Player.Instance.GetComponentInChildren<ReloadGun>();
 
-        reloadGun.OnReloadStart += StartRingFill;
-        reloadGun.OnReloadEnd += EndRingFill;
+        reloadGun.ReloadStarted += StartRingFill;
+        reloadGun.ReloadEnded += EndRingFill;
         duration = reloadGun.reloadTime;
 
         if (Player.Instance.Animator.GetBool("isAiming"))

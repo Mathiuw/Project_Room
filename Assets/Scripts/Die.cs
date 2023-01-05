@@ -7,8 +7,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Health))]
 public class Die : MonoBehaviour
 {
-    public event Action OnDieAction;
-    public event Action<bool> OnDieBoolTrue;
+    public event Action Died;
 
     [Header("Components that will be disabled")]
     [SerializeField] private Component[] components;
@@ -16,8 +15,7 @@ public class Die : MonoBehaviour
     //Morre(Obvio)
     public void Dead() 
     {
-        OnDieAction?.Invoke();
-        OnDieBoolTrue?.Invoke(true);
+        Died?.Invoke();
         DisableComponents(); 
     }
 
@@ -26,5 +24,4 @@ public class Die : MonoBehaviour
     { 
         foreach (MonoBehaviour c in components) c.enabled = false;     
     }
-
 }

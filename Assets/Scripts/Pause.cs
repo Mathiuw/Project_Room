@@ -5,44 +5,24 @@ using UnityEngine;
 
 public class Pause : MonoBehaviour
 {
-    public static bool isPaused;
+    public static Pause instance;
 
-    public event Action<bool> changePauseState;
+    bool isPaused = false;
+    public event Action<bool> Paused;
 
-    private void Awake()
-    {
-        for (int i = 0; i < transform.childCount; i++) transform.GetChild(i).gameObject.SetActive(false);
+    void Awake() => instance = this;
 
-        isPaused = false;
-
-        CheckUIElementsAndCursorState(isPaused);
-
-        changePauseState += CheckUIElementsAndCursorState;
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape)) PauseOrUnpauseGame();
-    }
-
-    public void PauseOrUnpauseGame()
+    public void OnPauseUnpause()
     {
         isPaused = !isPaused;
-
-        changePauseState?.Invoke(isPaused);
+        CheckUIElementsAndCursorState();
+        Paused?.Invoke(isPaused);
     }
 
-    public void CheckUIElementsAndCursorState(bool paused)
+    void CheckUIElementsAndCursorState()
     {
-        if (paused)
-        {
-            for (int i = 0; i < transform.childCount; i++) transform.GetChild(i).gameObject.SetActive(true);
-            CursorState.CursorUnlock();
-        }
-        else
-        {
-            for (int i = 0; i < transform.childCount; i++) transform.GetChild(i).gameObject.SetActive(false);
-            CursorState.CursorLock();
-        }    
+        for (int i = 0; i < transform.childCount; i++) transform.GetChild(i).gameObject.SetActive(isPaused);
+        if (isPaused)CursorState.CursorUnlock();
+        else CursorState.CursorLock();
     }
 }

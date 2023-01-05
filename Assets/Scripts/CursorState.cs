@@ -4,7 +4,6 @@ using UnityEngine;
 
 public static class CursorState
 {
-
     public static void CursorLock()
     {
         Cursor.visible = false;

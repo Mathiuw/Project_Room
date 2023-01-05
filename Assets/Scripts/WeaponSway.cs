@@ -17,14 +17,14 @@ public class WeaponSway : MonoBehaviour,ICanDo
     {
         animator = GameObject.Find("Player_And_Camera").GetComponent<Animator>();
 
-        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
+        FindObjectOfType<Pause>().Paused += CheckIfCanDo;
     }
 
     private void Update()
     {
         if (!canDo) return;
 
-        if (Player.Instance.WeaponPickup.IsholdingWeapon())
+        if (Player.Instance.WeaponInteraction.IsholdingWeapon())
         {
             Sway();
 

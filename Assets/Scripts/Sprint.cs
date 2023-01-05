@@ -10,7 +10,7 @@ public class Sprint : MonoBehaviour
     [SerializeField] int staminaCost = 10;
     [SerializeField] int staminaRecover = 8;
     [SerializeField] float Multiplier = 1.5f;
-    public bool isInfinite = false;
+    public bool isInfinite = false;     
 
     //Player Stamina
     public float stamina { get; private set; } = 30;
@@ -23,27 +23,30 @@ public class Sprint : MonoBehaviour
 
     public void Sprinting(KeyCode RunInput, KeyCode WalkInput)
     {
+        Player player = Player.Instance;
+
         if (Input.GetKey(RunInput) && Input.GetKey(WalkInput))
         {
-            if (stamina > 0 && Player.Instance.IsGrounded())
-            {
-                Player.Instance.Movement.sprintMultiplier = Multiplier;
+            if (stamina <= 0) return;
 
-                if (isInfinite)
-                {
-                    stamina = maximumStamina;
-                    Debug.Log("Infinite Sprinting");
-                }
-                else stamina -= staminaCost * Time.deltaTime;
-                Debug.Log("Sprinting");
+            player.Movement.sprintMultiplier = Multiplier;
+
+            if (isInfinite)
+            {
+                stamina = maximumStamina;
+
+                Debug.Log("Infinite Sprinting");
+                return;
             }
-            else Player.Instance.Movement.sprintMultiplier = 1;
+
+            else stamina -= staminaCost * Time.deltaTime;
+
+            Debug.Log("Sprinting");
+            return;
         }
-        else
-        {
-            Player.Instance.Movement.sprintMultiplier = 1;
-            if (stamina <= maximumStamina) AddStamina(staminaRecover * Time.deltaTime);
-        }
+
+        player.Movement.sprintMultiplier = 1;
+        if (stamina <= maximumStamina) AddStamina(staminaRecover * Time.deltaTime);
         StaminaConstraintCheck();
     }
 

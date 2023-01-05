@@ -71,7 +71,7 @@ public class UI_Inventory : MonoBehaviour
 
     void ShowAmmoInUI()
     {
-        if (!Player.Instance.WeaponPickup.IsholdingWeapon()) return;
+        if (!Player.Instance.WeaponInteraction.IsholdingWeapon()) return;
 
         ShootGun shootGun = Player.Instance.GetPlayerGun();
         ammoUI.SetText(shootGun.ammo.ToString() + "/" + shootGun.maximumAmmo.ToString());

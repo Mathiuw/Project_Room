@@ -15,7 +15,7 @@ public class Interact : MonoBehaviour,ICanDo
     {
         cameraTransform = GameObject.Find("Main Camera").transform;
 
-        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
+        FindObjectOfType<Pause>().Paused += CheckIfCanDo;
     }
 
     void Update()

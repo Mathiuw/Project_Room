@@ -1,15 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_PlayerStats : MonoBehaviour
 {
-    [SerializeField] private GameObject healthBar;
-    private Slider healthBarSlider;
+    [SerializeField] GameObject healthBar;
+    Slider healthBarSlider;
 
-    [SerializeField] private GameObject staminaBar;
+    [SerializeField] GameObject staminaBar;
     [HideInInspector]public Slider staminaBarSlider;
+
+    Player player;
 
     private void Awake()
     {
@@ -19,8 +22,10 @@ public class UI_PlayerStats : MonoBehaviour
 
     void Start() 
     {
-        staminaBarSlider.maxValue = Player.Instance.Sprint.maximumStamina;
-        healthBarSlider.maxValue = Player.Instance.Health.MaxHealthAmount;
+        player = Player.Instance;
+
+        staminaBarSlider.maxValue = player.Sprint.maximumStamina;
+        healthBarSlider.maxValue = player.Health.MaxHealthAmount;
     }
 
     void Update()
@@ -31,17 +36,17 @@ public class UI_PlayerStats : MonoBehaviour
 
     void SetStaminaUI()
     {
-        staminaBarSlider.value = Player.Instance.Sprint.stamina;
+        staminaBarSlider.value = player.Sprint.stamina;
 
-        if (Player.Instance.Sprint.stamina == Player.Instance.Sprint.maximumStamina) staminaBar.SetActive(false);
+        if (player.Sprint.stamina == player.Sprint.maximumStamina) staminaBar.SetActive(false);
         else staminaBar.SetActive(true);
     }
 
     private void SetHealthUI()
     {
-        healthBarSlider.value = Player.Instance.Health.HealthAmount;
+        healthBarSlider.value = player.Health.HealthAmount;
 
-        if (healthBarSlider.value == Player.Instance.Health.MaxHealthAmount) healthBar.SetActive(false);
+        if (healthBarSlider.value == player.Health.MaxHealthAmount) healthBar.SetActive(false);
         else healthBar.SetActive(true);
     }
 }

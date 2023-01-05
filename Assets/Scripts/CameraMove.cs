@@ -19,7 +19,7 @@ public class CameraMove : MonoBehaviour,ICanDo
 
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
 
-        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
+        FindObjectOfType<Pause>().Paused += CheckIfCanDo;
     }
 
     void Update()

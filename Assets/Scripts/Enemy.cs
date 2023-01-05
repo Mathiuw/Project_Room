@@ -26,6 +26,6 @@ public class Enemy : MonoBehaviour
         navMeshAgent= GetComponentInChildren<NavMeshAgent>();
         ragdoll = GetComponentInChildren<Ragdoll>();
 
-        die.OnDieBoolTrue += ragdoll.RagdollActive;
+        die.Died += ragdoll.OnActivateRagdoll;
     }
 }

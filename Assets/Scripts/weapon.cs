@@ -18,6 +18,8 @@ public class weapon : MonoBehaviour
     
     void Awake() 
     {
+        gameObject.layer = 12;
+
         weaponName = GetComponent<Name>();
         shootGun = GetComponent<ShootGun>();
         reloadGun= GetComponent<ReloadGun>();
@@ -28,5 +30,5 @@ public class weapon : MonoBehaviour
 
     public void BeingHold(bool b) => IsBeingHold = b;
 
-    void SetAudioSpacialBlend(float f) => WeaponSound.spatialBlend = f;
+    public void SetAudioSpacialBlend(float f) => WeaponSound.spatialBlend = f;
 }

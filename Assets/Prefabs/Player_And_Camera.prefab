@@ -80,6 +80,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 676692474}
+  - component: {fileID: 6471102959154250304}
   m_Layer: 10
   m_Name: UI
   m_TagString: Untagged
@@ -102,6 +103,18 @@ Transform:
   m_Father: {fileID: 3297487628650994907}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6471102959154250304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 676692473}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b3f2c566436a04886e491012f8909d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &748626743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1061,13 +1074,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 836869242936404980}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1992886139ccfd44d81c6b62f846f85b, type: 3}
+  m_Script: {fileID: 11500000, guid: 4eef3a651aaf26341a6f444dab45d806, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   camPlace: {fileID: 3297487630335051389}
-  shakeDistance: 0.1
-  smooth: 0.5
-  shakeDuration: 0
 --- !u!114 &2096740462654853803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1705,7 +1715,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 5168401746700391391}
-        m_MethodName: PauseOrUnpauseGame
+        m_MethodName: OnPauseUnpause
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2056,11 +2066,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cda89db01a6a29740a3b78e5de76dd84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  checkSphereLocation: {fileID: 3297487629337117629}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 16128
-  sphereRadius: 0.1
 --- !u!114 &2452807408174240962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2148,16 +2153,15 @@ GameObject:
   - component: {fileID: 4729456718445527371}
   - component: {fileID: 3297487630234954675}
   - component: {fileID: 3297487630234954674}
-  - component: {fileID: 3297487630234954685}
   - component: {fileID: 3297487630234954678}
-  - component: {fileID: 7899348561227156019}
   - component: {fileID: 3297487630234954679}
+  - component: {fileID: 3297487630234954685}
   - component: {fileID: 2067884927}
-  - component: {fileID: 1884495362}
   - component: {fileID: 3297487630234954673}
   - component: {fileID: 6489626937573324851}
   - component: {fileID: 8715768490026876800}
   - component: {fileID: 3094166134442810487}
+  - component: {fileID: 3621669783269704848}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -2191,7 +2195,7 @@ Rigidbody:
   m_GameObject: {fileID: 3297487630234954667}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 4
+  m_Drag: 5.5
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -2275,22 +2279,6 @@ MonoBehaviour:
     m_Bits: 15104
   itemPrefab: {fileID: 8270332264307256688, guid: 445d518733da0984595164b2ca86f8d1,
     type: 3}
---- !u!114 &3297487630234954685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3297487630234954667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50fd90712edb43349b1f7bb11326a5ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gunHolder: {fileID: 3297487629207671530}
-  Camera: {fileID: 3297487630538489608}
-  maxItemDistance: 5
-  dropForce: 10
 --- !u!114 &3297487630234954678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2306,20 +2294,6 @@ MonoBehaviour:
   moveSpeed: 2000
   maxWalkingSpeed: 6
   maxRunningSpeed: 10
---- !u!114 &7899348561227156019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3297487630234954667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777b48ccb4c209d48a48a0e30c12bb15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  jumpForce: 20
-  jumpCost: 10
 --- !u!114 &3297487630234954679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2336,6 +2310,25 @@ MonoBehaviour:
   staminaRecover: 8
   Multiplier: 1.5
   isInfinite: 0
+--- !u!114 &3297487630234954685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3297487630234954667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ff5243326c408e4592f188032318f14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gunHolder: {fileID: 3297487629207671530}
+  WeaponMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  maxItemDistance: 5
+  dropForce: 10
+  raycastTransform: {fileID: 0}
 --- !u!114 &2067884927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2351,20 +2344,6 @@ MonoBehaviour:
   healthBar: {fileID: 8318080746404392663}
   staminaBar: {fileID: 8081144779859199738}
   staminaBarSlider: {fileID: 0}
---- !u!114 &1884495362
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3297487630234954667}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd56cd1c03c75e6459e2fe3ab4d1ec1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ammoUI: {fileID: 1211903474}
-  ammoType: {fileID: 8760587235883933440}
 --- !u!114 &3297487630234954673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2429,6 +2408,20 @@ MonoBehaviour:
     m_Bits: 15104
   displayText: {fileID: 4412135926740607820}
   playerCamera: {fileID: 3297487630538489608}
+--- !u!114 &3621669783269704848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3297487630234954667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8f3f8a183a0afb488f6075482a3d10c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ammoUI: {fileID: 1211903474}
+  ammoType: {fileID: 8760587235883933440}
 --- !u!1 &3297487630268299270
 GameObject:
   m_ObjectHideFlags: 0
@@ -2613,7 +2606,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.01
-  far clip plane: 1000
+  far clip plane: 150
   field of view: 70
   orthographic: 0
   orthographic size: 5
@@ -2729,7 +2722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaa1de5a22330d3419e24c1e131eecc9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  focusSpeed: 4.5
+  focusSpeed: 7.5
 --- !u!1 &3348716874169796827
 GameObject:
   m_ObjectHideFlags: 0
@@ -4201,7 +4194,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 0b525c84ebdc1f5449a4bb7b8616f05e, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 8318c5c5a1b9f5740a01977416fb3acd, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1

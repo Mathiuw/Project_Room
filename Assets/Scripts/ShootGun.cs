@@ -25,7 +25,7 @@ public class ShootGun : MonoBehaviour
     float nextTimeToFire = 0;
 
     public event Action onShoot;
-    public event Action onHit;
+    public event Action<Health> onHit;
 
     void Start() 
     {
@@ -35,17 +35,17 @@ public class ShootGun : MonoBehaviour
         ammo = maximumAmmo; 
     }
 
-    //Adicionar Munição
+    //Adiciona Munição
     public void AddAmmo(int amount)
     {
         ammo += amount;
         if (ammo > maximumAmmo) ammo = maximumAmmo;
     }
 
-    //Remover Munição
+    //Remove Munição
     public void RemoveAmmo(int amount) => ammo -= amount;
 
-    //Ação de atirar
+    //Atira
     public void Shooting(Transform raycastPos)
     {
         if (ReloadGun.reloading) return;
@@ -64,9 +64,9 @@ public class ShootGun : MonoBehaviour
             {
                 if (health = hit.transform.GetComponentInParent<Health>())
                 {
+                    onHit?.Invoke(health);
                     health.RemoveHealth(damage);
-                    AddForceToDeadBodies(hit.transform, raycastPos, bulletForce,health);
-                    onHit?.Invoke();
+                    AddForceToDeadBodies(hit.transform, raycastPos, bulletForce, health);
                     Debug.Log(hit.transform.name + " - life = " + health.HealthAmount);
                 }
                 else Debug.LogError(hit.transform.name + " Doesnt Have Health");            
@@ -75,6 +75,7 @@ public class ShootGun : MonoBehaviour
         }
     }
 
+    //Adiciona força aos Corpos Mortos
     void AddForceToDeadBodies(Transform t, Transform directionForce, float forceAmount, Health health) 
     {
         Rigidbody rb;
@@ -96,5 +97,9 @@ public class ShootGun : MonoBehaviour
     }
 
     //Reseta os Eventos da Arma
-    public void ResetGunEvents() => onShoot = null;
+    public void ResetGunEvents() 
+    {
+        onShoot = null;
+        onHit = null;
+    } 
 }

@@ -10,11 +10,9 @@ public class interactive : MonoBehaviour
     public Items necessaryItem;
 
     [Header("Doors")]
-    [SerializeField] private string objectDoor;
+    [SerializeField] string objectDoor;
 
-    private Puzzle_1 puzzleScript;
-
-    private Transform player;
+    Puzzle_1 puzzleScript;
 
     public enum InteractiveTypes
     {
@@ -43,8 +41,6 @@ public class interactive : MonoBehaviour
             }  
         }
     }
-
-    void start() { player = Player.Instance.transform; }
 
     public void Interact()
     {
@@ -125,7 +121,7 @@ public class interactive : MonoBehaviour
     IEnumerator CloseElevatorAndEndGame()
     {
         Animator elevatorAnimator = GetComponentInParent<Animator>();
-        Animator playerAnimator = player.GetComponent<Animator>();
+        Animator playerAnimator = Player.Instance.Animator;
         Elevator elevatorScript = GetComponentInParent<Elevator>();
         MeshRenderer panelMesh = elevatorScript.elevatorPanels[1].GetComponentInChildren<MeshRenderer>();
 

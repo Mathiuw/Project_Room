@@ -164,7 +164,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5898751178688358236}
   m_Layer: 11
-  m_Name: Enemy_Gun_Holder
+  m_Name: Gun_Holder
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -346,11 +346,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4139558382295038296}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50fd90712edb43349b1f7bb11326a5ae, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ff5243326c408e4592f188032318f14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gunHolder: {fileID: 5898751178688358236}
-  Camera: {fileID: 0}
+  WeaponMask:
+    serializedVersion: 2
+    m_Bits: 4096
   maxItemDistance: 5
   dropForce: 10
 --- !u!1 &4139558383484913994

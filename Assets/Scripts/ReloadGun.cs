@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
 [RequireComponent(typeof(ShootGun))]
-public class ReloadGun : MonoBehaviour, ICanDo
+public class ReloadGun : MonoBehaviour
 {
     bool canDo = true;
 
@@ -15,17 +16,12 @@ public class ReloadGun : MonoBehaviour, ICanDo
 
     ShootGun shootGun;
 
-    public delegate void Reload();
-    public event Reload OnReloadStart;
-    public event Reload OnReloadEnd;
+    public event Action ReloadStarted;
+    public event Action ReloadEnded;
 
-    void Awake()
-    {
-        shootGun = GetComponent<ShootGun>();
-        FindObjectOfType<Pause>().changePauseState += CheckIfCanDo;
-    }
+    void Awake() => shootGun = GetComponent<ShootGun>();
 
-    //Ação de Recarregar
+    //Ação de Recarregar a Arma
     public void Reloading()
     {
         if (!canDo) return;
@@ -39,13 +35,13 @@ public class ReloadGun : MonoBehaviour, ICanDo
         }
     }
 
-    //Corotina para determinar o tempo de recarregamento da arma
+    //Coroutine Para Determinar o Tempo de Recarregamento da Arma
     IEnumerator ReloadCoroutine()
     {
         string gunName = GetComponent<Name>().text;
 
         Debug.Log("Reload Start");
-        OnReloadStart?.Invoke();
+        ReloadStarted?.Invoke();
         Player.Instance.Animator.SetBool("isShooting", false);
         Player.Instance.Animator.SetBool("isAiming", false);
         reloading = true;
@@ -56,14 +52,8 @@ public class ReloadGun : MonoBehaviour, ICanDo
         Player.Instance.Animator.SetTrigger("ReloadEnd");
         shootGun.AddAmmo(shootGun.maximumAmmo);
         reloading = false;
-        OnReloadEnd?.Invoke();
+        ReloadEnded?.Invoke();
         Debug.Log("Reload End");
         yield break;
-    }
-
-    public void CheckIfCanDo(bool check)
-    {
-        if (check) canDo = false;
-        else canDo = true;
     }
 }

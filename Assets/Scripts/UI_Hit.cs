@@ -4,37 +4,34 @@ using UnityEngine;
 
 public class UI_Hit : MonoBehaviour
 {
-    float time = 0.15f;
+    public static UI_Hit Instance;
 
     AudioSource hitSound;
     [SerializeField] RectTransform[] hitSprite;
 
     void Awake() 
     {
+        Instance= this;
         hitSound = GetComponent<AudioSource>();
 
-        SetHitSprite(false);
+        SetHitmarkerSprite(false);
     }
 
-    void Start() 
+    public void OnPickupWeapon(Transform gun) => gun.GetComponent<weapon>().shootGun.onHit += OnHit;
+
+    public void OnHit(Health health) => StartCoroutine(HitmarkerCoroutine(health));
+
+    IEnumerator HitmarkerCoroutine(Health health) 
     {
-        Player.Instance.WeaponPickup.onPickupCoroutineEnd += AddEventToGun;
-    }
-
-    void AddEventToGun(Transform g) => g.transform.GetComponent<ShootGun>().onHit += OnHit;
-
-    void OnHit() => StartCoroutine(OnHitCoroutine());
-
-    IEnumerator OnHitCoroutine() 
-    {
+        if (health.Isdead()) yield break;
         hitSound.Play();
-        SetHitSprite(true);
+        SetHitmarkerSprite(true);
         yield return new WaitForSeconds(hitSound.clip.length);
-        SetHitSprite(false);
+        SetHitmarkerSprite(false);
         yield break;
     }
 
-    void SetHitSprite(bool b) 
+    void SetHitmarkerSprite(bool b) 
     {
         foreach (RectTransform r in hitSprite) r.gameObject.SetActive(b);
     }
