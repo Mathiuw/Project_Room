@@ -248,7 +248,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 4139558382295038296}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.75
   m_Speed: 7
   m_Acceleration: 45
   avoidancePriority: 50
@@ -355,6 +355,7 @@ MonoBehaviour:
     m_Bits: 4096
   maxItemDistance: 5
   dropForce: 10
+  raycastTransform: {fileID: 0}
 --- !u!1 &4139558383484913994
 GameObject:
   m_ObjectHideFlags: 0

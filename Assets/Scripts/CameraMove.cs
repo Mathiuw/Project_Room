@@ -1,40 +1,25 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMove : MonoBehaviour,ICanDo
+public class CameraMove : MonoBehaviour
 {
-    private bool canDo = true;
-    private Camera cam;
-
     [Header("Camera Settings")]
     [SerializeField] float senX, senY;
-    public float multiplier;
-    private float mouseX, mouseY;    
-    private float xRotation, yRotation;
+    [SerializeField] float multiplier;
+    float mouseX, mouseY;    
+    float xRotation, yRotation;
+    Transform cam;
 
-    private void Awake()
+    private void Start()
     {
         CursorState.CursorLock();
 
-        cam = GameObject.Find("Main Camera").GetComponent<Camera>();
-
-        FindObjectOfType<Pause>().Paused += CheckIfCanDo;
+        cam = Player.Instance.transform.Find("Camera");
     }
 
-    void Update()
-    {
-        if (!canDo)return;
-        camMove();
-    }
-
-    void FixedUpdate()
-    {
-        if (!canDo)return;
-        bodyRot();
-    }
-
-    void camMove()
+    public void camMove()
     {
         mouseX = Input.GetAxisRaw("Mouse X") * senX * multiplier;
         mouseY = Input.GetAxisRaw("Mouse Y") * senY * multiplier;
@@ -49,11 +34,5 @@ public class CameraMove : MonoBehaviour,ICanDo
         cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
     }
 
-    void bodyRot() => transform.localRotation = Quaternion.Euler(0, yRotation, 0);
-
-    public void CheckIfCanDo(bool check)
-    {
-        if (check) canDo = false;
-        else canDo = true;
-    }
+    public void bodyRot() => transform.localRotation = Quaternion.Euler(0, yRotation, 0);
 }

@@ -6,11 +6,18 @@ using UnityEngine;
 public class PlayerInput : MonoBehaviour
 {
     Player player;
+    CameraMove cameraMove;
 
-    void Start() => player = Player.Instance; 
+    void Start() 
+    {
+        player = Player.Instance;
+        cameraMove = player.GetComponentInChildren<CameraMove>();
+    } 
 
     void Update() 
     {
+        //Move Camera
+        cameraMove.camMove();
         //Run
         player.Sprint.Sprinting(KeyCode.LeftShift, KeyCode.W);
         //Shoot Gun
@@ -41,7 +48,9 @@ public class PlayerInput : MonoBehaviour
     void FixedUpdate() 
     {
         //Move Player
-        Player.Instance.Movement.Move(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
+        player.Movement.Move(Input.GetAxisRaw("Vertical"), Input.GetAxisRaw("Horizontal"));
+        //Move Body
+        cameraMove.bodyRot();
     }
 
     public void OnEnableDisable(bool b) => enabled = !b;

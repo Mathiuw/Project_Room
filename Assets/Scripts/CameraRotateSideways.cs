@@ -1,50 +1,50 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 
-public class CameraRotateSideways : MonoBehaviour, ICanDo
+public class CameraRotateSideways : MonoBehaviour
 {
-    bool canDo = true;
     [Range(1,5)]
-    [SerializeField] float angleLimit;
-    [Range(0.05f,0.25f)]
+    [SerializeField] float angleLimit;   
     [SerializeField] float smooth;
 
     [Header("Angle")]
     [SerializeField]float angle;
 
-    Transform cameraTransform;
+    [SerializeField]Transform cameraTransform;
+    Player player;
 
-    void Awake()
+    void Start()
     {
-        cameraTransform = GameObject.Find("Main Camera").transform;
+        player = Player.Instance;
 
-        FindObjectOfType<Pause>().Paused += CheckIfCanDo;
+        cameraTransform = player.GetComponentInChildren<CinemachineVirtualCamera>().transform;
     }
 
     void Update()
     {
-        if (!canDo) return;
         cameraTransform.eulerAngles = new Vector3(cameraTransform.eulerAngles.x, cameraTransform.eulerAngles.y, RotateVector());
     }
 
     float RotateVector()
     {
-        if (Input.GetKey(KeyCode.A)) angle += smooth;
-        else if (Input.GetKey(KeyCode.D)) angle -= smooth;
-        else
-        {
-            if (angle > 0f) angle -= smooth;
-            else if (angle < 0f) angle += smooth;
-        }
-        if (angle > angleLimit) angle = angleLimit;
-        else if (angle < -angleLimit) angle = -angleLimit;
-        return angle;
-    }
+        angle += -(Input.GetAxisRaw("Horizontal")) * smooth * Time.deltaTime;
+        angle = Mathf.Clamp(angle, -angleLimit, angleLimit);
 
-    public void CheckIfCanDo(bool check)
-    {
-        if (check) canDo = false;
-        else canDo = true;
+        if (Input.GetAxisRaw("Horizontal") != 0) return angle;
+         
+        if (angle > 0f) 
+        {
+            angle -= smooth * Time.deltaTime;
+            angle = Mathf.Clamp(angle, 0f, angleLimit);
+        } 
+        else if (angle < 0f) 
+        {
+            angle += smooth * Time.deltaTime;
+            angle = Mathf.Clamp(angle, -angleLimit, 0f);
+        } 
+        return angle;
     }
 }

@@ -1,0 +1,149 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Enemy_LowerBody_Mask
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Body.Rig
+    m_Weight: 0
+  - m_Path: Body.Rig/Pelvic.l
+    m_Weight: 1
+  - m_Path: Body.Rig/Pelvic.l/Thigh.l
+    m_Weight: 1
+  - m_Path: Body.Rig/Pelvic.l/Thigh.l/Leg.l
+    m_Weight: 1
+  - m_Path: Body.Rig/Pelvic.l/Thigh.l/Leg.l/Foot.l
+    m_Weight: 1
+  - m_Path: Body.Rig/Pelvic.l/Thigh.l/Leg.l/Foot.l/Foot.l_end
+    m_Weight: 1
+  - m_Path: Body.Rig/Pelvic.r
+    m_Weight: 1
+  - m_Path: Body.Rig/Pelvic.r/Thigh.r
+    m_Weight: 1
+  - m_Path: Body.Rig/Pelvic.r/Thigh.r/Leg.r
+    m_Weight: 1
+  - m_Path: Body.Rig/Pelvic.r/Thigh.r/Leg.r/Foot.r
+    m_Weight: 1
+  - m_Path: Body.Rig/Pelvic.r/Thigh.r/Leg.r/Foot.r/Foot.r_end
+    m_Weight: 1
+  - m_Path: Body.Rig/Spine.1
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.2.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.2.l/Thumb.1.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.2.l/Thumb.1.l/Thumb.2.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.2.l/Thumb.1.l/Thumb.2.l/Thumb.2.l_end
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.3.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.3.l/Index.1.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.3.l/Index.1.l/Index.2.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.3.l/Index.1.l/Index.2.l/Index.2.l_end
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.4.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.4.l/Middle.1.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.4.l/Middle.1.l/Middle.2.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.4.l/Middle.1.l/Middle.2.l/Middle.2.l_end
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.5.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.5.l/Ring.1.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.5.l/Ring.1.l/Ring.2.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.5.l/Ring.1.l/Ring.2.l/Ring.2.l_end
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.6.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.6.l/Pinky.1.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.6.l/Pinky.1.l/Pinky.2.l
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.l/Shouder.l/Forearm.l/Hand.1.l/Hand.6.l/Pinky.1.l/Pinky.2.l/Pinky.2.l_end
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.2.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.2.r/Thumb.1.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.2.r/Thumb.1.r/Thumb.2.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.2.r/Thumb.1.r/Thumb.2.r/Thumb.2.r_end
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.3.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.3.r/Index.1.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.3.r/Index.1.r/Index.2.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.3.r/Index.1.r/Index.2.r/Index.2.r_end
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.4.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.4.r/Middle.1.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.4.r/Middle.1.r/Middle.2.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.4.r/Middle.1.r/Middle.2.r/Middle.2.r_end
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.5.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.5.r/Ring.1.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.5.r/Ring.1.r/Ring.2.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.5.r/Ring.1.r/Ring.2.r/Ring.2.r_end
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.6.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.6.r/Pinky.1.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.6.r/Pinky.1.r/Pinky.2.r
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Pec.r/Shouder.r/Forearm.r/Hand.1.r/Hand.6.r/Pinky.1.r/Pinky.2.r/Pinky.2.r_end
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Spine.3
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Spine.3/Head
+    m_Weight: 0
+  - m_Path: Body.Rig/Spine.1/Spine.2/Spine.3/Head/Head_end
+    m_Weight: 0
+  - m_Path: Clothes
+    m_Weight: 0
+  - m_Path: Gas.Mask
+    m_Weight: 0
+  - m_Path: Gloves
+    m_Weight: 0
+  - m_Path: Shoes
+    m_Weight: 0
