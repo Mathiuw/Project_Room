@@ -53,6 +53,4 @@ public class PlayerInput : MonoBehaviour
         //Move Body
         cameraMove.bodyRot();
     }
-
-    public void OnPause(bool b) => enabled = !b;
 }

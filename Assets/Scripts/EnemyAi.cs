@@ -13,7 +13,10 @@ public class EnemyAi : MonoBehaviour
     [SerializeField] Transform raycastPos;
     [SerializeField] int burst = 5, nextBurst = 2;
     [SerializeField] float timeBetweenBullets = 0.1f;
-    bool startedAttacking = false;
+    bool startedAttack = false;
+    bool canAttackPlayer = false;
+    public event Action attackedPlayer;
+    public event Action cannedAttackPlayer;
     NavMeshAgent navMeshAgent;
     Health health;
     ShootGun shootGun;
@@ -24,18 +27,17 @@ public class EnemyAi : MonoBehaviour
     [SerializeField] Transform pathHolder;
     [SerializeField] Vector3[] waypoints;
     [SerializeField] float waitTime;
-     bool startedPatroling = false; 
+    bool startedPatroling = false;
+    public event Action patrolled;
 
     [Header("Field of view")]
     public float radius;
-    [Range(0,360)]
-    public float angle;
+    [Range(0,360)] public float angle;   
 
     public LayerMask targetMask;
     public LayerMask obstructionMask;
 
-    public bool SawPlayer;
-    public bool canAttackPlayer;
+    [HideInInspector] public bool SawPlayer;
 
     enum EnemyType
     {
@@ -105,7 +107,11 @@ public class EnemyAi : MonoBehaviour
                 {
                     SawPlayer = true;
 
-                    if (distanceToTarget < radius / 1.1f) canAttackPlayer = true;
+                    if (distanceToTarget < radius / 1.1f) 
+                    {
+                        canAttackPlayer = true;
+                        cannedAttackPlayer?.Invoke();
+                    } 
                     else canAttackPlayer = false;
                 }
                 else canAttackPlayer = false;
@@ -119,6 +125,7 @@ public class EnemyAi : MonoBehaviour
     IEnumerator PatrolRoute()
     {
         startedPatroling = true;
+        patrolled?.Invoke();
 
         int waypointIndex = 0;
 
@@ -154,21 +161,22 @@ public class EnemyAi : MonoBehaviour
         navMeshAgent.SetDestination(transform.position);
         transform.LookAt(Player.Instance.PlayerTransform().position);
 
-        if (shootGun != null && !startedAttacking) StartCoroutine(Attack());
+        if (shootGun != null && !startedAttack) StartCoroutine(Attack());
     }
 
     IEnumerator Attack()
     {
-        startedAttacking = true;
+        startedAttack = true;
 
         yield return new WaitForSeconds(0.5f);
 
         for (int i = 0; i < burst; i++)
         {
             shootGun.Shooting(raycastPos);
+            attackedPlayer?.Invoke();
             yield return new WaitForSeconds(timeBetweenBullets);
         }
-        startedAttacking = false;
+        startedAttack = false;
 
         if (!canAttackPlayer) yield break;
         yield return new WaitForSeconds(nextBurst);

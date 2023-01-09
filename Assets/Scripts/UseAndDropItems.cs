@@ -35,11 +35,11 @@ public class UseAndDropItems : MonoBehaviour
             {
                 GetComponent<Health>().AddHealth(item.item.recoverHealth);
 
-                if (item.item.canInfiniteSprint)
-                {               
-                    Player.Instance.Sprint.onInfiniteSprint += OnAdrenalineUsed;
-                    Player.Instance.Sprint.InfiniteSprintEvent(item.item.infiniteAdrenalineDuration);
-                }
+                //if (item.item.canInfiniteSprint)
+                //{               
+                //    Player.Instance.Sprint.InfiniteSprinted += OnAdrenalineUsed;
+                //    Player.Instance.Sprint.OnInfiniteSprint(item.item.infiniteAdrenalineDuration);
+                //}
 
                 if (item.amount > 1) item.amount--;
                 else Player.Instance.Inventory.inventory.Remove(item);

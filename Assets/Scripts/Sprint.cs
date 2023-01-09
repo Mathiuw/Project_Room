@@ -5,54 +5,54 @@ using UnityEngine;
 
 public class Sprint : MonoBehaviour
 {
-    //Player Sprint
     [Header("Sprinting")]
     [SerializeField] int staminaCost = 10;
     [SerializeField] int staminaRecover = 8;
     [SerializeField] float Multiplier = 1.5f;
-    public bool isInfinite = false;     
+    [HideInInspector] public bool isInfinite = false;     
 
-    //Player Stamina
     public float stamina { get; private set; } = 30;
-    public float maximumStamina { get; private set; } = 30;
+    public float maxStamina { get; private set; } = 30;
 
-    //Infinite Stamina Event
-    public event Func<float, IEnumerator> onInfiniteSprint;
+    public event Action<float> staminaUpdated;
 
-    public void InfiniteSprintEvent(float time) => onInfiniteSprint?.Invoke(time);
+    void Start() => staminaUpdated?.Invoke(stamina);
 
     public void Sprinting(KeyCode RunInput, KeyCode WalkInput)
     {
         Player player = Player.Instance;
 
-        if (Input.GetKey(RunInput) && Input.GetKey(WalkInput))
+        if (Input.GetKey(RunInput) && Input.GetKey(WalkInput) && stamina > 0f)
         {
-            if (stamina <= 0) return;
-
             player.Movement.sprintMultiplier = Multiplier;
 
             if (isInfinite)
             {
-                stamina = maximumStamina;
-
+                AddStamina(maxStamina * Time.deltaTime);
                 Debug.Log("Infinite Sprinting");
                 return;
             }
 
-            else stamina -= staminaCost * Time.deltaTime;
-
+            else RemoveStamina(staminaCost * Time.deltaTime) ;
             Debug.Log("Sprinting");
             return;
         }
 
         player.Movement.sprintMultiplier = 1;
-        if (stamina <= maximumStamina) AddStamina(staminaRecover * Time.deltaTime);
-        StaminaConstraintCheck();
+        if (stamina <= maxStamina) AddStamina(staminaRecover * Time.deltaTime);
     }
 
-    public void RemoveStamina(float amomunt) => stamina -= amomunt;
+    public void AddStamina(float amount)
+    {
+        stamina += amount;
+        Mathf.Clamp(stamina, 0f, maxStamina);
+        staminaUpdated?.Invoke(stamina);
+    }
 
-    public void AddStamina(float amount) => stamina += amount;
-
-    void StaminaConstraintCheck() { if (stamina > maximumStamina) stamina = maximumStamina; }
+    public void RemoveStamina(float amomunt) 
+    {
+        stamina -= amomunt;
+        Mathf.Clamp(stamina, 0f, maxStamina);
+        staminaUpdated?.Invoke(stamina);
+    }
 }

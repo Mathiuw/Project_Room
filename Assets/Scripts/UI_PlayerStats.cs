@@ -6,47 +6,36 @@ using UnityEngine.UI;
 
 public class UI_PlayerStats : MonoBehaviour
 {
-    [SerializeField] GameObject healthBar;
-    Slider healthBarSlider;
-
-    [SerializeField] GameObject staminaBar;
-    [HideInInspector]public Slider staminaBarSlider;
-
-    Player player;
-
-    private void Awake()
-    {
-        staminaBarSlider = staminaBar.GetComponent<Slider>();
-        healthBarSlider = healthBar.GetComponent<Slider>();
-    }
+    [SerializeField] Slider healthBar;
+    [SerializeField] Slider staminaBar;
+    Health health;
+    Sprint sprint;
 
     void Start() 
     {
-        player = Player.Instance;
+        health = Player.Instance.Health;
+        sprint= Player.Instance.Sprint;
 
-        staminaBarSlider.maxValue = player.Sprint.maximumStamina;
-        healthBarSlider.maxValue = player.Health.MaxHealthAmount;
+        staminaBar.maxValue = sprint.maxStamina;
+        healthBar.maxValue = health.MaxHealthAmount;
+
+        health.healthUpdated += SetHealthUI;
+        sprint.staminaUpdated += SetStaminaUI;
     }
 
-    void Update()
+    void SetStaminaUI(float stamina)
     {
-        SetStaminaUI();
-        SetHealthUI();
+        staminaBar.value = stamina;
+
+        if (staminaBar.value == staminaBar.maxValue) staminaBar.gameObject.SetActive(false);
+        else staminaBar.gameObject.SetActive(true);
     }
 
-    void SetStaminaUI()
+    void SetHealthUI(int healthAmount)
     {
-        staminaBarSlider.value = player.Sprint.stamina;
+        healthBar.value = healthAmount;
 
-        if (player.Sprint.stamina == player.Sprint.maximumStamina) staminaBar.SetActive(false);
-        else staminaBar.SetActive(true);
-    }
-
-    private void SetHealthUI()
-    {
-        healthBarSlider.value = player.Health.HealthAmount;
-
-        if (healthBarSlider.value == player.Health.MaxHealthAmount) healthBar.SetActive(false);
-        else healthBar.SetActive(true);
+        if (healthBar.value == healthBar.maxValue) healthBar.gameObject.SetActive(false);
+        else healthBar.gameObject.SetActive(true);
     }
 }

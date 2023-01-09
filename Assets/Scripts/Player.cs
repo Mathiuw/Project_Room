@@ -59,8 +59,9 @@ public class Player : MonoBehaviour
 
     void OnPause(bool b) 
     {
-        playerInput.enabled = !b;
+        GetComponent<PlayerInput>().enabled = !b;
         GetComponentInChildren<WeaponSway>().enabled = !b;
+        GetComponentInChildren<CameraRotateSideways>().enabled = !b;
     }
 
     void OnDead() 

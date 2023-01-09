@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(Health), typeof(Die))]
 [RequireComponent(typeof(EnemyAi))]
+[RequireComponent(typeof(EnemyAnimationManager))]
 [RequireComponent(typeof(Ragdoll))]
 public class Enemy : MonoBehaviour
 {
