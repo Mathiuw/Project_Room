@@ -30,7 +30,7 @@ public class CameraRotateSideways : MonoBehaviour
 
     float RotateVector()
     {
-        angle += -(Input.GetAxisRaw("Horizontal")) * smooth * Time.deltaTime;
+        angle -= (Input.GetAxisRaw("Horizontal")) * smooth * Time.deltaTime;
         angle = Mathf.Clamp(angle, -angleLimit, angleLimit);
 
         if (Input.GetAxisRaw("Horizontal") != 0) return angle;

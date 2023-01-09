@@ -11,7 +11,7 @@ public class PlayerInput : MonoBehaviour
     void Start() 
     {
         player = Player.Instance;
-        cameraMove = player.GetComponentInChildren<CameraMove>();
+        cameraMove = GetComponentInChildren<CameraMove>();
     } 
 
     void Update() 
@@ -33,6 +33,7 @@ public class PlayerInput : MonoBehaviour
         {
             player.WeaponInteraction.WeaponPickup();
             player.UseAndDropItems.pickupItem();
+            player.Interact.Interacting();
         }
         //Drop Gun
         if (Input.GetKeyDown(KeyCode.G)) player.WeaponInteraction.DropGun();
@@ -53,5 +54,5 @@ public class PlayerInput : MonoBehaviour
         cameraMove.bodyRot();
     }
 
-    public void OnEnableDisable(bool b) => enabled = !b;
+    public void OnPause(bool b) => enabled = !b;
 }

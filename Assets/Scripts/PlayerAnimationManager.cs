@@ -22,12 +22,12 @@ public class PlayerAnimationManager : MonoBehaviour
 
         OnHoldWeaponAnimation(transform);
 
-        weaponInteraction.onPickupCoroutineStart += OnSetWeaponAnimations;
-        weaponInteraction.onPickupCoroutineEnd += OnPickupWeaponAnimation;
-        weaponInteraction.onPickupCoroutineEnd += OnHoldWeaponAnimation;
-        weaponInteraction.weaponDrop += OnDropWeaponAnimationReset;
-        weaponInteraction.weaponDrop += OnHoldWeaponAnimation;
-        weaponInteraction.onPickupCoroutineEnd += OnWeaponShootSetTrigger;
+        weaponInteraction.PickupStarted += OnSetWeaponAnimations;
+        weaponInteraction.PickupEnded += OnPickupWeaponAnimation;
+        weaponInteraction.PickupEnded += OnHoldWeaponAnimation;
+        weaponInteraction.weaponDroped += OnDropWeaponAnimationReset;
+        weaponInteraction.weaponDroped += OnHoldWeaponAnimation;
+        weaponInteraction.PickupEnded += OnWeaponShootSetTrigger;
     }
 
     void Update() => animator.SetFloat("RbVelocity", rb.velocity.magnitude);

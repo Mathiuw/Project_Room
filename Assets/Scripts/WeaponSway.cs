@@ -2,38 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponSway : MonoBehaviour,ICanDo
+public class WeaponSway : MonoBehaviour
 {
-    [SerializeField]private bool canDo = true;
+    [SerializeField] Transform gunHolder;
+    [SerializeField] float smooth;
+    [SerializeField] float swayMultiplier;
+    Animator animator;
 
-    private Animator animator;
+    void Start() => animator = Player.Instance.GetComponent<Animator>();
 
-    [SerializeField] private Transform gunHolder;
-
-    [SerializeField] private float smooth;
-    [SerializeField] private float swayMultiplier;
-
-    private void Awake()
+    void Update()
     {
-        animator = GameObject.Find("Player_And_Camera").GetComponent<Animator>();
+        if (!Player.Instance.WeaponInteraction.IsholdingWeapon()) return;
 
-        FindObjectOfType<Pause>().Paused += CheckIfCanDo;
+        if (animator.GetBool("isAiming") == true) swayMultiplier = 0.2f;
+        else swayMultiplier = 2f;
+
+        Sway();
     }
 
-    private void Update()
-    {
-        if (!canDo) return;
-
-        if (Player.Instance.WeaponInteraction.IsholdingWeapon())
-        {
-            Sway();
-
-            if (animator.GetBool("isAiming") == true) swayMultiplier = 0.2f;
-            else swayMultiplier = 2f;
-        }
-    }
-
-    private void Sway()
+    void Sway()
     {
         //Mouse input
         float mouseX = Input.GetAxisRaw("Mouse X") * swayMultiplier;
@@ -47,14 +35,5 @@ public class WeaponSway : MonoBehaviour,ICanDo
 
         //Rotate
         gunHolder.localRotation = Quaternion.Slerp(gunHolder.localRotation, targetRotation, smooth * Time.deltaTime);
-    }
-
-    public void CheckIfCanDo(bool check)
-    {
-        if (check)
-        {
-            canDo = false;
-        }
-        else canDo = true;
     }
 }

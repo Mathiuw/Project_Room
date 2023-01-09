@@ -6,7 +6,6 @@ public class Ragdoll : MonoBehaviour
 {
     [SerializeField] bool ActivateOnStart = false;
     [SerializeField] Rigidbody[] rbs;
-    Enemy enemy;
    
     void Start() 
     {
@@ -22,7 +21,4 @@ public class Ragdoll : MonoBehaviour
         foreach (Rigidbody rb in rbs) rb.isKinematic = !b;
         Debug.Log("Ragdoll = " + b);
     }
-
-    //Ativa o Ragdoll
-    public void OnActivateRagdoll() => RagdollActive(true);
 }

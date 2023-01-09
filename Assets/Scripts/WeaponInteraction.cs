@@ -7,18 +7,19 @@ using UnityEditor.UIElements;
 
 public class WeaponInteraction : MonoBehaviour
 {
+    public Transform raycastTransform;
     [SerializeField] Transform gunHolder;
     [SerializeField] LayerMask WeaponMask;
     [SerializeField] int maxItemDistance = 5;
     [SerializeField] float dropForce = 10;
-    [HideInInspector] public Transform raycastTransform;
+
     Collider[] cols;
     RaycastHit hit;
     weapon weapon;
 
-    public event Action<Transform> onPickupCoroutineStart;
-    public event Action<Transform> onPickupCoroutineEnd;
-    public event Action<Transform> weaponDrop;
+    public event Action<Transform> PickupStarted;
+    public event Action<Transform> PickupEnded;
+    public event Action<Transform> weaponDroped;
 
     public void WeaponPickup() 
     {
@@ -36,7 +37,7 @@ public class WeaponInteraction : MonoBehaviour
             yield break;
         }
 
-        onPickupCoroutineStart?.Invoke(gun);
+        PickupStarted?.Invoke(gun);
 
         gun.SetParent(gunHolder);
 
@@ -64,7 +65,7 @@ public class WeaponInteraction : MonoBehaviour
 
         weapon.shootGun.onHit += UI_Hit.Instance.OnHit;
 
-        onPickupCoroutineEnd?.Invoke(gun);
+        PickupEnded?.Invoke(gun);
 
         weapon.BeingHold(true);
 
@@ -90,7 +91,7 @@ public class WeaponInteraction : MonoBehaviour
             weapon.rb.interpolation = RigidbodyInterpolation.Interpolate;
             weapon.rb.AddForce(raycastTransform.forward * dropForce, ForceMode.VelocityChange);
 
-            weaponDrop?.Invoke(weapon.transform);
+            weaponDroped?.Invoke(weapon.transform);
 
             weapon.BeingHold(false);
 
