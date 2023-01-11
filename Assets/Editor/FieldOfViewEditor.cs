@@ -21,7 +21,7 @@ public class FIeldOfViewEditor : Editor
         Handles.DrawLine(fov.transform.position, fov.transform.position + viewAngle01 * fov.radius);
         Handles.DrawLine(fov.transform.position, fov.transform.position + viewAngle02 * fov.radius);
 
-        if (fov.SawPlayer)
+        if (fov.enemyState == EnemyAi.EnemyState.Chasing)
         {
             Handles.color = Color.green;
             Handles.DrawLine(fov.transform.position, Player.Instance.transform.position) ;

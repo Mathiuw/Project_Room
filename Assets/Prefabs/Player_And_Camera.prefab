@@ -772,8 +772,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   crosshair_Dot: {fileID: 748626743}
-  crosshair_Weapon: {fileID: 6005521099551321708}
-  crosshair_ReloadRing: {fileID: 4300537215371467693}
+  crosshair_Weapon: {fileID: 0}
+  crosshair_ReloadRing: {fileID: 0}
 --- !u!1 &46285461960039880
 GameObject:
   m_ObjectHideFlags: 0
