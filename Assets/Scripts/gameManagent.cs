@@ -26,7 +26,7 @@ public class GameManagent : MonoBehaviour
     {
         loadingScreen.SetActive(true);
 
-        SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
     }
 
     public void ExitGame()

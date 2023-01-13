@@ -12,6 +12,7 @@ public class WeaponInteraction : MonoBehaviour
     [SerializeField] LayerMask WeaponMask;
     [SerializeField] int maxItemDistance = 5;
     [SerializeField] float dropForce = 10;
+    public bool isHoldingWeapon { get; private set; } = false;
 
     Collider[] cols;
     RaycastHit hit;
@@ -19,11 +20,11 @@ public class WeaponInteraction : MonoBehaviour
 
     public event Action<Transform> PickupStarted;
     public event Action<Transform> PickupEnded;
-    public event Action<Transform> weaponDroped;
+    public event Action<Transform> weaponDropped;
 
     public void WeaponPickup() 
     {
-        if (!IsholdingWeapon() && Physics.Raycast(raycastTransform.position, raycastTransform.forward, out hit, maxItemDistance, WeaponMask)) 
+        if (!isHoldingWeapon && Physics.Raycast(raycastTransform.position, raycastTransform.forward, out hit, maxItemDistance, WeaponMask)) 
             StartCoroutine(PickUpCoroutine(hit.transform));
     }
 
@@ -31,7 +32,7 @@ public class WeaponInteraction : MonoBehaviour
     {
         weapon = gun.GetComponent<weapon>();
 
-        if (weapon.IsBeingHold == true) 
+        if (weapon.IsBeingHold) 
         {
             Debug.LogError("Gun already Picked up");
             yield break;
@@ -65,9 +66,9 @@ public class WeaponInteraction : MonoBehaviour
 
         weapon.shootGun.onHit += UI_Hit.Instance.OnHit;
 
-        PickupEnded?.Invoke(gun);
-
+        isHoldingWeapon = true;
         weapon.BeingHold(true);
+        PickupEnded?.Invoke(gun);
 
         Debug.Log("Picked up gun");
         yield break;
@@ -75,33 +76,24 @@ public class WeaponInteraction : MonoBehaviour
 
     public void DropGun()
     {
-        if (!IsholdingWeapon()) return;
+        if (!isHoldingWeapon || weapon.reloadGun.reloading) return;
 
-        if (IsholdingWeapon() && !weapon.reloadGun.reloading)
-        {
-            weapon.shootGun.ResetGunEvents();
-            weapon.weaponName.enabled = true;  
-            weapon.transform.SetParent(null);
-            weapon.transform.localPosition = raycastTransform.position + raycastTransform.forward * 1.5f;
+        weapon.shootGun.ResetGunEvents();
+        weapon.weaponName.enabled = true;
+        weapon.transform.SetParent(null);
+        weapon.transform.localPosition = raycastTransform.position + raycastTransform.forward * 1.5f;
 
-            cols = weapon.GetComponentsInChildren<Collider>();
-            for (int i = 0; i < cols.Length; i++) cols[i].isTrigger = false;
+        cols = weapon.GetComponentsInChildren<Collider>();
+        for (int i = 0; i < cols.Length; i++) cols[i].isTrigger = false;
 
-            weapon.rb.isKinematic = false;
-            weapon.rb.interpolation = RigidbodyInterpolation.Interpolate;
-            weapon.rb.AddForce(raycastTransform.forward * dropForce, ForceMode.VelocityChange);
+        weapon.rb.isKinematic = false;
+        weapon.rb.interpolation = RigidbodyInterpolation.Interpolate;
+        weapon.rb.AddForce(raycastTransform.forward * dropForce, ForceMode.VelocityChange);
 
-            weaponDroped?.Invoke(weapon.transform);
+        isHoldingWeapon = false;
+        weapon.BeingHold(false);
+        weaponDropped?.Invoke(weapon.transform);
 
-            weapon.BeingHold(false);
-
-            Debug.Log("Dropped gun");
-        }
-    }
-
-    public bool IsholdingWeapon()
-    {
-        if (gunHolder.childCount > 0) return true;
-        return false;
+        Debug.Log("Dropped gun");
     }
 }

@@ -21,12 +21,12 @@ public class PlayerInput : MonoBehaviour
         //Run
         player.Sprint.Sprinting(KeyCode.LeftShift, KeyCode.W);
         //Shoot Gun
-        if (Input.GetKey(KeyCode.Mouse0) && player.WeaponInteraction.IsholdingWeapon())
+        if (Input.GetKey(KeyCode.Mouse0) && player.WeaponInteraction.isHoldingWeapon)
             player.GetPlayerGun().Shooting(player.PlayerCamera.transform);
         //Aim Gun
         player.PlayerAnimationManager.AimingWeaponAnimation(Input.GetKey(KeyCode.Mouse1));
         //Reload Gun
-        if (Input.GetKeyDown(KeyCode.R) && player.WeaponInteraction.IsholdingWeapon())
+        if (Input.GetKeyDown(KeyCode.R) && player.WeaponInteraction.isHoldingWeapon)
             player.GetPlayerGun().ReloadGun.Reloading();
         //Pickup Item or Gun
         if (Input.GetKeyDown(KeyCode.E))

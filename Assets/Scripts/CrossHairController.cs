@@ -5,22 +5,23 @@ using UnityEngine.UI;
 
 public class CrossHairController : MonoBehaviour
 {
-    [SerializeField] private GameObject crosshair_Dot;
-    [SerializeField] private GameObject crosshair_Weapon;
-    [SerializeField] private GameObject crosshair_ReloadRing;
+    [SerializeField] GameObject crosshair_Dot;
+    [SerializeField] GameObject crosshair_Weapon;
+    [SerializeField] GameObject crosshair_ReloadRing;
 
     float timeStartedLerp = 0;
     float percentageComplete = 0;
     float duration;
     Image ring;
+    ReloadGun reloadGun;
 
-    private void Awake() => ring = crosshair_ReloadRing.GetComponent<Image>();
+    void Start() => ring = crosshair_ReloadRing.GetComponent<Image>();
 
-    private void Update() => CrossHairCheck();
+    void Update() => CrossHairCheck();
 
-    private void CrossHairCheck()
+    void CrossHairCheck()
     {
-        if (!Player.Instance.WeaponInteraction.IsholdingWeapon())
+        if (!Player.Instance.WeaponInteraction.isHoldingWeapon)
         {
             crosshair_Dot.SetActive(true);
             crosshair_Weapon.SetActive(false);
@@ -28,8 +29,7 @@ public class CrossHairController : MonoBehaviour
             return;
         }
 
-        ReloadGun reloadGun = Player.Instance.GetComponentInChildren<ReloadGun>();
-
+        reloadGun = Player.Instance.GetComponentInChildren<ReloadGun>();
         reloadGun.ReloadStarted += StartRingFill;
         reloadGun.ReloadEnded += EndRingFill;
         duration = reloadGun.reloadTime;

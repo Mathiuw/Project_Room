@@ -20,7 +20,7 @@ public class Health : MonoBehaviour
     public void AddHealth(int amount)
     {
         HealthAmount += amount;
-        Mathf.Clamp(healthAmount, 0, maxHealthAmount);
+        healthAmount = Mathf.Clamp(healthAmount, 0, maxHealthAmount);
         healthUpdated?.Invoke(healthAmount);
     }
 
@@ -28,7 +28,7 @@ public class Health : MonoBehaviour
     public void RemoveHealth(int amount)
     {
         HealthAmount -= amount;
-        Mathf.Clamp(healthAmount, 0, maxHealthAmount);
+        healthAmount = Mathf.Clamp(healthAmount, 0, maxHealthAmount);
         healthUpdated?.Invoke(healthAmount);
         Isdead();
     }

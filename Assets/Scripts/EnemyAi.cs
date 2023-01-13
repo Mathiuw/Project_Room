@@ -7,10 +7,6 @@ using UnityEngine.SocialPlatforms;
 
 public class EnemyAi : MonoBehaviour
 {
-    [Header("Enemy Type")]
-    [SerializeField] EnemyType enemyType;
-    public EnemyState enemyState { get; private set; }
-
     [Header("Attack")]
     [SerializeField] Transform raycastPos;
     [SerializeField] int burst = 3;
@@ -27,30 +23,20 @@ public class EnemyAi : MonoBehaviour
     [Range(0, 360)] public float angle;
     [SerializeField] LayerMask targetMask, obstructionMask;
 
-    public event Action patrolled;
-    public event Action chased;
-    public event Action attacked;
-
-    bool isAttacking = false;
     bool isPatrolling = false;
+    bool isAttacking = false;
+
+    public bool canSeeTarget { get; private set; }
+    bool canAttackTarget = false;
+
+    public event Action onPatrol;
+    public event Action onChase;
+    public event Action onAttack;
 
     NavMeshAgent navMeshAgent;
     Health health;
     ShootGun shootGun;
     Collider[] rangeCheck;
-
-    enum EnemyType
-    {
-        Patrol,
-        Stand, 
-    }
-
-    public enum EnemyState 
-    {
-        Patrolling,
-        Chasing,
-        Attacking, 
-    }
 
     void OnDisable() => StopAllCoroutines();
 
@@ -59,12 +45,6 @@ public class EnemyAi : MonoBehaviour
         navMeshAgent = GetComponent<NavMeshAgent>();
         health = GetComponent<Health>();
         shootGun = GetComponentInChildren<ShootGun>();
-
-        if (enemyType == EnemyType.Stand) 
-        {
-            Destroy(path.gameObject);
-            return;
-        }
 
         waypoints = new Vector3[path.childCount];
 
@@ -76,46 +56,35 @@ public class EnemyAi : MonoBehaviour
     }
 
     void Update() 
-    {
-        HealthCheck();
+    {   
         FieldOfViewCheck();
+        if (health.HealthAmount < health.MaxHealthAmount) canSeeTarget= true;
         Behavior();
-    }
-
-    void HealthCheck() 
-    {
-        if (health.HealthAmount < health.MaxHealthAmount)
-        {
-            enemyState = EnemyState.Chasing;
-            return;
-        }
     }
 
     void FieldOfViewCheck()
     {
         rangeCheck = Physics.OverlapSphere(transform.position, radius, targetMask);
-        if (rangeCheck.Length == 0) return;
+        if (rangeCheck.Length != 0) 
+        {
+            Transform target = rangeCheck[0].transform;
+            Vector3 directionToTarget = (target.position - transform.position).normalized;
+            float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-        Transform target = rangeCheck[0].transform;
-        Vector3 directtionToTarget = (target.position - transform.position).normalized;
+            if (!(Vector3.Angle(transform.forward, directionToTarget) < angle / 2)) return;
+            if (Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask)) return;
 
-        if (!(Vector3.Angle(transform.forward, directtionToTarget) < angle / 2)) return;
-
-        float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
-        if (Physics.Raycast(transform.position, directtionToTarget, distanceToTarget, obstructionMask)) return;
-
-        enemyState = EnemyState.Chasing;
-
-        if (distanceToTarget < radius / 1.1f) enemyState = EnemyState.Attacking;
-        else enemyState = EnemyState.Chasing;
+            canSeeTarget = true;
+            if (distanceToTarget < radius / 1.1f) canAttackTarget = true;
+        }
+        else canAttackTarget = false;
     }
 
     void Behavior()
     {
-        if (enemyType != EnemyType.Stand && enemyState == EnemyState.Patrolling) Patrol();
-        if (enemyState == EnemyState.Chasing) Chase();
-        if (enemyState == EnemyState.Attacking) Attack();
+        if (!canSeeTarget && !canAttackTarget) Patrol();
+        if (canSeeTarget && !canAttackTarget) Chase();
+        if (canSeeTarget && canAttackTarget) Attack();
     }
 
     void Patrol() 
@@ -127,39 +96,41 @@ public class EnemyAi : MonoBehaviour
     {
         isPatrolling= true;
         Debug.Log("Started Patrolling");
-        patrolled?.Invoke();
+        onPatrol?.Invoke();
 
         Vector2 position = new Vector2(transform.position.x, transform.position.z);
         Vector2 desiredPosition = new Vector2(waypoints[waypointIndex].x, waypoints[waypointIndex].z);
-
-        navMeshAgent.SetDestination(waypoints[waypointIndex]);
-
-        while (position != desiredPosition)
+      
+        while (true)
         {
-            position = new Vector2(transform.position.x, transform.position.z);
+            navMeshAgent.SetDestination(waypoints[waypointIndex]);
 
-            if (enemyState != EnemyState.Patrolling) 
-            {
-                isPatrolling = false;
-                Debug.Log("Stopped Patrolling");
-                yield break;
-            } 
+            while (position != desiredPosition)
+            {              
+                position = new Vector2(transform.position.x, transform.position.z);
+
+                if (canSeeTarget)
+                {
+                    isPatrolling = false;
+                    Debug.Log("Stopped Patrolling");
+                    yield break;
+                }
+                yield return null;
+            }
+
+            waypointIndex++;
+            if (waypointIndex == waypoints.Length) waypointIndex = 0;
+            desiredPosition = new Vector2(waypoints[waypointIndex].x, waypoints[waypointIndex].z);
+
             yield return null;
         }
-
-        waypointIndex++;
-        if (waypointIndex == waypoints.Length) waypointIndex = 0;
-
-        isPatrolling = false;
-        Debug.Log("Stopped Patrolling");
-        yield break;
     }
 
     void Chase() 
     {
         navMeshAgent.SetDestination(Player.Instance.PlayerTransform().position);
         Debug.Log("Chasing");
-        chased?.Invoke();
+        onChase?.Invoke();
     } 
 
     void Attack()
@@ -169,16 +140,18 @@ public class EnemyAi : MonoBehaviour
 
         if (isAttacking) return;
 
-        attacked?.Invoke();
-        StartCoroutine(ShootWeapon(isAttacking));
+        onAttack?.Invoke();
+        StartCoroutine(ShootWeapon());
     }
 
-    IEnumerator ShootWeapon(bool isStarted)
+    IEnumerator ShootWeapon()
     {
         isAttacking = true;
         Debug.Log("Started Attacking");
 
         yield return new WaitForSeconds(nextBurst);
+
+        if (shootGun.ammo == 0) shootGun.ammo = shootGun.maximumAmmo;
 
         for (int i = 0; i < burst; i++)
         {

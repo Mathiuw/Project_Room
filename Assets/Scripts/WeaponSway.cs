@@ -13,7 +13,7 @@ public class WeaponSway : MonoBehaviour
 
     void Update()
     {
-        if (!Player.Instance.WeaponInteraction.IsholdingWeapon()) return;
+        if (!Player.Instance.WeaponInteraction.isHoldingWeapon) return;
 
         if (animator.GetBool("isAiming") == true) swayMultiplier = 0.2f;
         else swayMultiplier = 2f;

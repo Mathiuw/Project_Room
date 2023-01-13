@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
 
     public ShootGun GetPlayerGun() 
     {
-       if (WeaponInteraction.IsholdingWeapon()) return GetComponentInChildren<ShootGun>();
+       if (WeaponInteraction.isHoldingWeapon) return GetComponentInChildren<ShootGun>();
        Debug.LogError("Player Doesnt Have Gun");
        return null;
     }

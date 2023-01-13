@@ -25,8 +25,8 @@ public class PlayerAnimationManager : MonoBehaviour
         weaponInteraction.PickupStarted += OnSetWeaponAnimations;
         weaponInteraction.PickupEnded += OnPickupWeaponAnimation;
         weaponInteraction.PickupEnded += OnHoldWeaponAnimation;
-        weaponInteraction.weaponDroped += OnDropWeaponAnimationReset;
-        weaponInteraction.weaponDroped += OnHoldWeaponAnimation;
+        weaponInteraction.weaponDropped += OnDropWeaponAnimationReset;
+        weaponInteraction.weaponDropped += OnHoldWeaponAnimation;
         weaponInteraction.PickupEnded += OnWeaponShootSetTrigger;
     }
 
@@ -41,7 +41,7 @@ public class PlayerAnimationManager : MonoBehaviour
     //Ativa a Animação de Mirar a Arma
     public void AimingWeaponAnimation(bool input)
     {
-        if (!Player.Instance.WeaponInteraction.IsholdingWeapon()) return;
+        if (!Player.Instance.WeaponInteraction.isHoldingWeapon) return;
         if (input && !Player.Instance.GetPlayerGun().ReloadGun.reloading) Player.Instance.Animator.SetBool("isAiming", true);
         else Player.Instance.Animator.SetBool("isAiming", false);
     }
@@ -55,7 +55,7 @@ public class PlayerAnimationManager : MonoBehaviour
     //Ativa ou Desativa a Animação de Segurar da Arma
     public void OnHoldWeaponAnimation(Transform gun)
     {
-        bool isHoldingWeapon = weaponInteraction.IsholdingWeapon();
+        bool isHoldingWeapon = weaponInteraction.isHoldingWeapon;
 
         animator.SetBool("isHoldingWeapon", isHoldingWeapon);
         ammoUI.SetActive(isHoldingWeapon);

@@ -12,8 +12,8 @@ public class EnemyAnimationManager : MonoBehaviour
         animator = GetComponentInChildren<Animator>();   
         enemyAi= GetComponent<EnemyAi>();
 
-        enemyAi.patrolled += ActivateWalk;
-        enemyAi.attacked += DisableWalk;
+        enemyAi.onPatrol += ActivateWalk;
+        enemyAi.onAttack += DisableWalk;
     }
 
     void ActivateWalk() => animator.SetFloat("walk", 1f);

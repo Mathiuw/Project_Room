@@ -45,14 +45,14 @@ public class Sprint : MonoBehaviour
     public void AddStamina(float amount)
     {
         stamina += amount;
-        Mathf.Clamp(stamina, 0f, maxStamina);
+        stamina = Mathf.Clamp(stamina, 0f, maxStamina);
         staminaUpdated?.Invoke(stamina);
     }
 
     public void RemoveStamina(float amomunt) 
     {
         stamina -= amomunt;
-        Mathf.Clamp(stamina, 0f, maxStamina);
+        stamina = Mathf.Clamp(stamina, 0f, maxStamina);
         staminaUpdated?.Invoke(stamina);
     }
 }
