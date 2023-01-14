@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour
     void OnDead() 
     {
         GetComponent<EnemyAi>().enabled = false;
+        GetComponent<WeaponInteraction>().DropGun();
         GetComponent<NavMeshAgent>().enabled = false;
         GetComponentInChildren<Animator>().enabled = false;
         GetComponentInChildren<Ragdoll>().RagdollActive(true);

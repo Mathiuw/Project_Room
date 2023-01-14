@@ -64,20 +64,20 @@ public class EnemyAi : MonoBehaviour
 
     void FieldOfViewCheck()
     {
+        canAttackTarget = false;
+
         rangeCheck = Physics.OverlapSphere(transform.position, radius, targetMask);
-        if (rangeCheck.Length != 0) 
-        {
-            Transform target = rangeCheck[0].transform;
-            Vector3 directionToTarget = (target.position - transform.position).normalized;
-            float distanceToTarget = Vector3.Distance(transform.position, target.position);
+        if (rangeCheck.Length == 0) return;
 
-            if (!(Vector3.Angle(transform.forward, directionToTarget) < angle / 2)) return;
-            if (Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask)) return;
+        Transform target = rangeCheck[0].transform;
+        Vector3 directionToTarget = (target.position - transform.position).normalized;
+        float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-            canSeeTarget = true;
-            if (distanceToTarget < radius / 1.1f) canAttackTarget = true;
-        }
-        else canAttackTarget = false;
+        if (!(Vector3.Angle(transform.forward, directionToTarget) < angle / 2)) return;
+        if (Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask)) return;
+
+        canSeeTarget = true;
+        if (distanceToTarget < radius / 1.1f) canAttackTarget = true;
     }
 
     void Behavior()

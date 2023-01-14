@@ -12,6 +12,7 @@ public class ShootGun : MonoBehaviour
     [SerializeField] LayerMask shootLayer;
     [SerializeField] ParticleSystem muzzleFlash;
 
+    weapon weapon;
     AudioSource gunSound;
     public ReloadGun ReloadGun { get; private set; }
 
@@ -29,6 +30,7 @@ public class ShootGun : MonoBehaviour
 
     void Start() 
     {
+        weapon = GetComponent<weapon>();
         ReloadGun = GetComponent<ReloadGun>();
         gunSound = GetComponent<AudioSource>();
 
@@ -48,6 +50,7 @@ public class ShootGun : MonoBehaviour
     //Atira
     public void Shooting(Transform raycastPos)
     {
+        if (!weapon.IsBeingHold) return;
         if (ReloadGun.reloading) return;
         if (ammo == 0) return;
 

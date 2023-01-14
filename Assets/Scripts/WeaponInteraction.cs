@@ -22,6 +22,11 @@ public class WeaponInteraction : MonoBehaviour
     public event Action<Transform> PickupEnded;
     public event Action<Transform> weaponDropped;
 
+    void Start() 
+    {
+        if (gunHolder.GetChild(0) != null) StartCoroutine(PickUpCoroutine(gunHolder.GetChild(0)));
+    }
+
     public void WeaponPickup() 
     {
         if (!isHoldingWeapon && Physics.Raycast(raycastTransform.position, raycastTransform.forward, out hit, maxItemDistance, WeaponMask)) 
@@ -63,8 +68,6 @@ public class WeaponInteraction : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
-        weapon.shootGun.onHit += UI_Hit.Instance.OnHit;
 
         isHoldingWeapon = true;
         weapon.BeingHold(true);
