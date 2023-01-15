@@ -1,11 +1,17 @@
 ﻿using UnityEngine;
 using System;
 
-[RequireComponent(typeof(Health))]
 public class Die : MonoBehaviour
 {
     public event Action Died;
+    bool isDead = false;
 
     //Morre(Obvio)
-    public void Dead() => Died?.Invoke();
+    public void Dead() 
+    {
+        if (isDead) return;
+
+        isDead = true;
+        Died?.Invoke();;
+    } 
 }

@@ -31,7 +31,7 @@ public class PlayerInput : MonoBehaviour
         //Pickup Item or Gun
         if (Input.GetKeyDown(KeyCode.E))
         {
-            player.WeaponInteraction.WeaponPickup();
+            player.WeaponInteraction.TryToPickupWeapon();
             player.UseAndDropItems.pickupItem();
             player.Interact.Interacting();
         }

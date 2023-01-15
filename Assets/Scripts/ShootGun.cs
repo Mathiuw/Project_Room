@@ -50,7 +50,6 @@ public class ShootGun : MonoBehaviour
     //Atira
     public void Shooting(Transform raycastPos)
     {
-        if (!weapon.IsBeingHold) return;
         if (ReloadGun.reloading) return;
         if (ammo == 0) return;
 
@@ -69,27 +68,20 @@ public class ShootGun : MonoBehaviour
                 {
                     onHit?.Invoke(health);
                     health.RemoveHealth(damage);
-                    AddForceToDeadBodies(hit.transform, raycastPos, bulletForce, health);
-                    Debug.Log(hit.transform.name + " - life = " + health.HealthAmount);
+                    if (health.Isdead()) AddForceToRbs(hit.transform, raycastPos, bulletForce);
                 }
-                else Debug.LogError(hit.transform.name + " Doesnt Have Health");            
+                else AddForceToRbs(hit.transform, raycastPos, bulletForce);
             }
             nextTimeToFire = Time.time + (1f / fireRate);
         }
     }
 
-    //Adiciona força aos Corpos Mortos
-    void AddForceToDeadBodies(Transform t, Transform directionForce, float forceAmount, Health health) 
+    //Adiciona força a RigidBodies
+    void AddForceToRbs(Transform t, Transform directionForce, float forceAmount) 
     {
         Rigidbody rb;
 
-        if (!health.Isdead()) 
-        {
-            Debug.Log(t.name + " is not dead");
-            return;
-        }
-        if (t.TryGetComponent(out rb)) rb.AddForce(directionForce.forward * forceAmount, ForceMode.VelocityChange);
-        else Debug.LogError("rbs Not Found");
+        if (t.TryGetComponent(out rb) && !rb.isKinematic) rb.AddForce(directionForce.forward * forceAmount, ForceMode.VelocityChange);
     }
 
     //Muzzle Flash e Som da Arma
@@ -98,11 +90,4 @@ public class ShootGun : MonoBehaviour
         muzzleFlash.Play(true);
         gunSound.Play();
     }
-
-    //Reseta os Eventos da Arma
-    public void ResetGunEvents() 
-    {
-        onShoot = null;
-        onHit = null;
-    } 
 }

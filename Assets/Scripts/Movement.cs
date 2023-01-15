@@ -15,7 +15,7 @@ public class Movement : MonoBehaviour
     {
         moveDirection = transform.forward * moveV + transform.right * moveH;
 
-        Player.Instance.RigidBody.AddForce(moveDirection.normalized * moveSpeed * sprintMultiplier * Time.deltaTime);
+        Player.Instance.RigidBody.AddForce(moveDirection.normalized * moveSpeed * sprintMultiplier * Time.deltaTime, ForceMode.VelocityChange);
 
         MaxSpeedCheck();
     }
