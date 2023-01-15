@@ -8852,13 +8852,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 488911057, guid: 202c48f1c5a003241ac5095ca3105090, type: 3}
-      propertyPath: healthAmount
-      value: 100000
-      objectReference: {fileID: 0}
-    - target: {fileID: 488911057, guid: 202c48f1c5a003241ac5095ca3105090, type: 3}
-      propertyPath: maxHealthAmount
-      value: 100000
+    - target: {fileID: 476823638, guid: 202c48f1c5a003241ac5095ca3105090, type: 3}
+      propertyPath: m_AmplitudeGain
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1937950686344160428, guid: 202c48f1c5a003241ac5095ca3105090,
         type: 3}
@@ -8940,31 +8936,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3297487630234954672, guid: 202c48f1c5a003241ac5095ca3105090,
-        type: 3}
-      propertyPath: m_Drag
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297487630234954672, guid: 202c48f1c5a003241ac5095ca3105090,
-        type: 3}
-      propertyPath: m_Mass
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3297487630234954678, guid: 202c48f1c5a003241ac5095ca3105090,
-        type: 3}
-      propertyPath: moveSpeed
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 6596702033261614114, guid: 202c48f1c5a003241ac5095ca3105090,
-        type: 3}
-      propertyPath: crosshair_Weapon
-      value: 
-      objectReference: {fileID: 1641876629}
-    - target: {fileID: 6596702033261614114, guid: 202c48f1c5a003241ac5095ca3105090,
-        type: 3}
-      propertyPath: crosshair_ReloadRing
-      value: 
-      objectReference: {fileID: 685484838}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 202c48f1c5a003241ac5095ca3105090, type: 3}
 --- !u!1001 &298126852
@@ -16802,12 +16773,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &685484838 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4300537215371467693, guid: 202c48f1c5a003241ac5095ca3105090,
-    type: 3}
-  m_PrefabInstance: {fileID: 295000515}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &691350510
 Mesh:
   m_ObjectHideFlags: 0
@@ -42747,7 +42712,7 @@ PrefabInstance:
     - target: {fileID: 6980745419994426010, guid: a20e9ce2d338ddc4aac45d25c587afd3,
         type: 3}
       propertyPath: m_Name
-      value: Game Management
+      value: Game Manager
       objectReference: {fileID: 0}
     - target: {fileID: 6980745419994426010, guid: a20e9ce2d338ddc4aac45d25c587afd3,
         type: 3}
@@ -45126,12 +45091,6 @@ PrefabInstance:
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 445d518733da0984595164b2ca86f8d1, type: 3}
---- !u!1 &1641876629 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6005521099551321708, guid: 202c48f1c5a003241ac5095ca3105090,
-    type: 3}
-  m_PrefabInstance: {fileID: 295000515}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1647498768
 Mesh:
   m_ObjectHideFlags: 0

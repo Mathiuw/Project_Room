@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6980745419994426009}
   - component: {fileID: 6453349847648398695}
   m_Layer: 0
-  m_Name: Game Management
+  m_Name: Game Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,9 +40,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6980745419994426010}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60d2089e0c5c1634c8405a84c0e0bbaa, type: 3}
+  m_Script: {fileID: 11500000, guid: 999f9644ac29e65479db91977755c05b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   loadingScreen: {fileID: 0}
-  levelAmount: 9
-  gameScenes: []

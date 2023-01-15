@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManagent : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
     public GameObject loadingScreen;
 
     void Awake()
     {
-        DontDestroyOnLoad(gameObject);
-
-        GameManagent[] instances = FindObjectsOfType<GameManagent>();
-
-        if (instances.Length > 1)
+        if (instance != null && instance != this)
         {
-            for (int i = 0; i < instances.Length - 1; i++)
-            {
-                Destroy(instances[i].gameObject);
-            }
+            Destroy(this);
         }
+        else instance = this;
+
+
+        DontDestroyOnLoad(gameObject);
     }
 
     public void StartGame()

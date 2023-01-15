@@ -6,23 +6,17 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-    public Sound[] sounds;
-
     public static AudioManager instance;
+
+    public Sound[] sounds;
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
-
-        AudioManager[] instances = FindObjectsOfType<AudioManager>();
-
-        if (instances.Length > 1)
+        if (instance != null && instance != this)
         {
-            for (int i = 0; i < instances.Length - 1; i++)
-            {
-                Destroy(instances[i].gameObject);
-            }
+            Destroy(this);
         }
+        else instance = this;
 
         foreach (Sound s in sounds)
         {
