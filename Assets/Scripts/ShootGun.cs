@@ -81,7 +81,7 @@ public class ShootGun : MonoBehaviour
     {
         Rigidbody rb;
 
-        if (t.TryGetComponent(out rb) && !rb.isKinematic) rb.AddForce(directionForce.forward * forceAmount, ForceMode.VelocityChange);
+        if (t.TryGetComponent(out rb) && !rb.isKinematic) rb.AddForce(directionForce.forward * forceAmount, ForceMode.Impulse);
     }
 
     //Muzzle Flash e Som da Arma

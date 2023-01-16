@@ -67,7 +67,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c124549f987ce449fa088a7acf2fc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isBeingHold: 0
 --- !u!114 &1830547555977088245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -98,8 +97,8 @@ MonoBehaviour:
     m_Bits: 12032
   muzzleFlash: {fileID: 5671447419204676612}
   damage: 20
-  bulletForce: 2.5
-  bulletMaxDistace: 10000
+  bulletForce: 10
+  bulletMaxDistace: 500
   fireRate: 5
   ammo: 15
   maximumAmmo: 15
