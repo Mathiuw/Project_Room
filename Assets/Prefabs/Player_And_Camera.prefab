@@ -2381,7 +2381,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3297487630234954667}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c2a6b8221b16104893b517759660b41, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d8836bbdc84d604c901829be540165d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   hotbarSlots: {fileID: 1420430877}
@@ -2448,7 +2448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff5243326c408e4592f188032318f14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raycastTransform: {fileID: 0}
+  raycastTransform: {fileID: 3297487630538489608}
   gunHolder: {fileID: 3297487629207671530}
   WeaponMask:
     serializedVersion: 2
@@ -2508,12 +2508,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3297487630234954667}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa978aab2a21ad6438d03e8607a5965c, type: 3}
+  m_Script: {fileID: 11500000, guid: c3e475e28eb60c448af04e776623665f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   interactiveMask:
     serializedVersion: 2
-    m_Bits: 15104
+    m_Bits: 0
   rayLength: 5
 --- !u!114 &3094166134442810487
 MonoBehaviour:
@@ -2529,7 +2529,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layersToRead:
     serializedVersion: 2
-    m_Bits: 15104
+    m_Bits: 13056
   displayText: {fileID: 4412135926740607820}
   playerCamera: {fileID: 3297487630538489608}
 --- !u!114 &3621669783269704848

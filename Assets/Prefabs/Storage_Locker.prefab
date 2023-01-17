@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2615663458818157880}
-  - component: {fileID: 7822234715128457455}
   m_Layer: 13
   m_Name: LockerDoor
   m_TagString: Untagged
@@ -24,29 +23,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1102818939435357225}
-  m_LocalRotation: {x: -0, y: -0, z: 0.0000005900559, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.636, y: 0.527, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5042260325001822560}
   m_Father: {fileID: 7989073646208417535}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7822234715128457455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1102818939435357225}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e6ae6fd9c1bf9a4fbb9ca7c3b66554e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactiveTypes: 2
-  necessaryItem: {fileID: 0}
-  objectDoor: Locker
 --- !u!1 &5836845077845719551
 GameObject:
   m_ObjectHideFlags: 0
@@ -78,7 +62,7 @@ Transform:
   m_LocalScale: {x: 140, y: 140, z: 140}
   m_Children: []
   m_Father: {fileID: 7989073646208417535}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6448040451798247364
 MeshFilter:
@@ -150,9 +134,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7989073646208417535}
-  - component: {fileID: 5712753528532086478}
+  - component: {fileID: 2993582557528257708}
+  - component: {fileID: 5416084654655943542}
   m_Layer: 8
-  m_Name: Locker
+  m_Name: Storage_Locker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -169,30 +154,42 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 8544380256510268489}
   - {fileID: 2615663458818157880}
+  - {fileID: 8544380256510268489}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!95 &5712753528532086478
-Animator:
-  serializedVersion: 3
+--- !u!114 &2993582557528257708
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7989073646208417534}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ea5ed5a3ddd972e499b56674ecac2bb7, type: 2}
-  m_CullingMode: 2
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d4f007dd720896408154c7e855dda3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Locker
+  duration: 0.4
+  doors:
+  - {fileID: 2615663458818157880}
+  desiredRotations:
+  - {x: 0, y: 0, z: -100}
+--- !u!114 &5416084654655943542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7989073646208417534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  text: 
 --- !u!1 &9071749151219702941
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,7 +202,7 @@ GameObject:
   - component: {fileID: 4338255461182262668}
   - component: {fileID: 7745243691731893713}
   - component: {fileID: 9071749151219702946}
-  - component: {fileID: 8776414938639188612}
+  - component: {fileID: 2735724478059884258}
   m_Layer: 13
   m_Name: LockerDoorModel
   m_TagString: Untagged
@@ -288,16 +285,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: -8212642602513761415, guid: 7e57d5acb0a424845b2732f772457ea5, type: 3}
---- !u!114 &8776414938639188612
-MonoBehaviour:
+--- !u!54 &2735724478059884258
+Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9071749151219702941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  text: 
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
