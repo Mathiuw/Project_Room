@@ -2402,11 +2402,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d4f007dd720896408154c7e855dda3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectName: Door
+  duration: 0.4
   doors:
   - {fileID: 6801573462930604015}
+  startRotation:
+  - {x: 0, y: 0, z: 0}
   desiredRotations:
   - {x: 0, y: -94, z: 0}
-  duration: 0.4
 --- !u!114 &1205410652441093058
 MonoBehaviour:
   m_ObjectHideFlags: 0

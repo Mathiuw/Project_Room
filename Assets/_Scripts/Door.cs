@@ -11,16 +11,19 @@ public class Door : Interact
     [Header("Rotation")]
     [SerializeField] float duration = 0.4f;
     [SerializeField] Transform[] doors;
+    [SerializeField] Vector3[] startRotation;
     [SerializeField] Vector3[] desiredRotations;
     bool open = false;
 
     Name doorName;
 
-    void Awake() 
+    void Start() 
     {
         doorName = GetComponent<Name>();
 
         SetName(objectName);
+
+        for (int i = 0; i < doors.Length; i++) doors[i].localEulerAngles = startRotation[i];
     }
 
     public override void Interacting() => StartCoroutine(OpenCloseDoor());
@@ -33,22 +36,10 @@ public class Door : Interact
         float elapsedtime = 0f;     
         float percentageComplete = 0f;
 
-        Quaternion[] startRotation = new Quaternion[doors.Length];
-
-        for (int i = 0; i < doors.Length; i++) startRotation[i] = doors[i].localRotation;
-
         while (elapsedtime < duration)
         {
-            if (!open)
-                for (int i = 0; i < doors.Length; i++)
-                {
-                    doors[i].localRotation = Quaternion.Lerp(startRotation[i], Quaternion.Euler(desiredRotations[i]), percentageComplete);
-                }
-            else
-                for (int i = 0; i < doors.Length; i++) 
-                {
-                    doors[i].localRotation = Quaternion.Lerp(startRotation[i], Quaternion.identity, percentageComplete);
-                }       
+            if (!open) ArrayLerp(doors, startRotation, desiredRotations, percentageComplete);
+            else ArrayLerp(doors, desiredRotations, startRotation, percentageComplete);
 
             elapsedtime += Time.deltaTime;
             percentageComplete = elapsedtime / duration;
@@ -58,7 +49,7 @@ public class Door : Interact
         for (int i = 0; i < doors.Length; i++) 
         {
             if (!open) doors[i].localRotation = Quaternion.Euler(desiredRotations[i]);
-            else doors[i].localRotation = Quaternion.identity;
+            else doors[i].localRotation = Quaternion.Euler(startRotation[i]);
         }
 
         open = !open;
@@ -67,6 +58,14 @@ public class Door : Interact
         doorName.enabled= true;
         enabled = true;
         yield break;
+    }
+
+    void ArrayLerp(Transform[] t, Vector3[] startRotation, Vector3[] desiredRotation, float percentageComplete ) 
+    {
+        for (int i = 0; i < doors.Length; i++)
+        {
+            t[i].localRotation = Quaternion.Lerp( Quaternion.Euler(startRotation[i]), Quaternion.Euler(desiredRotation[i]), percentageComplete);
+        }
     }
 
     void ChangeNames(string text)=> doorName.text = text;

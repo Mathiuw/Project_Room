@@ -175,6 +175,8 @@ MonoBehaviour:
   duration: 0.4
   doors:
   - {fileID: 2615663458818157880}
+  startRotation:
+  - {x: 0, y: 0, z: 0}
   desiredRotations:
   - {x: 0, y: 0, z: -100}
 --- !u!114 &5416084654655943542
