@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 541013020259382555}
   - component: {fileID: 5514343440331723490}
   - component: {fileID: -6196181425649279609}
+  - component: {fileID: -3850745253016182314}
   - component: {fileID: 584032758333625060}
   m_Layer: 12
   m_Name: Gun_Pistol
@@ -129,6 +130,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponOverrideController: {fileID: 22100000, guid: 4f547759e1dd5c041b6017e80dc64ee7,
     type: 2}
+--- !u!114 &-3850745253016182314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3163711967376219197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9903863393b6b2d47bdccc59068a0471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amplitude: 1
+  frequency: 0.2
+  duration: 0.1
 --- !u!82 &584032758333625060
 AudioSource:
   m_ObjectHideFlags: 0

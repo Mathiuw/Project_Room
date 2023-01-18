@@ -1158,6 +1158,8 @@ GameObject:
   - component: {fileID: 5871790488042738631}
   - component: {fileID: 5411267623917582998}
   - component: {fileID: 2096740462654853803}
+  - component: {fileID: 5810801358800560343}
+  - component: {fileID: 6192752908026269548}
   m_Layer: 10
   m_Name: Camera
   m_TagString: Untagged
@@ -1210,6 +1212,31 @@ MonoBehaviour:
   smooth: 20
   angle: 0
   cameraTransform: {fileID: 0}
+--- !u!114 &5810801358800560343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836869242936404980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eaa1de5a22330d3419e24c1e131eecc9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  focusSpeed: 7.5
+--- !u!114 &6192752908026269548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836869242936404980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98c54babfa871c94da508a5effcbcb94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &892690372407775161
 GameObject:
   m_ObjectHideFlags: 0
@@ -2513,7 +2540,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactiveMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 12800
   rayLength: 5
 --- !u!114 &3094166134442810487
 MonoBehaviour:
@@ -2529,7 +2556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layersToRead:
     serializedVersion: 2
-    m_Bits: 13056
+    m_Bits: 12800
   displayText: {fileID: 4412135926740607820}
   playerCamera: {fileID: 3297487630538489608}
 --- !u!114 &3621669783269704848
@@ -2683,7 +2710,6 @@ GameObject:
   - component: {fileID: 3297487630538489609}
   - component: {fileID: 4768019215278580172}
   - component: {fileID: 4769280008701211086}
-  - component: {fileID: 2462851783950086820}
   - component: {fileID: 295000518}
   m_Layer: 10
   m_Name: Main Camera
@@ -2835,19 +2861,6 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   priority: 0
---- !u!114 &2462851783950086820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3297487630538489612}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eaa1de5a22330d3419e24c1e131eecc9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  focusSpeed: 7.5
 --- !u!114 &295000518
 MonoBehaviour:
   m_ObjectHideFlags: 0

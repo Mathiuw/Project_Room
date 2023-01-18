@@ -14,7 +14,6 @@ public class Door : Interact
     [SerializeField] Vector3[] startRotation;
     [SerializeField] Vector3[] desiredRotations;
     bool open = false;
-
     Name doorName;
 
     void Start() 
