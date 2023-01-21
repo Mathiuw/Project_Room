@@ -14,7 +14,7 @@ public class DynamicDOF : MonoBehaviour
 
     void Awake()
     {
-        postProcessVolume = GetComponent<PostProcessVolume>();
+        postProcessVolume = GetComponentInChildren<PostProcessVolume>();
     }
 
     void Update()

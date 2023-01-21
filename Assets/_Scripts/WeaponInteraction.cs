@@ -1,9 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using System;
-using UnityEditor.UIElements;
 
 public class WeaponInteraction : MonoBehaviour
 {
@@ -16,8 +14,8 @@ public class WeaponInteraction : MonoBehaviour
     public bool isHoldingWeapon { get; private set; } = false;
 
     RaycastHit hit;
-    weapon currentWeapon;
-
+    public weapon currentWeapon { get; protected set; }
+    
     public event Action<Transform> onPickupStart;
     public event Action<Transform> onPickupEnd;
     public event Action<Transform> onWeaponDrop;

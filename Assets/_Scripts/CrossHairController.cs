@@ -13,15 +13,22 @@ public class CrossHairController : MonoBehaviour
     float percentageComplete = 0;
     float duration;
     Image ring;
+    PlayerWeaponInteraction playerWeaponInteraction;
+    Animator animator;
     ReloadGun reloadGun;
 
-    void Start() => ring = crosshair_ReloadRing.GetComponent<Image>();
+    void Start() 
+    {
+        ring = crosshair_ReloadRing.GetComponent<Image>();
+        playerWeaponInteraction = Player.Instance.GetComponentInChildren<PlayerWeaponInteraction>();
+        animator = Player.Instance.GetComponentInChildren<Animator>();
+    } 
 
     void Update() => CrossHairCheck();
 
     void CrossHairCheck()
     {
-        if (!Player.Instance.WeaponInteraction.isHoldingWeapon)
+        if (!playerWeaponInteraction.isHoldingWeapon)
         {
             crosshair_Dot.SetActive(true);
             crosshair_Weapon.SetActive(false);
@@ -34,7 +41,7 @@ public class CrossHairController : MonoBehaviour
         reloadGun.ReloadEnded += EndRingFill;
         duration = reloadGun.reloadTime;
 
-        if (Player.Instance.Animator.GetBool("isAiming"))
+        if (animator.GetBool("isAiming"))
         {
             crosshair_Dot.SetActive(false);
             crosshair_Weapon.SetActive(false);
@@ -56,6 +63,8 @@ public class CrossHairController : MonoBehaviour
         crosshair_ReloadRing.SetActive(false);
     }
 
+
+
     float ReloadRingLerp()
     {
         float timeSinceStarted = Time.time - timeStartedLerp;
@@ -65,13 +74,13 @@ public class CrossHairController : MonoBehaviour
         return result;
     }
 
-    private void StartRingFill()
+    void StartRingFill()
     {
         ring.fillAmount = 0;
         timeStartedLerp = Time.time;
     }
 
-    private void EndRingFill()
+    void EndRingFill()
     {
         ring.fillAmount = 1;
         percentageComplete = 0;

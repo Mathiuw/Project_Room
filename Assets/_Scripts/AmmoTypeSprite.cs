@@ -8,7 +8,7 @@ public class AmmoTypeSprite : MonoBehaviour
     [SerializeField] Image ammoType;
     [SerializeField] Sprite[] ammoTypeSprite;
 
-    void Start() => Player.Instance.WeaponInteraction.onPickupEnd += SetSprite;
+    void Start() => Player.Instance.GetComponentInChildren<PlayerWeaponInteraction>().onPickupEnd += SetSprite;
 
     void SetSprite(Transform gun) => ammoType.sprite = ammoTypeSprite[whichSpriteReturn(gun)];
 

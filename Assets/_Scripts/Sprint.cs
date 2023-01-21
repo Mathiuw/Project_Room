@@ -8,23 +8,29 @@ public class Sprint : MonoBehaviour
     [Header("Sprinting")]
     [SerializeField] int staminaCost = 10;
     [SerializeField] int staminaRecover = 8;
-    [SerializeField] float Multiplier = 1.5f;
-    [HideInInspector] public bool isInfinite = false;     
+    [SerializeField] float multiplierWhileRunning = 1.5f;
+    PlayerMovement playerMovement;
 
     public float stamina { get; private set; } = 30;
     public float maxStamina { get; private set; } = 30;
+    public bool isInfinite = false;
 
     public event Action<float> staminaUpdated;
 
-    void Start() => staminaUpdated?.Invoke(stamina);
+    void Start() 
+    {
+        playerMovement= GetComponent<PlayerMovement>();
+
+        staminaUpdated?.Invoke(stamina);
+    } 
+
+    void Update() => Sprinting(KeyCode.LeftShift, KeyCode.W);
 
     public void Sprinting(KeyCode RunInput, KeyCode WalkInput)
     {
-        Player player = Player.Instance;
-
         if (Input.GetKey(RunInput) && Input.GetKey(WalkInput) && stamina > 0f)
         {
-            player.Movement.sprintMultiplier = Multiplier;
+            playerMovement.sprintMultiplier = multiplierWhileRunning;
 
             if (isInfinite)
             {
@@ -38,7 +44,8 @@ public class Sprint : MonoBehaviour
             return;
         }
 
-        player.Movement.sprintMultiplier = 1;
+        playerMovement.sprintMultiplier = 1;
+
         if (stamina <= maxStamina) AddStamina(staminaRecover * Time.deltaTime);
     }
 

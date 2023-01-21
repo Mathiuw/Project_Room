@@ -121,7 +121,7 @@ public class interactive : MonoBehaviour
     IEnumerator CloseElevatorAndEndGame()
     {
         Animator elevatorAnimator = GetComponentInParent<Animator>();
-        Animator playerAnimator = Player.Instance.Animator;
+        Animator playerAnimator = Player.Instance.GetComponent<Animator>();
         Elevator elevatorScript = GetComponentInParent<Elevator>();
         MeshRenderer panelMesh = elevatorScript.elevatorPanels[1].GetComponentInChildren<MeshRenderer>();
 

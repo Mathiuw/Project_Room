@@ -13,8 +13,8 @@ public class UI_PlayerStats : MonoBehaviour
 
     void Start() 
     {
-        health = Player.Instance.Health;
-        sprint= Player.Instance.Sprint;
+        health = Player.Instance.GetComponentInChildren<Health>();
+        sprint= Player.Instance.GetComponentInChildren<Sprint>();
 
         staminaBar.maxValue = sprint.maxStamina;
         healthBar.maxValue = health.MaxHealthAmount;

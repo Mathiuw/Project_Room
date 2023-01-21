@@ -5,12 +5,30 @@ using UnityEngine;
 public class UseAndDropItems : MonoBehaviour
 {
     [Header("Pickup item")]
-    [SerializeField] private float rayLenght;
-    [SerializeField] private Transform cameraTransform;
-    [SerializeField] private LayerMask itemMask;
+    [SerializeField] float rayLenght;
+    [SerializeField] LayerMask itemMask;
+    Transform cameraTransform;
+    Inventory inventory;
+    Sprint sprint;
 
     [Header("Drop item")]
-    [SerializeField] private GameObject itemPrefab;
+    [SerializeField] GameObject itemPrefab;
+
+    void Awake() 
+    {
+        inventory = GetComponent<Inventory>();
+        cameraTransform = Camera.main.transform;
+        sprint= GetComponent<Sprint>();
+    }
+
+    void Update() 
+    {
+        if (Input.GetKeyDown(KeyCode.E)) pickupItem();
+
+        if (Input.GetKeyDown(KeyCode.Q)) DropItem();
+
+        if (Input.GetKeyDown(KeyCode.F)) UseItem();
+    }
 
     public void pickupItem()
     {
@@ -18,9 +36,9 @@ public class UseAndDropItems : MonoBehaviour
 
         if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, rayLenght, itemMask))
         {
-            if (hit.transform.GetComponent<SetItem>() && Player.Instance.Inventory.CheckAndAddItem(hit.transform.GetComponent<SetItem>()))
+            if (hit.transform.GetComponent<SetItem>() && inventory.CheckAndAddItem(hit.transform.GetComponent<SetItem>()))
             {
-                Player.Instance.UIInventory.RefreshInventory();
+                UI_Inventory.instance.RefreshInventory();
                 Destroy(hit.transform.gameObject);
                 Debug.Log("Picked item");
             }
@@ -29,9 +47,9 @@ public class UseAndDropItems : MonoBehaviour
 
     public void UseItem()
     {
-        foreach (SetItem item in Player.Instance.Inventory.inventory)
+        foreach (SetItem item in inventory.inventory)
         {
-            if (Player.Instance.Inventory.inventory.IndexOf(item) == UI_SelectItem.index && item.item.isConsumable)
+            if (inventory.inventory.IndexOf(item) == UI_SelectItem.index && item.item.isConsumable)
             {
                 GetComponent<Health>().AddHealth(item.item.recoverHealth);
 
@@ -42,9 +60,9 @@ public class UseAndDropItems : MonoBehaviour
                 //}
 
                 if (item.amount > 1) item.amount--;
-                else Player.Instance.Inventory.inventory.Remove(item);
+                else inventory.inventory.Remove(item);
 
-                Player.Instance.UIInventory.RefreshInventory();
+                UI_Inventory.instance.RefreshInventory();
                 Debug.Log(item.item.name + " used and removed");
                 break;
             }
@@ -55,12 +73,12 @@ public class UseAndDropItems : MonoBehaviour
     {
         Sprint sprintScript = GetComponent<Sprint>();
 
-        sprintScript.isInfinite = true;
+        sprint.isInfinite = true;
         Debug.Log("Infinite Sprint Started");
 
         yield return new WaitForSeconds(time);
 
-        sprintScript.isInfinite = false;
+        sprint.isInfinite = false;
         Debug.Log("Infinite Sprint Finished");
         yield break;
     }
@@ -68,17 +86,17 @@ public class UseAndDropItems : MonoBehaviour
     public void DropItem()
     {
         SpawnDropItem();
-        Player.Instance.UIInventory.RefreshInventory();
+        UI_Inventory.instance.RefreshInventory();
         Debug.Log("Item Droped");
     }
 
     void SpawnDropItem()
     {
-        foreach (SetItem item in Player.Instance.Inventory.inventory)
+        foreach (SetItem item in inventory.inventory)
         {
-            if (Player.Instance.Inventory.inventory.IndexOf(item) == UI_SelectItem.index)
+            if (inventory.inventory.IndexOf(item) == UI_SelectItem.index)
             {
-                if (item.amount == 1) Player.Instance.Inventory.inventory.RemoveAt(UI_SelectItem.index);
+                if (item.amount == 1) inventory.inventory.RemoveAt(UI_SelectItem.index);
                 else item.amount--;
                 GameObject itemSpawned = Instantiate(itemPrefab, cameraTransform.position + cameraTransform.forward * 1.5f, cameraTransform.rotation);
                 itemSpawned.GetComponent<SetItem>().item = item.item;

@@ -16,43 +16,38 @@ public class PlayerAnimationManager : MonoBehaviour
 
     void Start() 
     {
-        weaponInteraction = Player.Instance.WeaponInteraction;
-        animator = Player.Instance.Animator;
-        rb = Player.Instance.RigidBody;
+        weaponInteraction = GetComponent<WeaponInteraction>();
+        animator = GetComponentInParent<Animator>();
+        rb = GetComponent<Rigidbody>();
 
         OnHoldWeaponAnimation(transform);
 
-        weaponInteraction.onPickupStart += OnSetWeaponAnimations;
-        weaponInteraction.onPickupEnd += OnPickupWeaponAnimation;
+        weaponInteraction.onPickupStart += SetWeaponAnimations;
+        weaponInteraction.onPickupEnd += OnPickup;
         weaponInteraction.onPickupEnd += OnHoldWeaponAnimation;
-        weaponInteraction.onWeaponDrop += OnDropWeaponAnimationReset;
+        weaponInteraction.onPickupEnd += OnShoot;
+        weaponInteraction.onWeaponDrop += OnDrop;
         weaponInteraction.onWeaponDrop += OnHoldWeaponAnimation;
-        weaponInteraction.onPickupEnd += OnWeaponShootSetTrigger;
+
     }
 
     void Update() => animator.SetFloat("RbVelocity", rb.velocity.magnitude);
 
-    //Ativa a Animação de Atirar da Arma
-    void ShootWeaponAnimation() => animator.SetTrigger("isShooting");
+    void ShootWeapon() => animator.SetTrigger("isShooting");
 
-    //Adiciona o trigger da animação ao Evento de Atirar da arma
-    public void OnWeaponShootSetTrigger(Transform gun) => gun.GetComponent<ShootGun>().onShoot += ShootWeaponAnimation;
+    public void OnShoot(Transform gun) => gun.GetComponent<ShootGun>().onShoot += ShootWeapon;
  
-    //Ativa a Animação de Mirar a Arma
-    public void AimingWeaponAnimation(bool input)
+    public void AimWeapon(bool b)
     {
-        if (!Player.Instance.WeaponInteraction.isHoldingWeapon) return;
-        if (input && !Player.Instance.GetPlayerGun().ReloadGun.reloading) Player.Instance.Animator.SetBool("isAiming", true);
-        else Player.Instance.Animator.SetBool("isAiming", false);
+        if (b) animator.SetBool("isAiming", true);
+        else animator.SetBool("isAiming", false);
     }
 
-    //Define as Animações da Arma
-    public void OnSetWeaponAnimations(Transform gun) 
+    public void SetWeaponAnimations(Transform gun) 
     {
         animator.runtimeAnimatorController = gun.GetComponent<WeaponAnimations>().WeaponOverrideController;
     }
 
-    //Ativa ou Desativa a Animação de Segurar da Arma
     public void OnHoldWeaponAnimation(Transform gun)
     {
         bool isHoldingWeapon = weaponInteraction.isHoldingWeapon;
@@ -62,11 +57,9 @@ public class PlayerAnimationManager : MonoBehaviour
         ammoType.gameObject.SetActive(isHoldingWeapon);
     }
 
-    //Ativa a Animação de Pegar a Arma
-    public void OnPickupWeaponAnimation(Transform gun) => animator.SetBool("isHoldingWeapon", true);
+    public void OnPickup(Transform gun) => animator.SetBool("isHoldingWeapon", true);
 
-    //Desativa as Animações ao Dropar a Arma
-    public void OnDropWeaponAnimationReset(Transform gun) 
+    public void OnDrop(Transform gun) 
     {
         animator.SetBool("isHoldingWeapon", false);
         animator.SetBool("isAiming", false);

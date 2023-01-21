@@ -10,6 +10,11 @@ public class PlayerInteract : MonoBehaviour
 
     void Start() => cameraTransform = Camera.main.transform;
 
+    void Update() 
+    {
+        if(Input.GetKeyDown(KeyCode.E))Interacting();
+    } 
+
     public void Interacting() 
     {
         RaycastHit hit;
@@ -18,10 +23,7 @@ public class PlayerInteract : MonoBehaviour
         {
             Interact interact;
 
-            if ((interact = hit.transform.GetComponentInParent<Interact>()) && interact.enabled)
-            {
-                interact.Interacting();
-            }
+            if ((interact = hit.transform.GetComponentInParent<Interact>()) && interact.enabled) interact.Interacting();
         }
     }
 }

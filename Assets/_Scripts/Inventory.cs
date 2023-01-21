@@ -36,6 +36,7 @@ public class Inventory : MonoBehaviour
 
     public bool CheckAndRemoveItem(Items item)
     {
+        Debug.Log("tentou remover");
         foreach (SetItem i in inventory)
         {
             if (item.itemName == i.item.itemName)
@@ -62,7 +63,7 @@ public class Inventory : MonoBehaviour
         {
             if (inventory.IndexOf(i) == UI_SelectItem.index && item.itemName == i.item.itemName)
             {
-                Debug.Log("Player has " + item.itemType + "in the Index");
+                Debug.Log("Player has " + item.itemName + "in the Index");
                 return true;
             }
         }
@@ -76,11 +77,11 @@ public class Inventory : MonoBehaviour
         {
             if (item.name == i.item.name)
             {
-                Debug.Log("Player has " + item.itemType + "in the inventory");
+                Debug.Log("Player has " + item.itemName + " in the inventory");
                 return true;
             }
         }
-        Debug.Log("Player has not " + item + "in the inventory");
+        Debug.Log("Player has not " + item.itemName + " in the inventory");
         return false;
     }
 }
