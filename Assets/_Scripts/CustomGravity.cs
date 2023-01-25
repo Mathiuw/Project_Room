@@ -1,18 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 
+[RequireComponent(typeof(Rigidbody))]
 public class CustomGravity : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] float force;
+    Rigidbody rb;
+
+    void Awake() 
     {
-        
+        rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate() 
     {
-        
+        SetGravity(); 
+    }
+
+    void SetGravity()          
+    {
+        rb.AddForce(Vector3.down * force * Time.deltaTime, ForceMode.VelocityChange);
     }
 }

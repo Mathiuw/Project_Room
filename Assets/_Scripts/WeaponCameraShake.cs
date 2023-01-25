@@ -16,6 +16,16 @@ public class WeaponCameraShake : CameraShake
         weaponInteraction.onPickupEnd += OnPickup;
     }
 
+    void Update() 
+    {
+        while (cameraNoise.m_AmplitudeGain > 0f)
+        {
+            cameraNoise.m_AmplitudeGain -= Time.deltaTime / duration;
+            return;
+        }
+        cameraNoise.m_AmplitudeGain = 0;
+    }
+
     void OnPickup(Transform gun)
     {
         shakeValues = gun.GetComponentInParent<ReturnShakeValues>();
@@ -23,7 +33,7 @@ public class WeaponCameraShake : CameraShake
         amplitude = shakeValues.amplitude;
         duration = shakeValues.duration;
 
-        gun.GetComponentInParent<ShootGun>().onShoot += StartShake;
+        gun.GetComponentInParent<ShootGun>().onShoot += SetShake;
     }
 
     void OnDrop(Transform gun)
@@ -32,6 +42,6 @@ public class WeaponCameraShake : CameraShake
         duration = 0;
         duration = 0;
 
-        gun.GetComponentInParent<ShootGun>().onShoot -= StartShake;
+        gun.GetComponentInParent<ShootGun>().onShoot -= SetShake;
     }
 }

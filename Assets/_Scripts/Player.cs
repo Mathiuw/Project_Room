@@ -73,6 +73,7 @@ public class Player : MonoBehaviour
         GetComponentInChildren<CameraMove>().enabled = false;
         GetComponentInChildren<PlayerInteract>().enabled = false;
         GetComponentInChildren<PlayerWeaponInteraction>().enabled = false;
+        GetComponentInChildren<PlayerBodyRotation>().enabled= false;
         GetComponentInChildren<Die>().Died -= OnDead;
     }
 }
