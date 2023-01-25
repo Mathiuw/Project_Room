@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.UIElements;
 
 public class weapon : MonoBehaviour
 {
@@ -17,15 +19,15 @@ public class weapon : MonoBehaviour
     public event Action onBeingHold;
 
     void Awake() 
-    {
-        gameObject.layer = 12;
-
+    {      
         weaponName = GetComponent<Name>();
         shootGun = GetComponent<ShootGun>();
         reloadGun= GetComponent<ReloadGun>();
         weaponAnimations= GetComponent<WeaponAnimations>();
         rb = GetComponent<Rigidbody>();
         WeaponSound = GetComponent<AudioSource>();
+
+        OnBeingHold(false);
     }
 
     public void OnBeingHold(bool b) 
@@ -35,11 +37,17 @@ public class weapon : MonoBehaviour
         weaponName.enabled= !b;
 
         rb.isKinematic= b;
+
         if (b) rb.interpolation = RigidbodyInterpolation.None;
         else rb.interpolation = RigidbodyInterpolation.Interpolate;
 
         Collider[] colliders = GetComponentsInChildren<Collider>();
-        for (int i = 0; i < colliders.Length; i++) colliders[i].isTrigger = false;
+        for (int i = 0; i < colliders.Length; i++) colliders[i].isTrigger = b;
+
+        MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+        for (int i = 0; i < renderers.Length; i++) 
+            if(b) renderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            else renderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 
         onBeingHold?.Invoke();  
     }

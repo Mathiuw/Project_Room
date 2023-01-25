@@ -11,9 +11,11 @@ public class WeaponInteraction : MonoBehaviour
     [SerializeField] int maxItemDistance = 5;
     [SerializeField] float dropForce = 10;
     float percentageComplete = 0f;
+
     public bool isHoldingWeapon { get; private set; } = false;
 
     RaycastHit hit;
+
     public weapon currentWeapon { get; protected set; }
     
     public event Action<Transform> onPickupStart;
@@ -27,12 +29,16 @@ public class WeaponInteraction : MonoBehaviour
 
     public void TryToPickupWeapon() 
     {
-        if (!isHoldingWeapon && Physics.Raycast(raycastTransform.position, raycastTransform.forward, out hit, maxItemDistance, WeaponMask)) 
+        if (Physics.Raycast(raycastTransform.position, raycastTransform.forward, out hit, maxItemDistance, WeaponMask)) 
             StartCoroutine(PickUpWeapon(hit.transform));
     }
 
     IEnumerator PickUpWeapon(Transform gun)
     {
+        if (isHoldingWeapon) yield break;
+
+        enabled = false;
+
         currentWeapon = gun.GetComponent<weapon>();
 
         if (currentWeapon.isBeingHold) 
@@ -67,6 +73,7 @@ public class WeaponInteraction : MonoBehaviour
         gun.localRotation = Quaternion.identity;
 
         isHoldingWeapon = true;
+        enabled = true;
         onPickupEnd?.Invoke(gun);
 
         Debug.Log("Picked up gun");

@@ -9,12 +9,16 @@ public class PlayerWeaponInteraction : WeaponInteraction
     Animator animator;
     Inventory inventory;
 
-    void Start() 
+    void Awake() 
     {
         playerAnimationManager = GetComponent<PlayerAnimationManager>();
-        mainCamera = Camera.main.transform;
         animator = GetComponentInParent<Animator>();
-        inventory= GetComponent<Inventory>();
+        inventory = GetComponent<Inventory>();
+    }
+
+    void Start() 
+    {
+        mainCamera = Camera.main.transform;
     }
 
     void Update()

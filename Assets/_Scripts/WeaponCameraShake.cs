@@ -14,7 +14,6 @@ public class WeaponCameraShake : CameraShake
         weaponInteraction = Player.Instance.GetComponentInChildren<WeaponInteraction>();
 
         weaponInteraction.onPickupEnd += OnPickup;
-        weaponInteraction.onWeaponDrop -= OnPickup;
     }
 
     void OnPickup(Transform gun)
@@ -22,7 +21,6 @@ public class WeaponCameraShake : CameraShake
         shakeValues = gun.GetComponentInParent<ReturnShakeValues>();
 
         amplitude = shakeValues.amplitude;
-        frequency = shakeValues.frequency;
         duration = shakeValues.duration;
 
         gun.GetComponentInParent<ShootGun>().onShoot += StartShake;
@@ -31,7 +29,7 @@ public class WeaponCameraShake : CameraShake
     void OnDrop(Transform gun)
     {
         amplitude = 0;
-        frequency = 0;
+        duration = 0;
         duration = 0;
 
         gun.GetComponentInParent<ShootGun>().onShoot -= StartShake;

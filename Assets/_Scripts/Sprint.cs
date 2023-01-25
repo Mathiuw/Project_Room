@@ -43,10 +43,12 @@ public class Sprint : MonoBehaviour
             Debug.Log("Sprinting");
             return;
         }
+        else
+        {
+            playerMovement.sprintMultiplier = 1;
 
-        playerMovement.sprintMultiplier = 1;
-
-        if (stamina <= maxStamina) AddStamina(staminaRecover * Time.deltaTime);
+            if (stamina <= maxStamina) AddStamina(staminaRecover * Time.deltaTime);
+        }
     }
 
     public void AddStamina(float amount)

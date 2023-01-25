@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerInteract : MonoBehaviour
 {
     [SerializeField] LayerMask interactiveMask;
+    [SerializeField] LayerMask obstructionMask;
     [SerializeField] float rayLength = 5;
     Transform cameraTransform;
 
@@ -12,10 +13,10 @@ public class PlayerInteract : MonoBehaviour
 
     void Update() 
     {
-        if(Input.GetKeyDown(KeyCode.E))Interacting();
+        if(Input.GetKeyDown(KeyCode.E))Interacting(transform);
     } 
 
-    public void Interacting() 
+    public void Interacting(Transform t) 
     {
         RaycastHit hit;
 
@@ -23,7 +24,7 @@ public class PlayerInteract : MonoBehaviour
         {
             Interact interact;
 
-            if ((interact = hit.transform.GetComponentInParent<Interact>()) && interact.enabled) interact.Interacting();
+            if ((interact = hit.transform.GetComponentInParent<Interact>()) && interact.enabled) interact.Interacting(t);
         }
     }
 }

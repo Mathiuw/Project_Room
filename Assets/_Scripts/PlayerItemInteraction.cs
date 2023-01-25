@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UseAndDropItems : MonoBehaviour
+public class PlayerItemInteraction : MonoBehaviour
 {
     [Header("Pickup item")]
-    [SerializeField] float rayLenght;
-    [SerializeField] LayerMask itemMask;
     Transform cameraTransform;
     Inventory inventory;
     Sprint sprint;
@@ -23,26 +21,9 @@ public class UseAndDropItems : MonoBehaviour
 
     void Update() 
     {
-        if (Input.GetKeyDown(KeyCode.E)) pickupItem();
-
         if (Input.GetKeyDown(KeyCode.Q)) DropItem();
 
         if (Input.GetKeyDown(KeyCode.F)) UseItem();
-    }
-
-    public void pickupItem()
-    {
-        RaycastHit hit;      
-
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, rayLenght, itemMask))
-        {
-            if (hit.transform.GetComponent<SetItem>() && inventory.CheckAndAddItem(hit.transform.GetComponent<SetItem>()))
-            {
-                UI_Inventory.instance.RefreshInventory();
-                Destroy(hit.transform.gameObject);
-                Debug.Log("Picked item");
-            }
-        }
     }
 
     public void UseItem()

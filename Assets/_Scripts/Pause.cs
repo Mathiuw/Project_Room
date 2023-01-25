@@ -12,7 +12,12 @@ public class Pause : MonoBehaviour
 
     void Awake() => instance = this;
 
-    public void OnPauseUnpause()
+    void Update() 
+    {
+        if (Input.GetKeyDown(KeyCode.Escape)) OnPauseUnpause();
+    }
+
+    void OnPauseUnpause()
     {
         isPaused = !isPaused;
         CheckUIElementsAndCursorState();

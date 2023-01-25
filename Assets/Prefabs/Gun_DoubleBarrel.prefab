@@ -4916,9 +4916,11 @@ GameObject:
   - component: {fileID: 5834591774394609137}
   - component: {fileID: 7446554490590454356}
   - component: {fileID: 4662226800836548254}
-  - component: {fileID: 8689360115029294098}
+  - component: {fileID: 892040419093188764}
+  - component: {fileID: 1786720278640121424}
+  - component: {fileID: 5423894394823115578}
   m_Layer: 12
-  m_Name: DoubleBarrel(Model)
+  m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4986,8 +4988,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &8689360115029294098
-MeshCollider:
+--- !u!65 &892040419093188764
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -4996,10 +4998,35 @@ MeshCollider:
   m_Material: {fileID: 13400000, guid: 26663a7541ced244aa65f04c6f41745d, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: -1
-  m_Mesh: {fileID: 6342375818705536512, guid: 3856c688759ae8341966c63cdce0d03a, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.004886055, y: 0.0198321, z: 0.0026082292}
+  m_Center: {x: 0.000056737117, y: -0.0045449357, z: 0.0022511275}
+--- !u!65 &1786720278640121424
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6607751396769183563}
+  m_Material: {fileID: 13400000, guid: 26663a7541ced244aa65f04c6f41745d, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.003864943, y: 0.0028606944, z: 0.002578899}
+  m_Center: {x: -0.00007564114, y: 0.013483837, z: -0.0017652008}
+--- !u!65 &5423894394823115578
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6607751396769183563}
+  m_Material: {fileID: 13400000, guid: 26663a7541ced244aa65f04c6f41745d, type: 2}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0034804104, y: 0.0066934526, z: 0.00447089}
+  m_Center: {x: -0.000018736517, y: 0.008707607, z: 0.00034665488}
 --- !u!1 &8302687269831421434
 GameObject:
   m_ObjectHideFlags: 0
@@ -5142,9 +5169,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9903863393b6b2d47bdccc59068a0471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amplitude: 3
-  frequency: 0.5
-  duration: 0.1
+  amplitude: 5
+  duration: 0.5
 --- !u!82 &5819838069481923363
 AudioSource:
   m_ObjectHideFlags: 0

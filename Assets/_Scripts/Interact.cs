@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class Interact : MonoBehaviour
 {
-    public abstract void Interacting();
+    public abstract void Interacting(Transform t);
 }

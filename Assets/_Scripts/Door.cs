@@ -25,7 +25,7 @@ public class Door : Interact
         for (int i = 0; i < doors.Length; i++) doors[i].localEulerAngles = startRotation[i];
     }
 
-    public override void Interacting() => StartCoroutine(OpenCloseDoor());
+    public override void Interacting(Transform t) => StartCoroutine(OpenCloseDoor());
 
     IEnumerator OpenCloseDoor() 
     {

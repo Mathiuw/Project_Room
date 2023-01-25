@@ -5,6 +5,5 @@ using UnityEngine;
 public class ReturnShakeValues : MonoBehaviour
 {
     public float amplitude;
-    public float frequency;
     public float duration;
 }

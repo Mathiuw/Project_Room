@@ -13,14 +13,11 @@ public class CameraRotateSideways : MonoBehaviour
     [Header("Angle")]
     [SerializeField]float angle;
 
-    [SerializeField]Transform cameraTransform;
-    Player player;
+    Transform cameraTransform;
 
     void Start()
     {
-        player = Player.Instance;
-
-        cameraTransform = player.GetComponentInChildren<CinemachineVirtualCamera>().transform;
+        cameraTransform = GetComponentInChildren<CinemachineVirtualCamera>().transform;
     }
 
     void Update()
