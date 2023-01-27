@@ -9,54 +9,16 @@ public class interactive : MonoBehaviour
     [Header("KeyCard Reader")]
     public Items necessaryItem;
 
-    [Header("Doors")]
-    [SerializeField] string objectDoor;
-
-    Puzzle_1 puzzleScript;
-
     public enum InteractiveTypes
     {
-        None,
-        keycard,
-        Door,
         OpenElevator,
         CloseElevatorAndEndGame,
-    }
-
-    private void Awake()
-    {       
-        if (interactiveTypes == InteractiveTypes.keycard)
-        {
-            puzzleScript = GetComponentInParent<Puzzle_1>();
-        }
-        else if (interactiveTypes == InteractiveTypes.Door)
-        {
-            Animator DoorAnimator = GetComponentInParent<Animator>();
-
-            DoorAnimator.SetBool("Open Door", false);
-            DoorAnimator.SetBool("Close Door", true);
-            foreach (Name name in GetComponentsInChildren<Name>())
-            {
-                name.text = "Open " + objectDoor;
-            }  
-        }
     }
 
     public void Interact()
     {
         switch (interactiveTypes)
         {
-            case InteractiveTypes.None:
-                return;
-
-            case InteractiveTypes.keycard:
-                puzzleScript.UseKeycard(necessaryItem, transform);
-                break;
-
-            case InteractiveTypes.Door:
-                UseDoor();
-                break;
-
             case InteractiveTypes.OpenElevator:
                 OpenElevator();
                 break;
@@ -64,30 +26,6 @@ public class interactive : MonoBehaviour
             case InteractiveTypes.CloseElevatorAndEndGame:
                 StartCoroutine(CloseElevatorAndEndGame());
                 break;
-        }
-    }
-
-    public void UseDoor()
-    {
-        Animator DoorAnimator = GetComponentInParent<Animator>();
-
-        if (DoorAnimator.GetBool("Open Door") == true)
-        {
-            DoorAnimator.SetBool("Open Door",false);
-            DoorAnimator.SetBool("Close Door",true);
-            foreach (Name name in GetComponentsInChildren<Name>())
-            {
-                name.text = "Open " + objectDoor;
-            }
-        }
-        else if (DoorAnimator.GetBool("Close Door") == true)
-        {
-            DoorAnimator.SetBool("Close Door", false);
-            DoorAnimator.SetBool("Open Door", true);
-            foreach (Name name in GetComponentsInChildren<Name>())
-            {
-                name.text = "Close " + objectDoor;
-            }
         }
     }
 
@@ -114,8 +52,7 @@ public class interactive : MonoBehaviour
         elevatorAnimator.SetTrigger("Open Door");
         elevatorAnimator.ResetTrigger("Close Door");
         elevatorAnimator.Play("Elevator_ExteriorDownButtom");
-        transform.GetComponent<Name>().text = "";
-        interactiveTypes = InteractiveTypes.None;
+        transform.GetComponent<Name>().SetText("");
     }
 
     IEnumerator CloseElevatorAndEndGame()
@@ -143,8 +80,7 @@ public class interactive : MonoBehaviour
         elevatorAnimator.SetTrigger("Close Door");
         elevatorAnimator.ResetTrigger("Open Door");
         elevatorAnimator.Play("Elevator_InteriorDownButtom");
-        GetComponent<Name>().text = "";
-        interactiveTypes = InteractiveTypes.None;
+        GetComponent<Name>().SetText("");
         yield return new WaitForSeconds(2f);
         playerAnimator.Play("Fade Out", 1);
         Debug.Log("End Cutscene");

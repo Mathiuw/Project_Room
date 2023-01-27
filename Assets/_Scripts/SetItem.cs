@@ -20,7 +20,7 @@ public class SetItem : MonoBehaviour
         amount = 1;
         gameObject.name = item.itemName;
         transform.eulerAngles = new Vector3(itemTransform.eulerAngles.x, transform.eulerAngles.y, itemTransform.eulerAngles.z);
-        GetComponent<Name>().text = item.itemName;
+        GetComponent<Name>().SetText(item.itemName);
         GameObject prefab = Instantiate(item.itemPrefab,gameObject.transform);
         prefab.transform.localPosition = Vector3.zero;
         prefab.transform.rotation = item.itemPrefab.transform.rotation;

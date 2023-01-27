@@ -25,10 +25,10 @@ public class ReloadGun : MonoBehaviour
     //Ação de Recarregar a Arma
     public void Reloading(Inventory inventory,Animator playerAnimator)
     {
-        if (inventory.HasItemOnInventory(reloadMag) && !playerAnimator.GetBool("isAiming")
+        if (inventory.HaveItem(reloadMag) && !playerAnimator.GetBool("isAiming")
             && !playerAnimator.GetBool("isShooting") && !reloading && shootGun.ammo != shootGun.maximumAmmo)
         {
-            inventory.CheckAndRemoveItem(reloadMag);
+            inventory.RemoveItem(reloadMag);
             UI_Inventory.instance.RefreshInventory();
             StartCoroutine(ReloadCoroutine(playerAnimator));
         }

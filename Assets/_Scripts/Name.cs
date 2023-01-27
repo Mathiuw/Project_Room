@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Name : MonoBehaviour
 {
-    public string text;
+    [field: SerializeField] public string text { get; private set; }
 
-    public void Start()
+    public void SetText(string text) 
     {
-        
+        this.text = text;
     }
 }

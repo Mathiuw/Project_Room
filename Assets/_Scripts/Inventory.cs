@@ -9,7 +9,7 @@ public class Inventory : MonoBehaviour
 
     public List<SetItem> inventory = new List<SetItem>();
 
-    public bool CheckAndAddItem(SetItem item)
+    public bool AddItem(SetItem item)
     {
         foreach (SetItem i in inventory)
         {
@@ -34,9 +34,8 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public bool CheckAndRemoveItem(Items item)
+    public bool RemoveItem(Items item)
     {
-        Debug.Log("tentou remover");
         foreach (SetItem i in inventory)
         {
             if (item.itemName == i.item.itemName)
@@ -57,21 +56,21 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
-    public bool HasItemOnIndex(Items item)
+    public bool HaveItemSelected(Items item)
     {
         foreach (SetItem i in inventory)
         {
             if (inventory.IndexOf(i) == UI_SelectItem.index && item.itemName == i.item.itemName)
             {
-                Debug.Log("Player has " + item.itemName + "in the Index");
+                Debug.Log("Player has " + item.itemName + " in the Index");
                 return true;
             }
         }
-        Debug.LogError("Player has not " + item.itemName + "in the Index");
+        Debug.LogError("Player has not " + item.itemName + " in the Index");
         return false;
     }
 
-    public bool HasItemOnInventory(Items item)
+    public bool HaveItem(Items item)
     {
         foreach (SetItem i in inventory)
         {

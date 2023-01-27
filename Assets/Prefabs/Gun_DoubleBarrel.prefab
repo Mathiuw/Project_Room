@@ -5107,7 +5107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: Double Barrel
+  <text>k__BackingField: Double Barrel
 --- !u!114 &6871579513818629340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5169,7 +5169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9903863393b6b2d47bdccc59068a0471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amplitude: 5
+  amplitude: 4
   duration: 0.1
 --- !u!82 &5819838069481923363
 AudioSource:

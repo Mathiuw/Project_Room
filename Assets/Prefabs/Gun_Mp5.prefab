@@ -5064,7 +5064,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: MP5
+  <text>k__BackingField: MP5
 --- !u!114 &-6412683801309833417
 MonoBehaviour:
   m_ObjectHideFlags: 0

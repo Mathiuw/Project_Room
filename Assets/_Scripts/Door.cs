@@ -67,7 +67,7 @@ public class Door : Interact
         }
     }
 
-    void ChangeNames(string text)=> doorName.text = text;
+    void ChangeNames(string text)=> doorName.SetText(text);
 
     void SetName(string text) 
     {

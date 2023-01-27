@@ -15,14 +15,11 @@ public class Elevator : MonoBehaviour
     {
         foreach (Transform panel in elevatorPanels)
         {
-            if (panel.GetComponentInChildren<interactive>().interactiveTypes == interactive.InteractiveTypes.OpenElevator)
-            {
-                panel.GetComponentInChildren<Name>().text = "Open Elevator";
-            }
-            else if (panel.GetComponentInChildren<interactive>().interactiveTypes == interactive.InteractiveTypes.CloseElevatorAndEndGame)
-            {
-                panel.GetComponentInChildren<Name>().text = "Close Elevator";
-            }
+            if (panel.GetComponentInChildren<interactive>().interactiveTypes == interactive.InteractiveTypes.OpenElevator)            
+                panel.GetComponentInChildren<Name>().SetText("Open Elevator");
+            
+            else if (panel.GetComponentInChildren<interactive>().interactiveTypes == interactive.InteractiveTypes.CloseElevatorAndEndGame)            
+                panel.GetComponentInChildren<Name>().SetText("Close Elevator");           
         }
     }
 }
