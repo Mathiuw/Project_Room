@@ -36,8 +36,8 @@ public class PlayerItemInteraction : MonoBehaviour
 
                 //if (item.item.canInfiniteSprint)
                 //{               
-                //    Player.Instance.Sprint.InfiniteSprinted += OnAdrenalineUsed;
-                //    Player.Instance.Sprint.OnInfiniteSprint(item.item.infiniteAdrenalineDuration);
+                //    Player.instance.Sprint.InfiniteSprinted += OnAdrenalineUsed;
+                //    Player.instance.Sprint.OnInfiniteSprint(item.item.infiniteAdrenalineDuration);
                 //}
 
                 if (item.amount > 1) item.amount--;

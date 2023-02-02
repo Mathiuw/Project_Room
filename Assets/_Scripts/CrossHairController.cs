@@ -20,8 +20,8 @@ public class CrossHairController : MonoBehaviour
     void Start() 
     {
         ring = crosshair_ReloadRing.GetComponent<Image>();
-        playerWeaponInteraction = Player.Instance.GetComponentInChildren<PlayerWeaponInteraction>();
-        animator = Player.Instance.GetComponentInChildren<Animator>();
+        playerWeaponInteraction = Player.instance.GetComponentInChildren<PlayerWeaponInteraction>();
+        animator = Player.instance.GetComponentInChildren<Animator>();
     } 
 
     void Update() => CrossHairCheck();
@@ -36,7 +36,7 @@ public class CrossHairController : MonoBehaviour
             return;
         }
 
-        reloadGun = Player.Instance.GetComponentInChildren<ReloadGun>();
+        reloadGun = Player.instance.GetComponentInChildren<ReloadGun>();
         reloadGun.ReloadStarted += StartRingFill;
         reloadGun.ReloadEnded += EndRingFill;
         duration = reloadGun.reloadTime;

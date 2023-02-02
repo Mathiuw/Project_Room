@@ -11,7 +11,7 @@ public class WeaponCameraShake : CameraShake
     void Start() 
     {
         cameraNoise = GetComponentInChildren<CinemachineBasicMultiChannelPerlin>();
-        weaponInteraction = Player.Instance.GetComponentInChildren<WeaponInteraction>();
+        weaponInteraction = Player.instance.GetComponentInChildren<WeaponInteraction>();
 
         weaponInteraction.onPickupEnd += OnPickup;
     }

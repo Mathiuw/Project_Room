@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 5050054610014287743}
   - component: {fileID: 5050054610014287742}
   - component: {fileID: 5050054610014287741}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1287,7 +1287,7 @@ GameObject:
   - component: {fileID: 5050054610039653100}
   - component: {fileID: 3061510993441855895}
   - component: {fileID: 6802417436720993717}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1320,9 +1320,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5050054610039653099}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00589b68eb4161745ab46497ff5439e4, type: 3}
+  m_Script: {fileID: 11500000, guid: 86fd6803a3f2b87489674c7cfd2ba040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buttom: 0
   onMaterial: {fileID: 2100000, guid: c50971cc90406414eb3c67ccd5727bbd, type: 2}
   offMaterial: {fileID: 2100000, guid: bf565b09eda234c40865ce5fb620154d, type: 2}
 --- !u!114 &6802417436720993717
@@ -1351,7 +1352,7 @@ GameObject:
   - component: {fileID: 412334127596826377}
   - component: {fileID: 2763944491241823985}
   - component: {fileID: 2299962765081472225}
-  m_Layer: 8
+  m_Layer: 13
   m_Name: ButtomUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}

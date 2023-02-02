@@ -14,12 +14,15 @@ public class PlayerAnimationManager : MonoBehaviour
     Animator animator;
     Rigidbody rb;
 
-    void Start() 
+    void Awake() 
     {
         weaponInteraction = GetComponent<WeaponInteraction>();
         animator = GetComponentInParent<Animator>();
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();       
+    }
 
+    void Start() 
+    {
         OnHoldWeaponAnimation(transform);
 
         weaponInteraction.onPickupStart += SetWeaponAnimations;
@@ -28,7 +31,6 @@ public class PlayerAnimationManager : MonoBehaviour
         weaponInteraction.onPickupEnd += OnShoot;
         weaponInteraction.onWeaponDrop += OnDrop;
         weaponInteraction.onWeaponDrop += OnHoldWeaponAnimation;
-
     }
 
     void Update() => animator.SetFloat("RbVelocity", rb.velocity.magnitude);
@@ -65,6 +67,6 @@ public class PlayerAnimationManager : MonoBehaviour
         animator.SetBool("isAiming", false);
         animator.SetBool("isShooting", false);
         animator.ResetTrigger("ReloadEnd");
-        animator.Play("Not Holding Weapon");
+        animator.Play("Not Hold");
     }
 }

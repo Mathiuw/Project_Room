@@ -39,12 +39,12 @@ public class ReloadGun : MonoBehaviour
     {
         string gunName = GetComponent<Name>().text;
 
-        Debug.Log("Reload Start");
+        Debug.Log("Start Reload");
         ReloadStarted?.Invoke();
         playerAnimator.SetBool("isShooting", false);
         playerAnimator.SetBool("isAiming", false);
         reloading = true;
-        playerAnimator.Play( "Weapon Start Reloading" , 0);
+        playerAnimator.Play("Start Reload", 0);
 
         yield return new WaitForSeconds(reloadTime);
 

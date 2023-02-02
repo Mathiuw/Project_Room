@@ -4,29 +4,27 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public static Player Instance { get; private set; }
+    public static Player instance { get; private set; }
 
     Rigidbody rb;
-    Inventory inventory;
     PlayerWeaponInteraction playerWeaponInteraction;
 
     void Awake()
     {
-        Instance = this;
+        instance = this;
 
         rb = GetComponentInChildren<Rigidbody>();
         playerWeaponInteraction = GetComponentInChildren<PlayerWeaponInteraction>();
-        inventory= GetComponentInChildren<Inventory>();
+    }
 
-        playerWeaponInteraction.raycastTransform = Camera.main.transform;
+    void Start() 
+    {
         playerWeaponInteraction.onPickupEnd += OnPickupEnd;
-        playerWeaponInteraction.onWeaponDrop+= OnWeaponDrop;
+        playerWeaponInteraction.onWeaponDrop += OnWeaponDrop;
 
-        GetComponentInChildren<Die>().Died += OnDead;
+        GetComponentInChildren<Die>().onDead += OnDead;
 
         Pause.instance.Paused += OnPause;
-
-        UI_Inventory.instance.SetInventory(inventory);
     }
 
     void Update() 
@@ -67,13 +65,13 @@ public class Player : MonoBehaviour
     {
         playerWeaponInteraction.DropGun();
         rb.freezeRotation = false;
-        transform.Find("UI").gameObject.SetActive(false);
+        transform.Find("PlayerUI").gameObject.SetActive(false);
         GetComponentInChildren<CameraRotateSideways>().enabled = false;
         GetComponentInChildren<PlayerMovement>().enabled = false;
         GetComponentInChildren<CameraMove>().enabled = false;
         GetComponentInChildren<PlayerInteract>().enabled = false;
         GetComponentInChildren<PlayerWeaponInteraction>().enabled = false;
         GetComponentInChildren<PlayerBodyRotation>().enabled= false;
-        GetComponentInChildren<Die>().Died -= OnDead;
+        GetComponentInChildren<Die>().onDead -= OnDead;
     }
 }

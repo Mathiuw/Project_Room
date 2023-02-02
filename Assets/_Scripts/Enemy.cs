@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
-    void Awake() => GetComponentInChildren<Die>().Died += OnDead;
+    void Awake() => GetComponentInChildren<Die>().onDead += OnDead;
 
     void OnDead() 
     {

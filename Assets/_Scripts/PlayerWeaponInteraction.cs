@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerWeaponInteraction : WeaponInteraction
 {
     PlayerAnimationManager playerAnimationManager;
-    Transform mainCamera;
     Animator animator;
     Inventory inventory;
 
@@ -18,12 +17,12 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     void Start() 
     {
-        mainCamera = Camera.main.transform;
+        raycastTransform= Camera.main.transform;
     }
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.Mouse0) && isHoldingWeapon) currentWeapon.shootGun.Shooting(mainCamera);
+        if (Input.GetKey(KeyCode.Mouse0) && isHoldingWeapon) currentWeapon.shootGun.Shooting(raycastTransform);
 
         if (Input.GetKey(KeyCode.Mouse1) && isHoldingWeapon && !currentWeapon.reloadGun.reloading) playerAnimationManager.AimWeapon(true);
         else playerAnimationManager.AimWeapon(false);

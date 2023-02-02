@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 public class ElevatorAnimations : MonoBehaviour
@@ -15,16 +10,20 @@ public class ElevatorAnimations : MonoBehaviour
     void Start() 
     {
         SetState(false);
+        SetPanelEvents();
+    }
 
-        ElevatorInteraction[] interactions = GetComponentsInChildren<ElevatorInteraction>();
+    void SetState(bool b) => animator.SetBool("open", b);
 
-        foreach (ElevatorInteraction interaction in interactions)
+    void SetPanelEvents() 
+    {
+        ElevatorPanel[] interactions = GetComponentsInChildren<ElevatorPanel>();
+
+        foreach (ElevatorPanel interaction in interactions)
         {
             interaction.onButtomPress += InvertState;
         }
     }
-
-    void SetState(bool b) => animator.SetBool("open", b);
 
     void InvertState() 
     {

@@ -31,6 +31,17 @@ public class UI_Inventory : MonoBehaviour
 
     void Awake() => instance = this;
 
+    void Start() 
+    {
+        if ((inventory = Player.instance.GetComponentInChildren<Inventory>()) && inventory == null)
+        {
+            Debug.LogError("Cant Find Player Inventory");
+            return;
+        }
+    
+        SetInventory(inventory);
+    }
+
     public void SetInventory(Inventory inventory) 
     {
         uiSlots = new GameObject[inventory.InventorySize];
@@ -75,11 +86,11 @@ public class UI_Inventory : MonoBehaviour
         }
     }
 
-    public void ShowAmmoInUI(WeaponInteraction wi)
+    public void ShowAmmoInUI(WeaponInteraction weaponInteraction)
     {
-        if (!wi.isHoldingWeapon) return;
+        if (!weaponInteraction.isHoldingWeapon) return;
 
-        ShootGun shootGun = wi.currentWeapon.shootGun;
+        ShootGun shootGun = weaponInteraction.currentWeapon.shootGun;
 
         ammoUI.SetText(shootGun.ammo.ToString() + "/" + shootGun.maximumAmmo.ToString());
     }

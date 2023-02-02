@@ -9,7 +9,7 @@ public class PlayerBodyRotation : MonoBehaviour
 
     void Start() 
     {
-        cameraTransform = Player.Instance.transform.Find("Camera");
+        cameraTransform = Camera.main.transform;
     }
 
     void FixedUpdate() 

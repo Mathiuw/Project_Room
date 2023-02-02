@@ -3212,6 +3212,11 @@ PrefabInstance:
       propertyPath: buttom
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3061510993441855895, guid: 5cb19521ec042b8458c74d44fbc3caed,
+        type: 3}
+      propertyPath: _buttom
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4926960487529195941, guid: 5cb19521ec042b8458c74d44fbc3caed,
         type: 3}
       propertyPath: m_Mesh
