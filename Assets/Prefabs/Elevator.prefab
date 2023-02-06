@@ -74,6 +74,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7526882873297005240}
   - component: {fileID: 2892823360206027287}
+  - component: {fileID: 3888655459286308190}
   - component: {fileID: 1675979315633805941}
   m_Layer: 8
   m_Name: Elevator
@@ -122,6 +123,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3888655459286308190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7526882873297005241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a87e38a6fc763c347b80306afead2d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelToEnd: {fileID: 1540380304631201114}
 --- !u!114 &1675979315633805941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3309,6 +3323,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
+--- !u!114 &1540380304631201114 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3061510993441855895, guid: 5cb19521ec042b8458c74d44fbc3caed,
+    type: 3}
+  m_PrefabInstance: {fileID: 4547557822614922445}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86fd6803a3f2b87489674c7cfd2ba040, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8721588291955992097 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5050054610039653100, guid: 5cb19521ec042b8458c74d44fbc3caed,

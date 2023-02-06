@@ -20,10 +20,13 @@ public class UI_Fade : MonoBehaviour
         image= GetComponentInChildren<Image>();
     }
 
-    void Start() 
+    IEnumerator Start() 
     {
-        StartCoroutine(StartLevelFadeOut());
+        SetValue(1f);
+        yield return new WaitForSeconds(0.5f);
+        FadeOut();
         if (Player.instance != null) Player.instance.GetComponentInChildren<Die>().onDead += RestartLevelFadeIn;
+        yield break;
     } 
 
     public void SetValue(float value) 
@@ -55,14 +58,6 @@ public class UI_Fade : MonoBehaviour
     public void FadeIn() => StartCoroutine(FadeValue(0, 1));
 
     public void FadeOut() => StartCoroutine(FadeValue(1, 0));
-
-    IEnumerator StartLevelFadeOut() 
-    {
-        while (!SceneManager.GetActiveScene().isLoaded) yield return null;
-        
-        FadeOut();
-        yield break;
-    }
 
     public void RestartLevelFadeIn()
     {
