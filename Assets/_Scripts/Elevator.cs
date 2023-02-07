@@ -6,15 +6,9 @@ public class Elevator : MonoBehaviour
 {
     [SerializeField] ElevatorPanel panelToEnd;
 
-    void Start() 
-    {
-        panelToEnd.onButtomPress += EndGame;
-    }
+    void Start() => panelToEnd.onButtomPress += EndGame;
 
-    void EndGame() 
-    {
-        StartCoroutine(End());    
-    }
+    void EndGame() => StartCoroutine(End());
 
     IEnumerator End() 
     {

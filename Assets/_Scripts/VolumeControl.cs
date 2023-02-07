@@ -5,20 +5,13 @@ using UnityEngine;
 
 public class VolumeControl : MonoBehaviour
 {
-    private Slider volumeSlider;
+    Slider volumeSlider;
 
-    private void Awake()
-    {
-        volumeSlider = transform.Find("VolumeSlider").GetComponent<Slider>();
-    }
+    void Awake() => volumeSlider = GetComponentInChildren<Slider>();
 
-    private void Start()
-    {
-        volumeSlider.value = AudioListener.volume;
-    }
+    void Start() => volumeSlider.value = AudioListener.volume;
 
-    private void Update()
-    {
-        AudioListener.volume = volumeSlider.value;
-    }
+    void Update() => SetVolume(volumeSlider);
+
+    void SetVolume(Slider slider) => AudioListener.volume = slider.value;
 }

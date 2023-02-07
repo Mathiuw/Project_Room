@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
         GetComponentInChildren<WeaponSway>().enabled = !b;
         GetComponentInChildren<CameraRotateSideways>().enabled = !b;
         GetComponentInChildren<PlayerMovement>().enabled = !b;
-        GetComponentInChildren<CameraMove>().enabled = !b;
+        GetComponentInChildren<PlayerCameraMove>().enabled = !b;
         GetComponentInChildren<PlayerInteract>().enabled = !b;
         GetComponentInChildren<PlayerWeaponInteraction>().enabled = !b;
     }
@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
         transform.Find("PlayerUI").gameObject.SetActive(false);
         GetComponentInChildren<CameraRotateSideways>().enabled = false;
         GetComponentInChildren<PlayerMovement>().enabled = false;
-        GetComponentInChildren<CameraMove>().enabled = false;
+        GetComponentInChildren<PlayerCameraMove>().enabled = false;
         GetComponentInChildren<PlayerInteract>().enabled = false;
         GetComponentInChildren<PlayerWeaponInteraction>().enabled = false;
         GetComponentInChildren<PlayerBodyRotation>().enabled= false;

@@ -3,25 +3,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraMove : MonoBehaviour
+public class PlayerCameraMove : MonoBehaviour
 {
-    [SerializeField] float senX, senY;
+    public static PlayerCameraMove instance;
+
+    [Range(1,100)]
+    public float sensibility;
     [SerializeField] float multiplier;
 
     float mouseX, mouseY;    
     float xRotation, yRotation;
 
-    void Start()
-    {
-        CursorState.CursorLock();
-    }
+    void Awake() => instance = this;
+
+    void Start() => CursorState.CursorLock();   
 
     void Update() => camMove();
 
     void camMove()
     {
-        mouseX = Input.GetAxisRaw("Mouse X") * senX * multiplier;
-        mouseY = Input.GetAxisRaw("Mouse Y") * senY * multiplier;
+        mouseX = Input.GetAxisRaw("Mouse X") * sensibility * multiplier;
+        mouseY = Input.GetAxisRaw("Mouse Y") * sensibility * multiplier;
 
         Vector3 rot = transform.rotation.eulerAngles;
 
