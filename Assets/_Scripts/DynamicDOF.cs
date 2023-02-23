@@ -23,10 +23,8 @@ public class DynamicDOF : MonoBehaviour
     void Update()
     {
         RaycastHit hit;
-        
-        bool isAiming = transform.root.GetComponent<Animator>().GetBool("isAiming");
 
-        if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance, collsionMask) && !isAiming)
+        if (Physics.Raycast(transform.position, transform.forward, out hit, maxDistance, collsionMask))
         {
             distance = Vector3.Distance(transform.position, hit.point);
         }

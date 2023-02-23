@@ -11,9 +11,8 @@ public class UI_SelectItem : MonoBehaviour
 
     void Update() 
     {
-        //Change Inventory Slot
         if (Input.mouseScrollDelta.y < 0) ChangeSlot(1);
-        if (Input.mouseScrollDelta.y > 0) ChangeSlot(-1);
+        else if (Input.mouseScrollDelta.y > 0) ChangeSlot(-1);
     }
 
     Vector2 HotbarPosition(int index) => hotbarSlots.transform.GetChild(index).GetComponent<RectTransform>().anchoredPosition;

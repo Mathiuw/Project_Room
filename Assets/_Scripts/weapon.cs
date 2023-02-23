@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Audio;
-using UnityEngine.UIElements;
 
 public class weapon : MonoBehaviour
 {
@@ -15,8 +10,6 @@ public class weapon : MonoBehaviour
     public WeaponAnimations weaponAnimations { get; private set; }
     public Rigidbody rb { get; private set; }
     public AudioSource WeaponSound { get; private set; }
-
-    public event Action onBeingHold;
 
     void Awake() 
     {      
@@ -32,11 +25,11 @@ public class weapon : MonoBehaviour
 
     public void OnBeingHold(bool b) 
     {
-        isBeingHold= b;
+        isBeingHold = b;
 
-        weaponName.enabled= !b;
+        weaponName.enabled = !b;
 
-        rb.isKinematic= b;
+        rb.isKinematic = b;
 
         if (b) rb.interpolation = RigidbodyInterpolation.None;
         else rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -48,7 +41,5 @@ public class weapon : MonoBehaviour
         for (int i = 0; i < renderers.Length; i++) 
             if(b) renderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             else renderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
-
-        onBeingHold?.Invoke();  
     }
 }

@@ -6,13 +6,14 @@ using UnityEngine.UI;
 
 public class Pause : MonoBehaviour
 {
-    public static Pause instance;
+    public static Pause instance { get; private set; }
 
+    [SerializeField] Transform pauseTransform;
     [SerializeField] Button resume;
     [SerializeField] Button exit;
 
     bool isPaused = false;
-    public event Action<bool> Paused;
+    public event Action<bool> onPause;
 
     void Awake() => instance = this;
 
@@ -33,12 +34,12 @@ public class Pause : MonoBehaviour
     {
         isPaused = !isPaused;
         SetPause();
-        Paused?.Invoke(isPaused);
+        onPause?.Invoke(isPaused);
     }
 
     void SetPause()
     {
-        for (int i = 0; i < transform.childCount; i++) transform.GetChild(i).gameObject.SetActive(isPaused);
+        for (int i = 0; i < pauseTransform.childCount; i++) pauseTransform.GetChild(i).gameObject.SetActive(isPaused);
         if (isPaused)CursorState.CursorUnlock();
         else CursorState.CursorLock();
     }

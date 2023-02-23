@@ -17,11 +17,20 @@ public class UI_Hit : MonoBehaviour
         SetHitmarkerSprite(false);
     }
 
-    public void OnPickupWeapon(Transform gun) => gun.GetComponent<weapon>().shootGun.onHit += OnHit;
+    void Start() 
+    {
+        if (Player.instance != null)
+        {
+            PlayerWeaponInteraction playerWeaponInteraction = Player.instance .GetComponent<PlayerWeaponInteraction>();
 
-    public void OnHit(Health health) => StartCoroutine(HitmarkerCoroutine(health));
+            playerWeaponInteraction.onPickupEnd += AddPlayerEvents;
+            playerWeaponInteraction.onDrop += RemovePlayerEvents;
+        }
+    }
 
-    IEnumerator HitmarkerCoroutine(Health health) 
+    public void OnHit(Health health) => StartCoroutine(Hitmarker(health));
+
+    IEnumerator Hitmarker(Health health) 
     {
         if (health.Isdead()) yield break;
         hitSound.Play();
@@ -34,5 +43,19 @@ public class UI_Hit : MonoBehaviour
     void SetHitmarkerSprite(bool b) 
     {
         foreach (RectTransform r in hitSprite) r.gameObject.SetActive(b);
+    }
+
+    void AddPlayerEvents(Transform gun) 
+    {
+        PlayerWeaponInteraction playerWeaponInteraction= Player.instance.GetComponent<PlayerWeaponInteraction>();
+
+        gun.GetComponent<weapon>().shootGun.onHit += OnHit;
+    }
+
+    void RemovePlayerEvents() 
+    {
+        PlayerWeaponInteraction playerWeaponInteraction = Player.instance.GetComponent<PlayerWeaponInteraction>();
+
+        playerWeaponInteraction.currentWeapon.shootGun.onHit -= OnHit;
     }
 }

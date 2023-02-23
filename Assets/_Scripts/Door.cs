@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Name))]
@@ -32,7 +31,7 @@ public class Door : Interact
         enabled= false;
         doorName.enabled = false;
 
-        float elapsedtime = 0f;     
+        float elapsedtime = 0f;
         float percentageComplete = 0f;
 
         while (elapsedtime < duration)

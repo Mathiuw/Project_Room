@@ -6,14 +6,14 @@ using UnityEngine;
 public class WeaponCameraShake : CameraShake
 {
     ReturnShakeValues shakeValues;
-    WeaponInteraction weaponInteraction;
+    PlayerWeaponInteraction playerWeaponInteraction;
 
     void Start() 
     {
         cameraNoise = GetComponentInChildren<CinemachineBasicMultiChannelPerlin>();
-        weaponInteraction = Player.instance.GetComponentInChildren<WeaponInteraction>();
+        playerWeaponInteraction = Player.instance.GetComponentInChildren<PlayerWeaponInteraction>();
 
-        weaponInteraction.onPickupEnd += OnPickup;
+        playerWeaponInteraction.onPickupEnd += OnPickup;
     }
 
     void Update() 

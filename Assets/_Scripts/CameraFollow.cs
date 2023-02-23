@@ -6,8 +6,11 @@ public class CameraFollow : MonoBehaviour
 {
 	[SerializeField] Transform position;
 
-    void Update() 
+    void Start() 
     {
-        transform.position = position.position;
+        if (Player.instance != null) position = Player.instance.CameraPosition;
+        else Debug.LogError("Cant Find Player");
     }
+
+    void Update() => transform.position = position.position;
 }

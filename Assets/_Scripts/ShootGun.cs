@@ -44,13 +44,24 @@ public class ShootGun : MonoBehaviour
         if (ammo > maximumAmmo) ammo = maximumAmmo;
     }
 
-    //Remove Munição
     public void RemoveAmmo(int amount) => ammo -= amount;
 
-    //Atira
+    void AddForceToRbs(Transform t, Transform directionForce, float forceAmount)
+    {
+        Rigidbody rb;
+
+        if (t.TryGetComponent(out rb) && !rb.isKinematic) rb.AddForce(directionForce.forward * forceAmount, ForceMode.Impulse);
+    }
+
+    void GunEffects()
+    {
+        muzzleFlash.Play(true);
+        gunSound.Play();
+    }
+
     public void Shooting(Transform raycastPos)
     {
-        if (ReloadGun.reloading) return;
+        if (ReloadGun.isReloading) return;
         if (ammo == 0) return;
 
         if (Time.time > +nextTimeToFire)
@@ -74,20 +85,5 @@ public class ShootGun : MonoBehaviour
             }
             nextTimeToFire = Time.time + (1f / fireRate);
         }
-    }
-
-    //Adiciona força a RigidBodies
-    void AddForceToRbs(Transform t, Transform directionForce, float forceAmount) 
-    {
-        Rigidbody rb;
-
-        if (t.TryGetComponent(out rb) && !rb.isKinematic) rb.AddForce(directionForce.forward * forceAmount, ForceMode.Impulse);
-    }
-
-    //Muzzle Flash e Som da Arma
-    void GunEffects()
-    {
-        muzzleFlash.Play(true);
-        gunSound.Play();
     }
 }

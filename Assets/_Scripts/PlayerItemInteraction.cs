@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerItemInteraction : MonoBehaviour
 {
-    [Header("Pickup item")]
     Transform cameraTransform;
     Inventory inventory;
     Sprint sprint;
@@ -15,8 +14,12 @@ public class PlayerItemInteraction : MonoBehaviour
     void Awake() 
     {
         inventory = GetComponent<Inventory>();
+        sprint = GetComponent<Sprint>();      
+    }
+
+    void Start() 
+    {
         cameraTransform = Camera.main.transform;
-        sprint= GetComponent<Sprint>();
     }
 
     void Update() 
@@ -52,15 +55,15 @@ public class PlayerItemInteraction : MonoBehaviour
 
     IEnumerator OnAdrenalineUsed(float time)
     {
-        Sprint sprintScript = GetComponent<Sprint>();
+        //Sprint sprintScript = GetComponent<Sprint>();
 
-        sprint.isInfinite = true;
-        Debug.Log("Infinite Sprint Started");
+        //sprint.isInfinite = true;
+        //Debug.Log("Infinite Sprint Started");
 
-        yield return new WaitForSeconds(time);
+        //yield return new WaitForSeconds(time);
 
-        sprint.isInfinite = false;
-        Debug.Log("Infinite Sprint Finished");
+        //sprint.isInfinite = false;
+        //Debug.Log("Infinite Sprint Finished");
         yield break;
     }
 

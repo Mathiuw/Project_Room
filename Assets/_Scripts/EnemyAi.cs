@@ -128,7 +128,7 @@ public class EnemyAi : MonoBehaviour
 
     void Chase() 
     {
-        navMeshAgent.SetDestination(Player.instance.PlayerTransform().position);
+        navMeshAgent.SetDestination(Player.instance.transform.position);
         Debug.Log("Chasing");
         onChase?.Invoke();
     } 
@@ -136,7 +136,7 @@ public class EnemyAi : MonoBehaviour
     void Attack()
     {
         navMeshAgent.SetDestination(transform.position);
-        transform.LookAt(Player.instance.PlayerTransform().position);
+        transform.LookAt(Player.instance.transform.position);
 
         if (isAttacking) return;
 

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
+﻿using System;
 using UnityEngine;
 
 public class Sprint : MonoBehaviour
@@ -8,29 +6,73 @@ public class Sprint : MonoBehaviour
     [Header("Sprinting")]
     [SerializeField] int staminaCost = 10;
     [SerializeField] int staminaRecover = 8;
-    [SerializeField] float multiplierWhileRunning = 1.5f;
+    [SerializeField] float multiplier = 1.5f;
     PlayerMovement playerMovement;
+    PlayerWeaponInteraction playerWeaponInteraction;
 
     public float stamina { get; private set; } = 30;
     public float maxStamina { get; private set; } = 30;
-    public bool isInfinite = false;
+    public bool isRunning { get; private set; } = false;
+    public bool isInfinite { get; private set; } = false;
+
+    bool isAiming = false;
+    bool isReloading = false;
 
     public event Action<float> staminaUpdated;
 
-    void Start() 
+    void Awake() 
     {
-        playerMovement= GetComponent<PlayerMovement>();
-
-        staminaUpdated?.Invoke(stamina);
+        playerMovement = GetComponent<PlayerMovement>();
+        playerWeaponInteraction = GetComponent<PlayerWeaponInteraction>();
     } 
 
-    void Update() => Sprinting(KeyCode.LeftShift, KeyCode.W);
+    void Start() => staminaUpdated?.Invoke(stamina);
+
+    void Update() 
+    {
+        isAiming = playerWeaponInteraction.isAiming;
+        if (playerWeaponInteraction.isHoldingWeapon) isReloading = playerWeaponInteraction.currentWeapon.reloadGun.isReloading;
+
+        Sprinting(KeyCode.LeftShift, KeyCode.W);
+    } 
+
+    void SetRun(bool b) 
+    {
+        if(isRunning != b)isRunning = b;
+
+        if(b) playerMovement.sprintMultiplier = multiplier;
+        else playerMovement.sprintMultiplier = 1;
+    }
+
+    bool CanRun() 
+    {
+        if (isAiming || isReloading) return false;
+        else return true;
+    }
+
+    public void AddStamina(float amount)
+    {
+        stamina += amount;
+        stamina = Mathf.Clamp(stamina, 0f, maxStamina); 
+        staminaUpdated?.Invoke(stamina);
+    }
+
+    public void RemoveStamina(float amomunt)
+    {
+        stamina -= amomunt;
+        stamina = Mathf.Clamp(stamina, 0f, maxStamina);
+        staminaUpdated?.Invoke(stamina);
+    }
 
     public void Sprinting(KeyCode RunInput, KeyCode WalkInput)
     {
-        if (Input.GetKey(RunInput) && Input.GetKey(WalkInput) && stamina > 0f)
+        SetRun(false);
+
+        if (Input.GetKey(RunInput) && Input.GetKey(WalkInput) && CanRun())
         {
-            playerMovement.sprintMultiplier = multiplierWhileRunning;
+            if (stamina == 0) return;
+
+            SetRun(true);
 
             if (isInfinite)
             {
@@ -38,30 +80,14 @@ public class Sprint : MonoBehaviour
                 Debug.Log("Infinite Sprinting");
                 return;
             }
+            else RemoveStamina(staminaCost * Time.deltaTime);
 
-            else RemoveStamina(staminaCost * Time.deltaTime) ;
             Debug.Log("Sprinting");
             return;
         }
-        else
+        else 
         {
-            playerMovement.sprintMultiplier = 1;
-
             if (stamina <= maxStamina) AddStamina(staminaRecover * Time.deltaTime);
         }
-    }
-
-    public void AddStamina(float amount)
-    {
-        stamina += amount;
-        stamina = Mathf.Clamp(stamina, 0f, maxStamina);
-        staminaUpdated?.Invoke(stamina);
-    }
-
-    public void RemoveStamina(float amomunt) 
-    {
-        stamina -= amomunt;
-        stamina = Mathf.Clamp(stamina, 0f, maxStamina);
-        staminaUpdated?.Invoke(stamina);
     }
 }

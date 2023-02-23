@@ -9,9 +9,12 @@ public class EnemyAnimationManager : MonoBehaviour
 
     void Awake() 
     {
-        animator = GetComponentInChildren<Animator>();   
-        enemyAi= GetComponent<EnemyAi>();
+        animator = GetComponentInChildren<Animator>();
+        enemyAi = GetComponent<EnemyAi>();
+    }
 
+    void Start() 
+    {
         enemyAi.onPatrol += StartWalk;
         enemyAi.onChase += StartWalk;
         enemyAi.onChase += StartAim;
@@ -24,5 +27,4 @@ public class EnemyAnimationManager : MonoBehaviour
     void StopWalk() => animator.SetFloat("walk", 0f);
 
     void StartAim() => animator.SetBool("Aim", true);
-
 }

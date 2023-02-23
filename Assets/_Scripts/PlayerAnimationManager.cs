@@ -1,72 +1,76 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Animations;
-using System;
+﻿using UnityEngine;
 
 public class PlayerAnimationManager : MonoBehaviour
 {
-    [SerializeField] GameObject ammoUI;
-    [SerializeField] Image ammoType;
-
-    WeaponInteraction weaponInteraction;
+    PlayerWeaponInteraction playerWeaponInteraction;
     Animator animator;
+    Sprint sprint;
     Rigidbody rb;
 
     void Awake() 
     {
-        weaponInteraction = GetComponent<WeaponInteraction>();
-        animator = GetComponentInParent<Animator>();
-        rb = GetComponent<Rigidbody>();       
+        animator = GetComponent<Animator>();
     }
 
     void Start() 
     {
-        OnHoldWeaponAnimation(transform);
+        if (Player.instance != null) 
+        {
+            playerWeaponInteraction = Player.instance.GetComponent<PlayerWeaponInteraction>();
+            sprint= Player.instance.GetComponent<Sprint>();
+            rb = Player.instance.GetComponent<Rigidbody>();
+        } 
+        else enabled = false;
 
-        weaponInteraction.onPickupStart += SetWeaponAnimations;
-        weaponInteraction.onPickupEnd += OnPickup;
-        weaponInteraction.onPickupEnd += OnHoldWeaponAnimation;
-        weaponInteraction.onPickupEnd += OnShoot;
-        weaponInteraction.onWeaponDrop += OnDrop;
-        weaponInteraction.onWeaponDrop += OnHoldWeaponAnimation;
+        playerWeaponInteraction.onPickupEnd += OnPickup;
+        playerWeaponInteraction.onDrop += OnDrop;
+        playerWeaponInteraction.onAimStart += ActivateAim;
     }
 
-    void Update() => animator.SetFloat("RbVelocity", rb.velocity.magnitude);
-
-    void ShootWeapon() => animator.SetTrigger("isShooting");
-
-    public void OnShoot(Transform gun) => gun.GetComponent<ShootGun>().onShoot += ShootWeapon;
- 
-    public void AimWeapon(bool b)
+    void Update() 
     {
-        if (b) animator.SetBool("isAiming", true);
-        else animator.SetBool("isAiming", false);
+        animator.SetFloat("Walk Speed", WalkSpeed());
+        animator.SetFloat("RbVelocity", rb.velocity.magnitude);
+        animator.SetBool("Hold", playerWeaponInteraction.isHoldingWeapon);
+        
+        if (playerWeaponInteraction.isHoldingWeapon) 
+        {
+            animator.SetBool("Aim", playerWeaponInteraction.isAiming);
+            animator.SetBool("Reload", playerWeaponInteraction.currentWeapon.reloadGun.isReloading);
+        } 
+    } 
+
+    void ReloadStart() => animator.Play("Start Reload");
+
+    void ReloadEnd() => animator.Play("End Reload");
+
+    void OnPickup(Transform gun) 
+    {
+        ReloadGun reloadGun = gun.GetComponent<ReloadGun>();
+
+        reloadGun.onReloadStart += ReloadStart;
+        reloadGun.onReloadEnd += ReloadEnd;
+    } 
+
+    void OnDrop() 
+    {
+        ReloadGun reloadGun = playerWeaponInteraction.currentWeapon.reloadGun;
+
+        reloadGun.onReloadStart -= ReloadStart;
+        reloadGun.onReloadEnd -= ReloadEnd;
+
+        animator.Rebind();
     }
 
-    public void SetWeaponAnimations(Transform gun) 
+    void ActivateAim() 
     {
-        animator.runtimeAnimatorController = gun.GetComponent<WeaponAnimations>().WeaponOverrideController;
+        if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || !animator.GetCurrentAnimatorStateInfo(0).IsName("Aim") ) 
+            animator.Play("Idle");
     }
 
-    public void OnHoldWeaponAnimation(Transform gun)
+    float WalkSpeed() 
     {
-        bool isHoldingWeapon = weaponInteraction.isHoldingWeapon;
-
-        animator.SetBool("isHoldingWeapon", isHoldingWeapon);
-        ammoUI.SetActive(isHoldingWeapon);
-        ammoType.gameObject.SetActive(isHoldingWeapon);
-    }
-
-    public void OnPickup(Transform gun) => animator.SetBool("isHoldingWeapon", true);
-
-    public void OnDrop(Transform gun) 
-    {
-        animator.SetBool("isHoldingWeapon", false);
-        animator.SetBool("isAiming", false);
-        animator.SetBool("isShooting", false);
-        animator.ResetTrigger("ReloadEnd");
-        animator.Play("Not Hold");
+        if (sprint.isRunning) return 1.5f;
+        else return 1f;
     }
 }
