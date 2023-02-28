@@ -9,7 +9,7 @@ public class EnemyWeaponInteraction : WeaponInteraction
         gun.SetParent(gunHolder);
         gun.transform.localScale = Vector3.one;
         currentWeapon = gun.GetComponent<weapon>();
-        currentWeapon.OnBeingHold(true); 
+        currentWeapon.SetHoldState(true); 
         yield break;
     }
 
@@ -22,7 +22,7 @@ public class EnemyWeaponInteraction : WeaponInteraction
     public override void DropGun()
     {
         currentWeapon.transform.SetParent(null);
-        currentWeapon.OnBeingHold(false);
+        currentWeapon.SetHoldState(false);
         currentWeapon = null;
     }
 }

@@ -4994,11 +4994,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1920693396921853373}
   - component: {fileID: 956243267408335609}
+  - component: {fileID: 7230442753670311523}
   - component: {fileID: 1344508568975224537}
+  - component: {fileID: 5795022750935741127}
   - component: {fileID: 5327390562014500009}
   - component: {fileID: -6412683801309833417}
   - component: {fileID: 3108757238293499845}
-  - component: {fileID: 5520242545948811480}
   - component: {fileID: -5197375985125488539}
   - component: {fileID: 7982326377564497876}
   m_Layer: 12
@@ -5015,7 +5016,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5565268791908116749}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -5023,7 +5024,7 @@ Transform:
   - {fileID: 6182319579174035447}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &956243267408335609
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5040,6 +5041,25 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!95 &7230442753670311523
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5565268791908116749}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1523149f122cd704c99549905c1f7c55, type: 2}
+  m_CullingMode: 2
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1344508568975224537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5050,6 +5070,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7c124549f987ce449fa088a7acf2fc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aimVector: {x: -0.459, y: 0.285, z: -0.5}
+--- !u!114 &5795022750935741127
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5565268791908116749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 400cbb11d7734e641a586ecdf24d4b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &5327390562014500009
@@ -5083,10 +5116,9 @@ MonoBehaviour:
   muzzleFlash: {fileID: 2911870034229631284}
   damage: 15
   bulletForce: 20
-  bulletMaxDistace: 500
-  fireRate: 9
+  <fireRate>k__BackingField: 8
   ammo: 30
-  maximumAmmo: 30
+  maxAmmo: 30
 --- !u!114 &3108757238293499845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5101,20 +5133,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reloadMag: {fileID: 11400000, guid: cfa922a2daac2e341a46f6ac8c735ce2, type: 2}
   <reloadTime>k__BackingField: 3
---- !u!114 &5520242545948811480
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5565268791908116749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d69444c37e6c2a4ca82f674c75707e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponOverrideController: {fileID: 22100000, guid: fbebefe81c98f69478c2bc336d7b4261,
-    type: 2}
 --- !u!114 &-5197375985125488539
 MonoBehaviour:
   m_ObjectHideFlags: 0

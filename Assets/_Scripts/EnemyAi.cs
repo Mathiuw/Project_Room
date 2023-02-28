@@ -151,11 +151,11 @@ public class EnemyAi : MonoBehaviour
 
         yield return new WaitForSeconds(nextBurst);
 
-        if (shootGun.ammo == 0) shootGun.ammo = shootGun.maximumAmmo;
+        if (shootGun.ammo == 0) shootGun.ammo = shootGun.maxAmmo;
 
         for (int i = 0; i < burst; i++)
         {
-            shootGun.Shooting(raycastPos);
+            shootGun.Shoot(raycastPos);
             yield return new WaitForSeconds(timeBetweenBullets);
         }
 

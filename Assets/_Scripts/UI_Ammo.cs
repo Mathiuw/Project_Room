@@ -34,7 +34,7 @@ public class UI_Ammo : MonoBehaviour
     void SetPLayerAmmo() 
     {
         if (ammo != playerWeaponInteraction.currentWeapon.shootGun.ammo) ammo = playerWeaponInteraction.currentWeapon.shootGun.ammo;
-        if (maxAmmo != playerWeaponInteraction.currentWeapon.shootGun.maximumAmmo) maxAmmo = playerWeaponInteraction.currentWeapon.shootGun.maximumAmmo;
+        if (maxAmmo != playerWeaponInteraction.currentWeapon.shootGun.maxAmmo) maxAmmo = playerWeaponInteraction.currentWeapon.shootGun.maxAmmo;
     }
 
     void CheckAmmo(int ammo, int maxAmmo) 

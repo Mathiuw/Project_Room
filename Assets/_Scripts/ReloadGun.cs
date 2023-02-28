@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.ProBuilder;
 
 [RequireComponent(typeof(ShootGun))]
 public class ReloadGun : MonoBehaviour
@@ -11,18 +9,14 @@ public class ReloadGun : MonoBehaviour
     public Items reloadMag;
 
     [field: SerializeField] public float reloadTime { get; private set; } = 2;
-
     public bool isReloading { get; private set; } = false;
-
-    ShootGun shootGun;
 
     public event Action onReloadStart;
     public event Action onReloadEnd;
 
-    void Awake() 
-    {
-        shootGun = GetComponent<ShootGun>();
-    }  
+    ShootGun shootGun;
+
+    void Awake() { shootGun = GetComponent<ShootGun>(); }  
 
     public void SetReload(bool b) => isReloading = b;
 
@@ -39,7 +33,7 @@ public class ReloadGun : MonoBehaviour
 
         yield return new WaitForSeconds(time);
 
-        shootGun.AddAmmo(shootGun.maximumAmmo);
+        shootGun.AddAmmo(shootGun.maxAmmo);
         SetReload(false);
         onReloadEnd?.Invoke();
         yield break;

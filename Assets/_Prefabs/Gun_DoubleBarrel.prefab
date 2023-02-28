@@ -5037,11 +5037,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2640640005571256650}
   - component: {fileID: 3695096019320444430}
+  - component: {fileID: 2764383831595796678}
   - component: {fileID: 8936124951102028240}
+  - component: {fileID: 9047669986565859934}
   - component: {fileID: 4736018918220528946}
   - component: {fileID: 6871579513818629340}
   - component: {fileID: 1074020496222657700}
-  - component: {fileID: -3561588117988183403}
   - component: {fileID: -4287723862107902934}
   - component: {fileID: 5819838069481923363}
   m_Layer: 12
@@ -5083,6 +5084,25 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 3
+--- !u!95 &2764383831595796678
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8302687269831421434}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 22100000, guid: 256889344a1820d4f9d9ad130e20a49a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &8936124951102028240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5093,6 +5113,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7c124549f987ce449fa088a7acf2fc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  aimVector: {x: -0.46, y: 0.323, z: -0.51}
+--- !u!114 &9047669986565859934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8302687269831421434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 400cbb11d7734e641a586ecdf24d4b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &4736018918220528946
@@ -5126,10 +5159,9 @@ MonoBehaviour:
   muzzleFlash: {fileID: 1961095731343679995}
   damage: 60
   bulletForce: 50
-  bulletMaxDistace: 500
-  fireRate: 3
+  <fireRate>k__BackingField: 4
   ammo: 2
-  maximumAmmo: 2
+  maxAmmo: 2
 --- !u!114 &1074020496222657700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5144,20 +5176,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reloadMag: {fileID: 11400000, guid: b936a3ffd96c47249a5c826bf08bdfc8, type: 2}
   <reloadTime>k__BackingField: 5
---- !u!114 &-3561588117988183403
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8302687269831421434}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d69444c37e6c2a4ca82f674c75707e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weaponOverrideController: {fileID: 22100000, guid: 256889344a1820d4f9d9ad130e20a49a,
-    type: 2}
 --- !u!114 &-4287723862107902934
 MonoBehaviour:
   m_ObjectHideFlags: 0
