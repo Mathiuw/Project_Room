@@ -270,7 +270,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   maxPickupDistance: 5
-  dropForce: 10
+  dropForce: 5
 --- !u!114 &2449517527289744990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,7 +300,6 @@ MonoBehaviour:
   staminaCost: 10
   staminaRecover: 8
   multiplier: 1.5
-  isInfinite: 0
 --- !u!114 &4610753048223117576
 MonoBehaviour:
   m_ObjectHideFlags: 0

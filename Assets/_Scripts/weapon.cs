@@ -31,13 +31,31 @@ public class weapon : MonoBehaviour
 
     public Vector3 GetAimVector() { return aimVector; }
 
-    public void SetAim() { isBeingAim = !isBeingAim; }
+    void SetAimFalse() { isBeingAim = false; }
 
-    public void SetHoldState(bool b) 
+    public void InvertAim() { isBeingAim = !isBeingAim; }
+
+    public void SetHoldState(bool b, PlayerWeaponInteraction playerWeaponInteraction = null) 
     {
         isBeingHold = b;
         weaponName.enabled = !b;
-        rb.isKinematic = b;      
+        rb.isKinematic = b;
+
+        if (playerWeaponInteraction != null) 
+        {
+            if (b)
+            {
+                playerWeaponInteraction.onAimStart += InvertAim;
+                playerWeaponInteraction.onAimEnd += InvertAim;
+                playerWeaponInteraction.onDrop += SetAimFalse;
+            }
+            else 
+            {
+                playerWeaponInteraction.onAimStart -= InvertAim;
+                playerWeaponInteraction.onAimEnd -= InvertAim;
+                playerWeaponInteraction.onDrop -= SetAimFalse;
+            }
+        }
 
         if (b) rb.interpolation = RigidbodyInterpolation.None;
         else rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -47,8 +65,10 @@ public class weapon : MonoBehaviour
 
         MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
         for (int i = 0; i < renderers.Length; i++) 
-            if(b) renderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        {
+            if (b) renderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             else renderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
+        }
 
         onHoldStateChange?.Invoke(b);
     }

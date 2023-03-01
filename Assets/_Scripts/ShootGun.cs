@@ -10,7 +10,7 @@ public class ShootGun : MonoBehaviour
     [Header("Weapon config")]
     [SerializeField] int damage;
     [SerializeField] float bulletForce = 1f;
-    [field:SerializeField]public float fireRate { get; private set; }
+    public float fireRate;
     public int ammo;
     public int maxAmmo;
     float nextTimeToFire = 0;
@@ -27,10 +27,7 @@ public class ShootGun : MonoBehaviour
         gunSound = GetComponent<AudioSource>();
     }
 
-    void Start() 
-    {
-        ammo = maxAmmo; 
-    }
+    void Start() { ammo = maxAmmo; }
 
     public void AddAmmo(int amount)
     {

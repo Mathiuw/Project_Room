@@ -7,10 +7,7 @@ public class PlayerAnimationManager : MonoBehaviour
     Sprint sprint;
     Rigidbody rb;
 
-    void Awake() 
-    {
-        animator = GetComponent<Animator>();
-    }
+    void Awake() { animator = GetComponent<Animator>(); }
 
     void Start() 
     {
@@ -64,7 +61,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
     void ActivateAim() 
     {
-        if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || !animator.GetCurrentAnimatorStateInfo(0).IsName("Aim") ) 
+        if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || !animator.GetCurrentAnimatorStateInfo(0).IsName("AimTrue") ) 
             animator.Play("Idle");
     }
 

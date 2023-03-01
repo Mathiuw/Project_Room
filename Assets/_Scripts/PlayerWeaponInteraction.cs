@@ -6,8 +6,8 @@ using UnityEngine;
 public class PlayerWeaponInteraction : WeaponInteraction
 {
     [SerializeField] LayerMask WeaponMask;
-    [SerializeField] int maxPickupDistance = 5;
-    [SerializeField] float dropForce = 10;
+    [SerializeField] int maxPickupDistance;
+    [SerializeField] float dropForce;
 
     public bool isAiming { get; private set; } = false;
     bool isLerping = false;
@@ -34,8 +34,8 @@ public class PlayerWeaponInteraction : WeaponInteraction
     {
         if (Input.GetKey(KeyCode.Mouse0)) Shoot();
 
-        if (Input.GetKeyDown(KeyCode.Mouse1)) Aim();
-        else if(Input.GetKeyUp(KeyCode.Mouse1)) Aim();
+        if (Input.GetKeyDown(KeyCode.Mouse1)) AimTrue();
+        else if(Input.GetKeyUp(KeyCode.Mouse1)) AimFalse();
 
         if (Input.GetKeyDown(KeyCode.E)) TryToPickupWeapon();
 
@@ -50,11 +50,6 @@ public class PlayerWeaponInteraction : WeaponInteraction
         if (isLerping) return;
 
         currentWeapon.shootGun.Shoot(cameraTransform);
-    }
-
-    void SetAimPositon(Transform weapon, Vector3 aimPosition) 
-    {
-        weapon.localPosition = aimPosition; 
     }
 
     IEnumerator LerpWeapon(float time, Transform weapon, Vector3 desiredPosition, Quaternion desiredRotation, Transform parent = null) 
@@ -90,23 +85,28 @@ public class PlayerWeaponInteraction : WeaponInteraction
         yield break;
     }
 
-    void Aim()
+    void AimTrue()
     {
         if (!isHoldingWeapon) return;
         if (currentWeapon.reloadGun.isReloading) return;
 
-        isAiming = !isAiming;
+        isAiming = true;
 
-        if (isAiming)
-        {
-            StartCoroutine(LerpWeapon(0.3f, currentWeapon.transform, currentWeapon.GetAimVector(), Quaternion.identity));
-            onAimStart?.Invoke();
-        }
-        else
-        {
-            StartCoroutine(LerpWeapon(0.3f, currentWeapon.transform, Vector3.zero, Quaternion.identity));
-            onAimEnd?.Invoke();
-        }
+        StopAllCoroutines();
+        StartCoroutine(LerpWeapon(0.2f, currentWeapon.transform, currentWeapon.GetAimVector(), Quaternion.identity));
+        onAimStart?.Invoke();
+    }
+
+    void AimFalse() 
+    {
+        if (!isHoldingWeapon) return;
+        if (currentWeapon.reloadGun.isReloading) return;
+
+        isAiming = false;
+
+        StopAllCoroutines();
+        StartCoroutine(LerpWeapon(0.2f, currentWeapon.transform, Vector3.zero, Quaternion.identity));
+        onAimEnd?.Invoke();
     }
 
     protected override IEnumerator PickUpWeapon(Transform weapon)
@@ -125,10 +125,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
         }
 
         onPickupStart?.Invoke(weapon);
-        currentWeapon.SetHoldState(true);
-        onAimStart += currentWeapon.SetAim;
-        onAimEnd += currentWeapon.SetAim;
-
+        currentWeapon.SetHoldState(true, this);
         StartCoroutine(LerpWeapon(0.2f, weapon, Vector3.zero, Quaternion.identity, gunHolder));
         while (isLerping) yield return null;     
 
@@ -150,9 +147,10 @@ public class PlayerWeaponInteraction : WeaponInteraction
             StartCoroutine(PickUpWeapon(hit.transform));
     }
 
-    public override IEnumerator ReloadWeapon()
+    public override IEnumerator ReloadWeapon()  
     {
         if (!isHoldingWeapon) yield break;
+        if (isAiming) yield break;
 
         ReloadGun reloadGun = currentWeapon.reloadGun;
         reloadGun.onReloadStart += UI_Inventory.instance.RefreshInventory;
@@ -164,16 +162,16 @@ public class PlayerWeaponInteraction : WeaponInteraction
     public override void DropGun()
     {
         if (!isHoldingWeapon) return;
+        if (isLerping) return;
         if (currentWeapon.reloadGun.isReloading) return;
 
+        StopAllCoroutines();
         currentWeapon.SetHoldState(false);
         currentWeapon.transform.SetParent(null);
         currentWeapon.transform.localScale = Vector3.one;
-        currentWeapon.transform.localPosition = cameraTransform.position + cameraTransform.forward * 1.5f;
-        currentWeapon.rb.AddForce(cameraTransform.forward * dropForce, ForceMode.VelocityChange);
-
-        onAimStart -= currentWeapon.SetAim;
-        onAimEnd -= currentWeapon.SetAim;
+        currentWeapon.transform.localPosition = transform.position + transform.forward * 1.5f;
+        currentWeapon.transform.rotation = transform.rotation;
+        currentWeapon.rb.AddForce(transform.forward * dropForce, ForceMode.VelocityChange);
 
         isAiming = false;
         isHoldingWeapon = false;

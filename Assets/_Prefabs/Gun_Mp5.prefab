@@ -4997,10 +4997,9 @@ GameObject:
   - component: {fileID: 7230442753670311523}
   - component: {fileID: 1344508568975224537}
   - component: {fileID: 5795022750935741127}
-  - component: {fileID: 5327390562014500009}
   - component: {fileID: -6412683801309833417}
   - component: {fileID: 3108757238293499845}
-  - component: {fileID: -5197375985125488539}
+  - component: {fileID: 5327390562014500009}
   - component: {fileID: 7982326377564497876}
   m_Layer: 12
   m_Name: Gun_Mp5
@@ -5085,19 +5084,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 400cbb11d7734e641a586ecdf24d4b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5327390562014500009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5565268791908116749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <text>k__BackingField: MP5
 --- !u!114 &-6412683801309833417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5116,7 +5102,7 @@ MonoBehaviour:
   muzzleFlash: {fileID: 2911870034229631284}
   damage: 15
   bulletForce: 20
-  <fireRate>k__BackingField: 8
+  fireRate: 8
   ammo: 30
   maxAmmo: 30
 --- !u!114 &3108757238293499845
@@ -5133,7 +5119,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reloadMag: {fileID: 11400000, guid: cfa922a2daac2e341a46f6ac8c735ce2, type: 2}
   <reloadTime>k__BackingField: 3
---- !u!114 &-5197375985125488539
+--- !u!114 &5327390562014500009
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5142,11 +5128,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5565268791908116749}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9903863393b6b2d47bdccc59068a0471, type: 3}
+  m_Script: {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amplitude: 1
-  duration: 0.1
+  <text>k__BackingField: MP5
 --- !u!82 &7982326377564497876
 AudioSource:
   m_ObjectHideFlags: 0

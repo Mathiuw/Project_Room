@@ -13,10 +13,9 @@ GameObject:
   - component: {fileID: 582441418411031648}
   - component: {fileID: 377731405146213588}
   - component: {fileID: 2403420635520835646}
-  - component: {fileID: 1830547555977088245}
   - component: {fileID: 541013020259382555}
   - component: {fileID: 5514343440331723490}
-  - component: {fileID: -3850745253016182314}
+  - component: {fileID: 1830547555977088245}
   - component: {fileID: 584032758333625060}
   m_Layer: 12
   m_Name: Gun_Pistol
@@ -88,6 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c124549f987ce449fa088a7acf2fc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  aimVector: {x: -0.459, y: 0.245, z: -0.65}
 --- !u!114 &2403420635520835646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -100,19 +100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 400cbb11d7734e641a586ecdf24d4b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1830547555977088245
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3163711967376219197}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <text>k__BackingField: Pistol
 --- !u!114 &541013020259382555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,7 +118,7 @@ MonoBehaviour:
   muzzleFlash: {fileID: 5671447419204676612}
   damage: 20
   bulletForce: 10
-  <fireRate>k__BackingField: 4
+  fireRate: 5
   ammo: 15
   maxAmmo: 15
 --- !u!114 &5514343440331723490
@@ -148,7 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   reloadMag: {fileID: 11400000, guid: f3a15256ebc23754dba563d6c9b03a55, type: 2}
   <reloadTime>k__BackingField: 2
---- !u!114 &-3850745253016182314
+--- !u!114 &1830547555977088245
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,11 +144,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 3163711967376219197}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9903863393b6b2d47bdccc59068a0471, type: 3}
+  m_Script: {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amplitude: 1
-  duration: 0.1
+  <text>k__BackingField: Pistol
 --- !u!82 &584032758333625060
 AudioSource:
   m_ObjectHideFlags: 0

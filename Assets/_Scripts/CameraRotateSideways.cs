@@ -15,10 +15,7 @@ public class CameraRotateSideways : MonoBehaviour
 
     Transform cameraTransform;
 
-    void Start()
-    {
-        cameraTransform = GetComponentInChildren<CinemachineVirtualCamera>().transform;
-    }
+    void Start() { cameraTransform = Camera.main.transform; }
 
     void Update()
     {
