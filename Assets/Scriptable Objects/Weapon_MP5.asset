@@ -14,12 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: MP5
   damage: 15
+  bulletForce: 20
   maxAmmo: 21
   firerate: 8
   shootType: 1
   shootLayer:
     serializedVersion: 2
-    m_Bits: 16128
+    m_Bits: 12032
   Model: {fileID: 6401145719867435353, guid: f2022527f100d2a44af1ec975021b88b, type: 3}
   animatorOverride: {fileID: 0}
   aimLocation: {x: -0.459, y: 0.285, z: -0.5}
@@ -29,3 +30,6 @@ MonoBehaviour:
     type: 3}
   muzzleFlashLocation: {x: 0, y: 0.0959, z: 0.7}
   shootAudio: {fileID: 8300000, guid: 039ad0fbe0f91294b80aa198a8d33e3e, type: 3}
+  shootSouce: {fileID: 0}
+  noAmmoAudio: {fileID: 0}
+  noAmmoSource: {fileID: 0}

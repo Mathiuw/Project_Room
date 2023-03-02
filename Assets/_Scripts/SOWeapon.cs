@@ -6,6 +6,7 @@ public class SOWeapon : ScriptableObject
     [Header("Weapon")]
     public string weaponName;
     public int damage;
+    public float bulletForce;
     public int maxAmmo;
     public float firerate;
     public ShootType shootType;

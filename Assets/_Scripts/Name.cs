@@ -4,10 +4,7 @@ using UnityEngine;
 
 public class Name : MonoBehaviour
 {
-    [field: SerializeField] public string text { get; private set; }
+    public string text { get; private set; }
 
-    public void SetText(string text) 
-    {
-        this.text = text;
-    }
+    public void SetText(string text) => this.text = text;
 }

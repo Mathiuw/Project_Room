@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class weapon : MonoBehaviour
 {
-    [SerializeField] Vector3 aimVector;
-
     public bool isBeingHold { get; private set; } = false;
     public bool isBeingAim { get; private set; } = false;
 
@@ -12,28 +10,22 @@ public class weapon : MonoBehaviour
     public ShootGun shootGun { get; private set; }
     public ReloadGun reloadGun { get; private set; }
     public Rigidbody rb { get; private set; }
-    public AudioSource WeaponSound { get; private set; }
-    public Animator animator { get; private set; }
 
     public Action<bool> onHoldStateChange;
 
-    void Awake() 
-    {      
+    void Start() 
+    {
         weaponName = GetComponent<Name>();
         shootGun = GetComponent<ShootGun>();
-        reloadGun= GetComponent<ReloadGun>();
-        rb = GetComponent<Rigidbody>();
-        WeaponSound = GetComponent<AudioSource>();
-        animator = GetComponent<Animator>();
-    }
+        reloadGun = GetComponent<ReloadGun>();
+        rb = GetComponent<Rigidbody>(); 
 
-    void Start() => SetHoldState(false);
-
-    public Vector3 GetAimVector() { return aimVector; }
+        SetHoldState(false);
+    } 
 
     void SetAimFalse() { isBeingAim = false; }
 
-    public void InvertAim() { isBeingAim = !isBeingAim; }
+    public void SetAimTrue() { isBeingAim = true; }
 
     public void SetHoldState(bool b, PlayerWeaponInteraction playerWeaponInteraction = null) 
     {
@@ -45,14 +37,14 @@ public class weapon : MonoBehaviour
         {
             if (b)
             {
-                playerWeaponInteraction.onAimStart += InvertAim;
-                playerWeaponInteraction.onAimEnd += InvertAim;
+                playerWeaponInteraction.onAimStart += SetAimTrue;
+                playerWeaponInteraction.onAimEnd += SetAimFalse;
                 playerWeaponInteraction.onDrop += SetAimFalse;
             }
             else 
             {
-                playerWeaponInteraction.onAimStart -= InvertAim;
-                playerWeaponInteraction.onAimEnd -= InvertAim;
+                playerWeaponInteraction.onAimStart -= SetAimTrue;
+                playerWeaponInteraction.onAimEnd -= SetAimFalse;
                 playerWeaponInteraction.onDrop -= SetAimFalse;
             }
         }

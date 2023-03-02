@@ -151,7 +151,7 @@ public class EnemyAi : MonoBehaviour
 
         yield return new WaitForSeconds(nextBurst);
 
-        if (shootGun.ammo == 0) shootGun.ammo = shootGun.maxAmmo;
+        if (shootGun.ammo == 0) shootGun.AddAmmo(shootGun.maxAmmo);
 
         for (int i = 0; i < burst; i++)
         {

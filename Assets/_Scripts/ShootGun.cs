@@ -1,33 +1,48 @@
 ﻿using System;
 using UnityEngine;
 
-[RequireComponent(typeof(ReloadGun))]
 public class ShootGun : MonoBehaviour
 {
-    [SerializeField] LayerMask shootLayer;
-    [SerializeField] ParticleSystem muzzleFlash;
+    int damage;
+    float bulletForce;
 
-    [Header("Weapon config")]
-    [SerializeField] int damage;
-    [SerializeField] float bulletForce = 1f;
-    public float fireRate;
-    public int ammo;
-    public int maxAmmo;
+    public float firerate { get; private set; }
     float nextTimeToFire = 0;
+
+    public int ammo { get; private set; }
+
+    public int maxAmmo { get; private set; }
+
+    LayerMask shootLayer;
+    Vector3 aimVector;
+
+    AudioSource gunSound;
+    ReloadGun ReloadGun;
+    ParticleSystem muzzleFlash;
 
     public event Action onShoot;
     public event Action<Health> onHit;
 
-    AudioSource gunSound;
-    ReloadGun ReloadGun;
+    public void SetAttributes(int damage, float firerate, float bulletForce, int maxAmmo, Vector3 aimVector, LayerMask shootLayer, ParticleSystem muzzleFlash)
+    {
+        this.damage = damage;
+        this.firerate = firerate;
+        this.bulletForce = bulletForce;
+        this.maxAmmo = maxAmmo;
+        this.aimVector = aimVector;
+        this.shootLayer = shootLayer;
+        this.muzzleFlash = muzzleFlash;
+    }
 
-    void Awake() 
+    void Start() 
     {
         ReloadGun = GetComponent<ReloadGun>();
         gunSound = GetComponent<AudioSource>();
+
+        AddAmmo(maxAmmo); 
     }
 
-    void Start() { ammo = maxAmmo; }
+    public Vector3 GetAimVector() { return aimVector; }
 
     public void AddAmmo(int amount)
     {
@@ -74,7 +89,8 @@ public class ShootGun : MonoBehaviour
                 }
                 else AddForceToRbs(hit.transform, raycastPos, bulletForce);
             }
-            nextTimeToFire = Time.time + (1f / fireRate);
+
+            nextTimeToFire = Time.time + (1f / firerate);
         }
     }
 }

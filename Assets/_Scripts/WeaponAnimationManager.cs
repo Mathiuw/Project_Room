@@ -1,25 +1,19 @@
 ﻿using UnityEngine;
 
-[RequireComponent(typeof(ShootGun))]
-[RequireComponent(typeof(Animator))]
 public class WeaponAnimationManager : MonoBehaviour
 {
     ShootGun shootGun;
     Animator animator;
     weapon weapon;
 
-    void Awake() 
+    public void SetAttributes(ShootGun shootGun, Animator animator, weapon weapon) 
     {
-        shootGun = GetComponent<ShootGun>();
-        animator = GetComponent<Animator>();
-        weapon = GetComponent<weapon>();
+        this.shootGun= shootGun;
+        this.animator = animator;
+        this.weapon = weapon;
 
-        weapon.onHoldStateChange += HoldStateChange;
-    } 
-
-    void Start() 
-    {
         SetAnimationTime();
+        weapon.onHoldStateChange += HoldStateChange;
         shootGun.onShoot += ShootWeapon;
     }
 
@@ -31,7 +25,7 @@ public class WeaponAnimationManager : MonoBehaviour
 
     void SetAnimationTime() 
     {
-        animator.SetFloat("Time", shootGun.fireRate); 
+        animator.SetFloat("Time", shootGun.firerate); 
     }
 
     void HoldStateChange(bool b) 

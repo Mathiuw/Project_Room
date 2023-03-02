@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 2077752950034411335}
   - component: {fileID: 3132942771214426338}
   - component: {fileID: 909311028730123304}
-  - component: {fileID: 6906734903773485185}
+  - component: {fileID: 1511432889492239752}
   m_Layer: 9
-  m_Name: Keycard_Green(Model)
+  m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,8 +82,8 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &6906734903773485185
-MeshCollider:
+--- !u!65 &1511432889492239752
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -92,10 +92,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 5697637368414676610, guid: ad2c58818db714b40a6aa849161ff16a, type: 3}
+  serializedVersion: 2
+  m_Size: {x: 0.0045, y: 0.0030000007, z: 0.00010000002}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2499808526641469381
 GameObject:
   m_ObjectHideFlags: 0

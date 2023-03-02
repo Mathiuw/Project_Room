@@ -10,13 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4705395122014984434}
   - component: {fileID: 6245936013705981878}
-  - component: {fileID: 4592817269438468908}
   - component: {fileID: 1643965475651589187}
-  - component: {fileID: 5279310521303339926}
-  - component: {fileID: 830713900624039816}
-  - component: {fileID: 9001241653066771064}
-  - component: {fileID: 8128928771052974730}
-  - component: {fileID: 1298715529747147238}
   - component: {fileID: 3831908065994496667}
   m_Layer: 12
   m_Name: Spawn_Weapon
@@ -33,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1643965475651589186}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.55}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -55,25 +49,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 3
---- !u!95 &4592817269438468908
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1643965475651589186}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1523149f122cd704c99549905c1f7c55, type: 2}
-  m_CullingMode: 2
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &1643965475651589187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,79 +61,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b92f1dd9367aec44083be48b0e25eb8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5279310521303339926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1643965475651589186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7c124549f987ce449fa088a7acf2fc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aimVector: {x: 0, y: 0, z: 0}
---- !u!114 &830713900624039816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1643965475651589186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 400cbb11d7734e641a586ecdf24d4b8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &9001241653066771064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1643965475651589186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5da8aa4c8d1d994ba1e6149ad2568a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  shootLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  muzzleFlash: {fileID: 0}
-  damage: 0
-  bulletForce: 0
-  fireRate: 0
-  ammo: 0
-  maxAmmo: 0
---- !u!114 &8128928771052974730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1643965475651589186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5953c966cfd43c4d8069d93146dbe5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  reloadMag: {fileID: 0}
-  <reloadTime>k__BackingField: 0
---- !u!114 &1298715529747147238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1643965475651589186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <text>k__BackingField: 0
+  weapon: {fileID: 0}
 --- !u!82 &3831908065994496667
 AudioSource:
   m_ObjectHideFlags: 0

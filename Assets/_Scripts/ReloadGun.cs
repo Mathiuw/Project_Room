@@ -5,18 +5,21 @@ using UnityEngine;
 [RequireComponent(typeof(ShootGun))]
 public class ReloadGun : MonoBehaviour
 {
-    [Header("Reload Config")]
-    public Items reloadMag;
-
-    [field: SerializeField] public float reloadTime { get; private set; } = 2;
+    public float reloadTime { get; private set; }
     public bool isReloading { get; private set; } = false;
+
+    ShootGun shootGun;
+    Items reloadItem;
 
     public event Action onReloadStart;
     public event Action onReloadEnd;
 
-    ShootGun shootGun;
-
-    void Awake() { shootGun = GetComponent<ShootGun>(); }  
+    public void SetAttributes(float reloadTime, Items reloadItem, ShootGun shootGun)
+    {
+        this.reloadTime = reloadTime;
+        this.reloadItem = reloadItem;
+        this.shootGun = shootGun;
+    }
 
     public void SetReload(bool b) => isReloading = b;
 
@@ -24,8 +27,8 @@ public class ReloadGun : MonoBehaviour
     {
         if (inventory != null) 
         {
-            if (!inventory.HaveItem(reloadMag)) yield break;
-            inventory.RemoveItem(reloadMag);
+            if (!inventory.HaveItem(reloadItem)) yield break;
+            inventory.RemoveItem(reloadItem);
         }
 
         SetReload(true);

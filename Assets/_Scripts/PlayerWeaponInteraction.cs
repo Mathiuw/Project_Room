@@ -93,7 +93,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
         isAiming = true;
 
         StopAllCoroutines();
-        StartCoroutine(LerpWeapon(0.2f, currentWeapon.transform, currentWeapon.GetAimVector(), Quaternion.identity));
+        StartCoroutine(LerpWeapon(0.2f, currentWeapon.transform, currentWeapon.shootGun.GetAimVector(), Quaternion.identity));
         onAimStart?.Invoke();
     }
 
