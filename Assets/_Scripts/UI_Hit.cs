@@ -45,17 +45,13 @@ public class UI_Hit : MonoBehaviour
         foreach (RectTransform r in hitSprite) r.gameObject.SetActive(b);
     }
 
-    void AddPlayerEvents(Transform gun) 
+    void AddPlayerEvents(Transform weapon) 
     {
-        PlayerWeaponInteraction playerWeaponInteraction= Player.instance.GetComponent<PlayerWeaponInteraction>();
-
-        gun.GetComponent<weapon>().shootGun.onHit += OnHit;
+        weapon.GetComponent<Weapon>().shootGun.onHit += OnHit;
     }
 
-    void RemovePlayerEvents() 
+    void RemovePlayerEvents(Transform weapon) 
     {
-        PlayerWeaponInteraction playerWeaponInteraction = Player.instance.GetComponent<PlayerWeaponInteraction>();
-
-        playerWeaponInteraction.currentWeapon.shootGun.onHit -= OnHit;
+        weapon.GetComponent<Weapon>().shootGun.onHit -= OnHit;
     }
 }

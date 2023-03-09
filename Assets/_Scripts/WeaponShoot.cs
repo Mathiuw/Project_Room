@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class ShootGun : MonoBehaviour
+public class WeaponShoot : MonoBehaviour
 {
     int damage;
     float bulletForce;
@@ -9,48 +9,37 @@ public class ShootGun : MonoBehaviour
     public float firerate { get; private set; }
     float nextTimeToFire = 0;
 
-    public int ammo { get; private set; }
-
-    public int maxAmmo { get; private set; }
+    public SOWeapon.ShootType shootType { get; private set; }
 
     LayerMask shootLayer;
     Vector3 aimVector;
 
     AudioSource gunSound;
-    ReloadGun ReloadGun;
     ParticleSystem muzzleFlash;
 
     public event Action onShoot;
     public event Action<Health> onHit;
 
-    public void SetAttributes(int damage, float firerate, float bulletForce, int maxAmmo, Vector3 aimVector, LayerMask shootLayer, ParticleSystem muzzleFlash)
+    public void SetAttributes(int damage, float firerate, float bulletForce, SOWeapon.ShootType shootType, 
+        Vector3 aimVector, LayerMask shootLayer, ParticleSystem muzzleFlash, Weapon weapon)
     {
         this.damage = damage;
         this.firerate = firerate;
         this.bulletForce = bulletForce;
-        this.maxAmmo = maxAmmo;
+        this.shootType = shootType;
         this.aimVector = aimVector;
         this.shootLayer = shootLayer;
         this.muzzleFlash = muzzleFlash;
+
+        weapon.onHoldStateChange += SetPlayerEvents;
     }
 
     void Start() 
     {
-        ReloadGun = GetComponent<ReloadGun>();
         gunSound = GetComponent<AudioSource>();
-
-        AddAmmo(maxAmmo); 
     }
 
     public Vector3 GetAimVector() { return aimVector; }
-
-    public void AddAmmo(int amount)
-    {
-        ammo += amount;
-        if (ammo > maxAmmo) ammo = maxAmmo;
-    }
-
-    public void RemoveAmmo(int amount) => ammo -= amount;
 
     void AddForceToRbs(Transform t, Transform directionForce, float forceAmount)
     {
@@ -65,10 +54,20 @@ public class ShootGun : MonoBehaviour
         gunSound.Play();
     }
 
-    public void Shoot(Transform raycastPos)
+    bool AutoShoot() { return Input.GetKey(KeyCode.Mouse0); }
+
+    bool SingleShoot() { return Input.GetKeyDown(KeyCode.Mouse0); }
+
+    public void InputShoot(Transform raycastPos, Ammo ammo, bool isReloading)
     {
-        if (ReloadGun.isReloading) return;
-        if (ammo == 0) return;
+        if (shootType == SOWeapon.ShootType.Single && SingleShoot()) Shoot(raycastPos, ammo, isReloading);
+        else if (shootType == SOWeapon.ShootType.Automatic && AutoShoot()) Shoot(raycastPos, ammo, isReloading);
+    }
+
+    public void Shoot(Transform raycastPos, Ammo ammo, bool isReloading = false)
+    {
+        if (isReloading) return;
+        if (ammo.ammo == 0) return;
 
         if (Time.time > +nextTimeToFire)
         {
@@ -76,7 +75,7 @@ public class ShootGun : MonoBehaviour
             Health health;
 
             GunEffects();
-            RemoveAmmo(1);
+            ammo.RemoveAmmo(1);
             onShoot?.Invoke();
 
             if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000, shootLayer))
@@ -89,8 +88,15 @@ public class ShootGun : MonoBehaviour
                 }
                 else AddForceToRbs(hit.transform, raycastPos, bulletForce);
             }
-
             nextTimeToFire = Time.time + (1f / firerate);
         }
+    }
+
+    public void SetPlayerEvents(PlayerWeaponInteraction playerWeaponInteraction, bool state) 
+    {
+        if (playerWeaponInteraction == null) return;
+
+        if (state) playerWeaponInteraction.onShoot += InputShoot;
+        else playerWeaponInteraction.onShoot -= InputShoot;
     }
 }

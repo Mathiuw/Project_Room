@@ -15,13 +15,11 @@ public class SOWeapon : ScriptableObject
     public GameObject Model;
     [Header("Animations")]
     public AnimatorOverrideController animatorOverride;
-    public Vector3 aimLocation;
     [Header("Reload")]
     public float reloadTime;
     public Items reloadItem;
     [Header("Muzzle Flash")]
     public GameObject muzzleFlash;
-    public Vector3 muzzleFlashLocation;
     [Header("Audio")]
     public AudioClip shootAudio;
     public AudioSource shootSouce;

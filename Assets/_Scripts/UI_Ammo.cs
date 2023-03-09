@@ -1,46 +1,63 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 public class UI_Ammo : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI ammoUI;
     PlayerWeaponInteraction playerWeaponInteraction;
-    int ammo = 0;
-    int maxAmmo = 0;
+    Ammo ammo;
 
     void Start() 
     {
-        if (Player.instance != null) playerWeaponInteraction = Player.instance.GetComponent<PlayerWeaponInteraction>();
-        else 
+        if (Player.instance != null) 
         {
-            Debug.LogError("Cant Find Player");
-            enabled = false;
+            playerWeaponInteraction = Player.instance.GetComponent<PlayerWeaponInteraction>();
+
+            playerWeaponInteraction.onPickupEnd += ActivateUISprite;
+            playerWeaponInteraction.onPickupEnd += AddWeaponEvents;
+            playerWeaponInteraction.onDrop += DropUISprite;
+            playerWeaponInteraction.onDrop += RemoveWeaponEvents;
         }
+        CheckUISprite(playerWeaponInteraction);
     }
 
-    void Update()     
+    void ActivateUISprite(Transform weapon) 
     {
-        if (!playerWeaponInteraction.isHoldingWeapon) 
+        ammo = weapon.GetComponent<Ammo>();
+        ammoUI.enabled = true;
+        SetUIAmmo();
+    }
+
+    void DisableUISprite() 
+    {
+        ammo = null;
+        ammoUI.enabled = false;
+    }
+
+    void DropUISprite(Transform weapon) => DisableUISprite();
+
+    void CheckUISprite(PlayerWeaponInteraction playerWeaponInteraction) 
+    {     
+        if (playerWeaponInteraction.isHoldingWeapon) 
         {
-            if(ammoUI.enabled) ammoUI.enabled = false;
-            return;
-        }
-        SetPLayerAmmo();
-        CheckAmmo(ammo, maxAmmo);
+            Transform weapon = playerWeaponInteraction.currentWeapon.transform;
+
+            ActivateUISprite(weapon);
+        } 
+        else DisableUISprite();
     }
 
-    void SetPLayerAmmo() 
+    void SetUIAmmo() => ammoUI.SetText(ammo.ammo + "/" + ammo.maxAmmo);
+
+    void AddWeaponEvents(Transform weapon) 
     {
-        if (ammo != playerWeaponInteraction.currentWeapon.shootGun.ammo) ammo = playerWeaponInteraction.currentWeapon.shootGun.ammo;
-        if (maxAmmo != playerWeaponInteraction.currentWeapon.shootGun.maxAmmo) maxAmmo = playerWeaponInteraction.currentWeapon.shootGun.maxAmmo;
+        weapon.GetComponent<WeaponShoot>().onShoot += SetUIAmmo;
+        weapon.GetComponent<ReloadGun>().onReloadEnd += SetUIAmmo;
     }
 
-    void CheckAmmo(int ammo, int maxAmmo) 
+    void RemoveWeaponEvents(Transform weapon) 
     {
-        if(!ammoUI.enabled) ammoUI.enabled = true;
-
-        ammoUI.SetText(ammo + "/" + maxAmmo);
-    }
+        weapon.GetComponent<WeaponShoot>().onShoot -= SetUIAmmo;
+        weapon.GetComponent<ReloadGun>().onReloadEnd -= SetUIAmmo;
+    } 
 }

@@ -37,7 +37,7 @@ public class Player : MonoBehaviour
 
     void OnDead() 
     {
-        playerWeaponInteraction.DropGun();
+        playerWeaponInteraction.DropWeapon();
         rb.freezeRotation = false;
         GetComponentInChildren<PlayerMovement>().enabled = false;
         GetComponentInChildren<PlayerInteract>().enabled = false;

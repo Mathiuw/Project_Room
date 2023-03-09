@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SocialPlatforms;
@@ -10,12 +9,13 @@ public class EnemyAi : MonoBehaviour
     [Header("Attack")]
     [SerializeField] Transform raycastPos;
     [SerializeField] int burst = 3;
-    [SerializeField] float nextBurst = 0.5f;
+    [SerializeField] float nextBurst = 1f;
     [SerializeField] float timeBetweenBullets = 0.1f;
 
     [Header("Patroling")]
     [SerializeField] Transform path;
     Vector3[] waypoints;
+    Vector3 target;
     int waypointIndex = 0;
 
     [Header("Field of view")]
@@ -23,11 +23,10 @@ public class EnemyAi : MonoBehaviour
     [Range(0, 360)] public float angle;
     [SerializeField] LayerMask targetMask, obstructionMask;
 
-    bool isPatrolling = false;
-    bool isAttacking = false;
-
+    public bool isPatrolling { get; private set; }
+    public bool isAttacking { get; private set; }
     public bool canSeeTarget { get; private set; }
-    bool canAttackTarget = false;
+    public bool canAttackTarget { get; private set; }
 
     public event Action onPatrol;
     public event Action onChase;
@@ -35,7 +34,7 @@ public class EnemyAi : MonoBehaviour
 
     NavMeshAgent navMeshAgent;
     Health health;
-    ShootGun shootGun;
+    EnemyWeaponInteraction enemyWeaponInteraction;
     Collider[] rangeCheck;
 
     void OnDisable() => StopAllCoroutines();
@@ -44,9 +43,9 @@ public class EnemyAi : MonoBehaviour
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         health = GetComponent<Health>();
-        shootGun = GetComponentInChildren<ShootGun>();
-
-        waypoints = new Vector3[path.childCount];
+        enemyWeaponInteraction = GetComponent<EnemyWeaponInteraction>();
+        
+        waypoints = new Vector3[path.childCount]; 
 
         for (int i = 0; i < path.childCount; i++)
         {
@@ -56,9 +55,11 @@ public class EnemyAi : MonoBehaviour
     }
 
     void Update() 
-    {   
+    {
+        target = Player.instance.transform.position;
+
         FieldOfViewCheck();
-        if (health.HealthAmount < health.MaxHealthAmount) canSeeTarget= true;
+        if (health.HealthAmount < health.MaxHealthAmount) canSeeTarget = true;
         Behavior();
     }
 
@@ -82,17 +83,16 @@ public class EnemyAi : MonoBehaviour
 
     void Behavior()
     {
-        if (!canSeeTarget && !canAttackTarget) Patrol();
-        if (canSeeTarget && !canAttackTarget) Chase();
-        if (canSeeTarget && canAttackTarget) Attack();
+        if (!canSeeTarget && !canAttackTarget && !isPatrolling) StartCoroutine(PatrolRoute(navMeshAgent, waypoints));
+        if (canSeeTarget && !canAttackTarget) Chase(navMeshAgent, target);
+        if (canSeeTarget && canAttackTarget) 
+        {
+            transform.LookAt(target);
+            if (!isAttacking) StartCoroutine(ShootWeapon(navMeshAgent, enemyWeaponInteraction));
+        } 
     }
 
-    void Patrol() 
-    {      
-        if (!isPatrolling) StartCoroutine(PatrolRoute());
-    } 
-
-    IEnumerator PatrolRoute()
+    IEnumerator PatrolRoute(NavMeshAgent navMeshAgent, Vector3[] waypoints)
     {
         isPatrolling= true;
         Debug.Log("Started Patrolling");
@@ -120,52 +120,62 @@ public class EnemyAi : MonoBehaviour
 
             waypointIndex++;
             if (waypointIndex == waypoints.Length) waypointIndex = 0;
+
             desiredPosition = new Vector2(waypoints[waypointIndex].x, waypoints[waypointIndex].z);
 
             yield return null;
         }
     }
 
-    void Chase() 
+    void Chase(NavMeshAgent navMeshAgent, Vector3 target) 
     {
-        navMeshAgent.SetDestination(Player.instance.transform.position);
+        navMeshAgent.SetDestination(target);
         Debug.Log("Chasing");
         onChase?.Invoke();
     } 
 
-    void Attack()
+    IEnumerator ShootWeapon(NavMeshAgent navMeshAgent, EnemyWeaponInteraction enemyWeaponInteraction)
     {
-        navMeshAgent.SetDestination(transform.position);
-        transform.LookAt(Player.instance.transform.position);
+        if (enemyWeaponInteraction.currentWeapon == null)
+        {
+            Debug.LogError("Enemy Doesnt Have Gun");
+            yield break;
+        }
 
-        if (isAttacking) return;
-
-        onAttack?.Invoke();
-        StartCoroutine(ShootWeapon());
-    }
-
-    IEnumerator ShootWeapon()
-    {
         isAttacking = true;
+        onAttack?.Invoke();
+        navMeshAgent.SetDestination(transform.position);
+
+        WeaponShoot weaponShoot = enemyWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>();
+        Ammo ammo = enemyWeaponInteraction.currentWeapon.GetComponent<Ammo>();
+
         Debug.Log("Started Attacking");
 
         yield return new WaitForSeconds(nextBurst);
+        while (true) 
+        {         
+            for (int i = 0; i < burst; i++)
+            {
+                if (ammo.ammo == 0) ammo.AddAmmo(ammo.maxAmmo);
+                weaponShoot.Shoot(raycastPos, ammo);
+                yield return new WaitForSeconds(timeBetweenBullets);
+            }
 
-        if (shootGun.ammo == 0) shootGun.AddAmmo(shootGun.maxAmmo);
+            if (!canAttackTarget) 
+            {
+                isAttacking = false;
+                Debug.Log("Stopped Attacking");
+                yield break;
+            }
 
-        for (int i = 0; i < burst; i++)
-        {
-            shootGun.Shoot(raycastPos);
-            yield return new WaitForSeconds(timeBetweenBullets);
-        }
-
-        isAttacking = false;
-        Debug.Log("Stopped Attacking");
-        yield break;
+            yield return new WaitForSeconds(nextBurst);
+        }    
     }
 
     void OnDrawGizmos()
     {
+        if (path == null) return;
+
         Vector3 startPosition = path.GetChild(0).position;
         Vector3 previousPosition = startPosition;
 

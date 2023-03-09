@@ -2,28 +2,26 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(ShootGun))]
+[RequireComponent(typeof(WeaponShoot))]
 public class ReloadGun : MonoBehaviour
 {
     public float reloadTime { get; private set; }
     public bool isReloading { get; private set; } = false;
 
-    ShootGun shootGun;
     Items reloadItem;
 
     public event Action onReloadStart;
     public event Action onReloadEnd;
 
-    public void SetAttributes(float reloadTime, Items reloadItem, ShootGun shootGun)
+    public void SetAttributes(float reloadTime, Items reloadItem) 
     {
         this.reloadTime = reloadTime;
         this.reloadItem = reloadItem;
-        this.shootGun = shootGun;
-    }
+    } 
 
     public void SetReload(bool b) => isReloading = b;
 
-    public IEnumerator Reload(float time, Inventory inventory = null) 
+    public IEnumerator Reload(float time, Ammo ammo, Inventory inventory = null) 
     {
         if (inventory != null) 
         {
@@ -36,7 +34,7 @@ public class ReloadGun : MonoBehaviour
 
         yield return new WaitForSeconds(time);
 
-        shootGun.AddAmmo(shootGun.maxAmmo);
+        ammo.AddAmmo(ammo.maxAmmo);
         SetReload(false);
         onReloadEnd?.Invoke();
         yield break;

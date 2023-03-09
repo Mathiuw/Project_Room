@@ -13,10 +13,6 @@ public class Sprint : MonoBehaviour
     public float stamina { get; private set; } = 30;
     public float maxStamina { get; private set; } = 30;
     public bool isRunning { get; private set; } = false;
-    public bool isInfinite { get; private set; } = false;
-
-    bool isAiming = false;
-    bool isReloading = false;
 
     public event Action<float> staminaUpdated;
 
@@ -30,30 +26,27 @@ public class Sprint : MonoBehaviour
 
     void Update() 
     {
-        isAiming = playerWeaponInteraction.isAiming;
-        if (playerWeaponInteraction.isHoldingWeapon) isReloading = playerWeaponInteraction.currentWeapon.reloadGun.isReloading;
+        if (playerWeaponInteraction.isHoldingWeapon)
+        {
+            if (!CanRun(playerWeaponInteraction.isAiming, playerWeaponInteraction.currentWeapon.reloadGun.isReloading)) 
+            {
+                RecoverStamina();
+                return;
+            }
+        }
+        else if (!CanRun(playerWeaponInteraction.isAiming)) 
+        {
+            RecoverStamina();
+            return;
+        } 
 
         Sprinting(KeyCode.LeftShift, KeyCode.W);
-    } 
-
-    void SetRun(bool b) 
-    {
-        if(isRunning != b)isRunning = b;
-
-        if(b) playerMovement.sprintMultiplier = multiplier;
-        else playerMovement.sprintMultiplier = 1;
-    }
-
-    bool CanRun() 
-    {
-        if (isAiming || isReloading) return false;
-        else return true;
     }
 
     public void AddStamina(float amount)
     {
         stamina += amount;
-        stamina = Mathf.Clamp(stamina, 0f, maxStamina); 
+        stamina = Mathf.Clamp(stamina, 0f, maxStamina);
         staminaUpdated?.Invoke(stamina);
     }
 
@@ -64,30 +57,45 @@ public class Sprint : MonoBehaviour
         staminaUpdated?.Invoke(stamina);
     }
 
+    void SetRunState(bool b) 
+    {
+        isRunning = b;
+
+        if(b) playerMovement.sprintMultiplier = multiplier;
+        else playerMovement.sprintMultiplier = 1;
+    }
+
+    bool CanRun(bool isAiming, bool isReloading = false) 
+    {
+        if (isAiming || isReloading) return false;
+        else return true;
+    }
+
+    void RecoverStamina() 
+    {
+        if (stamina <= maxStamina) AddStamina(staminaRecover * Time.deltaTime);
+    }
+
     public void Sprinting(KeyCode RunInput, KeyCode WalkInput)
     {
-        SetRun(false);
-
-        if (Input.GetKey(RunInput) && Input.GetKey(WalkInput) && CanRun())
+        if (Input.GetKey(RunInput) && Input.GetKey(WalkInput))
         {
-            if (stamina == 0) return;
-
-            SetRun(true);
-
-            if (isInfinite)
+            if (stamina == 0) 
             {
-                AddStamina(maxStamina * Time.deltaTime);
-                Debug.Log("Infinite Sprinting");
+                SetRunState(false);        
                 return;
-            }
-            else RemoveStamina(staminaCost * Time.deltaTime);
+            } 
+
+            SetRunState(true);
+            RemoveStamina(staminaCost * Time.deltaTime);
 
             Debug.Log("Sprinting");
             return;
         }
         else 
         {
-            if (stamina <= maxStamina) AddStamina(staminaRecover * Time.deltaTime);
+            SetRunState(false);
+            RecoverStamina();
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
@@ -10,7 +7,7 @@ public class Enemy : MonoBehaviour
 
     void OnDead() 
     {
-        GetComponentInChildren<WeaponInteraction>().DropGun();
+        GetComponentInChildren<WeaponInteraction>().DropWeapon();
         GetComponentInChildren<EnemyAi>().enabled = false;
         GetComponentInChildren<NavMeshAgent>().enabled = false;
         GetComponentInChildren<Animator>().enabled = false;

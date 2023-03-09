@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class UI_Inventory : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class UI_Inventory : MonoBehaviour
     [SerializeField] RectTransform[] items;
 
     Inventory inventory;
+
+    public Action<Inventory> onInventoryChange;
 
     void Awake() => instance = this;
 
@@ -75,5 +78,7 @@ public class UI_Inventory : MonoBehaviour
                 }
             }
         }
+
+        onInventoryChange?.Invoke(inventory);
     }
 }

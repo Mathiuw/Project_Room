@@ -2,11 +2,11 @@
 
 public class WeaponAnimationManager : MonoBehaviour
 {
-    ShootGun shootGun;
+    WeaponShoot shootGun;
     Animator animator;
-    weapon weapon;
+    Weapon weapon;
 
-    public void SetAttributes(ShootGun shootGun, Animator animator, weapon weapon) 
+    public void SetAttributes(WeaponShoot shootGun, Animator animator, Weapon weapon) 
     {
         this.shootGun= shootGun;
         this.animator = animator;
@@ -14,7 +14,6 @@ public class WeaponAnimationManager : MonoBehaviour
 
         SetAnimationTime();
         weapon.onHoldStateChange += HoldStateChange;
-        shootGun.onShoot += ShootWeapon;
     }
 
     void ShootWeapon() 
@@ -28,9 +27,15 @@ public class WeaponAnimationManager : MonoBehaviour
         animator.SetFloat("Time", shootGun.firerate); 
     }
 
-    void HoldStateChange(bool b) 
+    void HoldStateChange(PlayerWeaponInteraction playerWeaponInteraction, bool b) 
     {
-        animator.Play("Idle");
         animator.enabled = b;
+
+        if (playerWeaponInteraction == null) return;
+        
+        if (b) shootGun.onShoot += ShootWeapon;
+        else shootGun.onShoot -= ShootWeapon;
+
+        animator.Play("Idle");
     }
 }

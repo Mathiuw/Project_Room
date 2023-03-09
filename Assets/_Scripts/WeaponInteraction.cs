@@ -7,7 +7,7 @@ public abstract class WeaponInteraction : MonoBehaviour
 
     public bool isHoldingWeapon { get; protected set; } = false;
 
-    public weapon currentWeapon { get; protected set; }
+    public Weapon currentWeapon { get; protected set; }
 
     void Start() 
     {
@@ -18,6 +18,6 @@ public abstract class WeaponInteraction : MonoBehaviour
 
     public abstract IEnumerator ReloadWeapon(); 
 
-    public abstract void DropGun();
+    public abstract void DropWeapon();
 
 }

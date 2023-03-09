@@ -1,22 +1,22 @@
 ﻿using System;
 using UnityEngine;
 
-public class weapon : MonoBehaviour
+public class Weapon : MonoBehaviour
 {
     public bool isBeingHold { get; private set; } = false;
     public bool isBeingAim { get; private set; } = false;
 
     public Name weaponName { get; private set; }
-    public ShootGun shootGun { get; private set; }
+    public WeaponShoot shootGun { get; private set; }
     public ReloadGun reloadGun { get; private set; }
     public Rigidbody rb { get; private set; }
 
-    public Action<bool> onHoldStateChange;
+    public Action<PlayerWeaponInteraction, bool> onHoldStateChange;
 
     void Start() 
     {
         weaponName = GetComponent<Name>();
-        shootGun = GetComponent<ShootGun>();
+        shootGun = GetComponent<WeaponShoot>();
         reloadGun = GetComponent<ReloadGun>();
         rb = GetComponent<Rigidbody>(); 
 
@@ -25,29 +25,15 @@ public class weapon : MonoBehaviour
 
     void SetAimFalse() { isBeingAim = false; }
 
-    public void SetAimTrue() { isBeingAim = true; }
+    void SetAimTrue() { isBeingAim = true; }
+
+    void DropAim(Transform weapon) { isBeingAim = false; }
 
     public void SetHoldState(bool b, PlayerWeaponInteraction playerWeaponInteraction = null) 
     {
         isBeingHold = b;
         weaponName.enabled = !b;
         rb.isKinematic = b;
-
-        if (playerWeaponInteraction != null) 
-        {
-            if (b)
-            {
-                playerWeaponInteraction.onAimStart += SetAimTrue;
-                playerWeaponInteraction.onAimEnd += SetAimFalse;
-                playerWeaponInteraction.onDrop += SetAimFalse;
-            }
-            else 
-            {
-                playerWeaponInteraction.onAimStart -= SetAimTrue;
-                playerWeaponInteraction.onAimEnd -= SetAimFalse;
-                playerWeaponInteraction.onDrop -= SetAimFalse;
-            }
-        }
 
         if (b) rb.interpolation = RigidbodyInterpolation.None;
         else rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -62,6 +48,25 @@ public class weapon : MonoBehaviour
             else renderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
         }
 
-        onHoldStateChange?.Invoke(b);
+        SetPlayerEvents(playerWeaponInteraction, b);
+        onHoldStateChange?.Invoke(playerWeaponInteraction, b);
+    }
+
+    public void SetPlayerEvents(PlayerWeaponInteraction playerWeaponInteraction, bool state) 
+    {
+        if (playerWeaponInteraction == null) return;
+
+        if (state)
+        {
+            playerWeaponInteraction.onAimStart += SetAimTrue;
+            playerWeaponInteraction.onAimEnd += SetAimFalse;
+            playerWeaponInteraction.onDrop += DropAim;
+        }
+        else
+        {
+            playerWeaponInteraction.onAimStart -= SetAimTrue;
+            playerWeaponInteraction.onAimEnd -= SetAimFalse;
+            playerWeaponInteraction.onDrop -= DropAim;
+        }
     }
 }

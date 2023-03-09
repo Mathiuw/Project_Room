@@ -21,14 +21,16 @@ public class WeaponSway : MonoBehaviour
 
     void Update() 
     {
-        if (playerWeaponInteraction.isAiming) Sway(swayMultiplier / 20);
-        else Sway(swayMultiplier);
-    } 
-
-    void Sway(float swayMultiplier)
-    {
         if (!playerWeaponInteraction.isHoldingWeapon) return;
 
+        Transform weapon = playerWeaponInteraction.currentWeapon.transform;
+
+        if (playerWeaponInteraction.isAiming) Sway( weapon, swayMultiplier / 20);
+        else Sway(weapon, swayMultiplier);
+    } 
+
+    void Sway(Transform weapon, float swayMultiplier)
+    {       
         float mouseX = Input.GetAxisRaw("Mouse X") * swayMultiplier;
         float mouseY = Input.GetAxisRaw("Mouse Y") * swayMultiplier;
 
@@ -37,7 +39,7 @@ public class WeaponSway : MonoBehaviour
 
         Quaternion targetRotation = rotationX * rotationY;
 
-        gunHolder.localRotation = Quaternion.Slerp(gunHolder.localRotation, targetRotation, smooth * Time.deltaTime);
+        weapon.localRotation = Quaternion.Slerp(weapon.localRotation, targetRotation, smooth * Time.deltaTime);
     }
 
     void OnPause(bool b) => enabled = !b;

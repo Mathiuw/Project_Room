@@ -49,9 +49,9 @@ public class PlayerAnimationManager : MonoBehaviour
         reloadGun.onReloadEnd += ReloadEnd;
     } 
 
-    void OnDrop() 
+    void OnDrop(Transform weapon) 
     {
-        ReloadGun reloadGun = playerWeaponInteraction.currentWeapon.reloadGun;
+        ReloadGun reloadGun = weapon.GetComponent<ReloadGun>();
 
         reloadGun.onReloadStart -= ReloadStart;
         reloadGun.onReloadEnd -= ReloadEnd;
