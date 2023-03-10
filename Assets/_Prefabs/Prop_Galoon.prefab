@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 10718773125892847}
   - component: {fileID: 1313069466862984581}
   - component: {fileID: 3200091042429967111}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 3293323350292207550}
   - component: {fileID: 3476280479535374194}
   - component: {fileID: 509705518499898455}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,7 +196,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8063383932236821008}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Prop_Galoon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

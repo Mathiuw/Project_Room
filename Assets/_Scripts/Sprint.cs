@@ -28,17 +28,10 @@ public class Sprint : MonoBehaviour
     {
         if (playerWeaponInteraction.isHoldingWeapon)
         {
-            if (!CanRun(playerWeaponInteraction.isAiming, playerWeaponInteraction.currentWeapon.reloadGun.isReloading)) 
-            {
-                RecoverStamina();
-                return;
-            }
+            if (!CanRun(playerWeaponInteraction.isAiming, playerWeaponInteraction.currentWeapon.reloadGun.isReloading)) return;
         }
-        else if (!CanRun(playerWeaponInteraction.isAiming)) 
-        {
-            RecoverStamina();
-            return;
-        } 
+
+        if (!CanRun(playerWeaponInteraction.isAiming)) return;
 
         Sprinting(KeyCode.LeftShift, KeyCode.W);
     }
@@ -67,7 +60,12 @@ public class Sprint : MonoBehaviour
 
     bool CanRun(bool isAiming, bool isReloading = false) 
     {
-        if (isAiming || isReloading) return false;
+        if (isAiming || isReloading) 
+        {
+            SetRunState(false);
+            RecoverStamina();
+            return false;
+        } 
         else return true;
     }
 

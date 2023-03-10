@@ -105,8 +105,8 @@ GameObject:
   - component: {fileID: 5150464134741534918}
   - component: {fileID: 5150464134741534937}
   - component: {fileID: 5150464134741534936}
-  m_Layer: 0
-  m_Name: Light
+  m_Layer: 8
+  m_Name: Prop_Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
