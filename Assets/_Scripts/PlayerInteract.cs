@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerInteract : MonoBehaviour
 {
     [SerializeField] LayerMask interactiveMask;
-    [SerializeField] LayerMask obstructionMask;
     [SerializeField] float rayLength = 5;
     Transform cameraTransform;
 

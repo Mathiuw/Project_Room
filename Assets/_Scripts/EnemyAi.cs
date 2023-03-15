@@ -157,7 +157,7 @@ public class EnemyAi : MonoBehaviour
             for (int i = 0; i < burst; i++)
             {
                 if (ammo.ammo == 0) ammo.AddAmmo(ammo.maxAmmo);
-                weaponShoot.Shoot(raycastPos, ammo);
+                weaponShoot.Shoot(raycastPos);
                 yield return new WaitForSeconds(timeBetweenBullets);
             }
 

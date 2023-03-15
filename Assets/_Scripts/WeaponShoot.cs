@@ -7,6 +7,7 @@ public class WeaponShoot : MonoBehaviour
     float bulletForce;
 
     public float firerate { get; private set; }
+    public bool waitToShoot { get; private set; }
     float nextTimeToFire = 0;
 
     public SOWeapon.ShootType shootType { get; private set; }
@@ -15,21 +16,26 @@ public class WeaponShoot : MonoBehaviour
     Vector3 aimVector;
 
     AudioSource gunSound;
+    ReloadGun reloadGun;
+    Ammo ammo;
     ParticleSystem muzzleFlash;
 
     public event Action onShoot;
     public event Action<Health> onHit;
 
-    public void SetAttributes(int damage, float firerate, float bulletForce, SOWeapon.ShootType shootType, 
-        Vector3 aimVector, LayerMask shootLayer, ParticleSystem muzzleFlash, Weapon weapon)
+    public void SetAttributes(int damage, float firerate,bool waitToshoot, float bulletForce, SOWeapon.ShootType shootType, 
+        Vector3 aimVector, LayerMask shootLayer, ParticleSystem muzzleFlash, ReloadGun reloadGun,Ammo ammo, Weapon weapon)
     {
         this.damage = damage;
         this.firerate = firerate;
+        this.waitToShoot = waitToshoot;
         this.bulletForce = bulletForce;
         this.shootType = shootType;
         this.aimVector = aimVector;
         this.shootLayer = shootLayer;
         this.muzzleFlash = muzzleFlash;
+        this.reloadGun = reloadGun;
+        this.ammo = ammo;
 
         weapon.onHoldStateChange += SetPlayerEvents;
     }
@@ -60,35 +66,40 @@ public class WeaponShoot : MonoBehaviour
 
     public void InputShoot(Transform raycastPos, Ammo ammo, bool isReloading)
     {
-        if (shootType == SOWeapon.ShootType.Single && SingleShoot()) Shoot(raycastPos, ammo, isReloading);
-        else if (shootType == SOWeapon.ShootType.Automatic && AutoShoot()) Shoot(raycastPos, ammo, isReloading);
+        switch (shootType)
+        {
+            case SOWeapon.ShootType.Single: if (SingleShoot()) { Shoot(raycastPos); }
+                break;
+            case SOWeapon.ShootType.Automatic: if (AutoShoot()) { Shoot(raycastPos); }
+                break;
+        }
     }
 
-    public void Shoot(Transform raycastPos, Ammo ammo, bool isReloading = false)
+    public void Shoot(Transform raycastPos)
     {
-        if (isReloading) return;
+        if (reloadGun.isReloading) return;
         if (ammo.ammo == 0) return;
 
-        if (Time.time > +nextTimeToFire)
+        if (!(Time.time > +nextTimeToFire) && waitToShoot) return;
+
+        RaycastHit hit;
+
+        GunEffects();
+        ammo.RemoveAmmo(1);
+        onShoot?.Invoke();
+        nextTimeToFire = Time.time + (1f / firerate);
+
+        if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000, shootLayer))
         {
-            RaycastHit hit;
             Health health;
 
-            GunEffects();
-            ammo.RemoveAmmo(1);
-            onShoot?.Invoke();
-
-            if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000, shootLayer))
+            if (health = hit.transform.GetComponentInParent<Health>())
             {
-                if (health = hit.transform.GetComponentInParent<Health>())
-                {
-                    onHit?.Invoke(health);
-                    health.RemoveHealth(damage);
-                    if (health.Isdead()) AddForceToRbs(hit.transform, raycastPos, bulletForce);
-                }
-                else AddForceToRbs(hit.transform, raycastPos, bulletForce);
+                onHit?.Invoke(health);
+                health.RemoveHealth(damage);
+                if (health.Isdead()) AddForceToRbs(hit.transform, raycastPos, bulletForce);
             }
-            nextTimeToFire = Time.time + (1f / firerate);
+            else AddForceToRbs(hit.transform, raycastPos, bulletForce);
         }
     }
 

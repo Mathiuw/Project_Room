@@ -17,18 +17,16 @@ MonoBehaviour:
   bulletForce: 20
   maxAmmo: 21
   firerate: 8
+  waitToShoot: 1
   shootType: 1
   shootLayer:
     serializedVersion: 2
     m_Bits: 12032
   Model: {fileID: 6401145719867435353, guid: f2022527f100d2a44af1ec975021b88b, type: 3}
   animatorOverride: {fileID: 0}
-  aimLocation: {x: -0.459, y: 0.285, z: -0.5}
   reloadTime: 4
   reloadItem: {fileID: 11400000, guid: cfa922a2daac2e341a46f6ac8c735ce2, type: 2}
-  muzzleFlash: {fileID: 6772948551756407687, guid: 6d2f69ef9a8a1884b963eb0c73b29bf0,
-    type: 3}
-  muzzleFlashLocation: {x: 0, y: 0.0959, z: 0.7}
+  muzzleFlash: {fileID: 6772948551756407687, guid: 6d2f69ef9a8a1884b963eb0c73b29bf0, type: 3}
   shootAudio: {fileID: 8300000, guid: 039ad0fbe0f91294b80aa198a8d33e3e, type: 3}
   shootSouce: {fileID: 0}
   noAmmoAudio: {fileID: 0}

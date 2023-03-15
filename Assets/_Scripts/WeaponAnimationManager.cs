@@ -18,8 +18,8 @@ public class WeaponAnimationManager : MonoBehaviour
 
     void ShootWeapon() 
     {
-        if (!weapon.isBeingAim) animator.Play("Shoot");
-        else animator.Play("Aim Shoot");
+        if (!weapon.isBeingAim) animator.Play("Shoot", -1, 0f);
+        else animator.Play("Aim Shoot", - 1, 0f);
     }
 
     void SetAnimationTime() 

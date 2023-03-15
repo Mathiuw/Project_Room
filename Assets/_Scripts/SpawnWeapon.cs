@@ -48,8 +48,8 @@ public class SpawnWeapon : MonoBehaviour
         muzzleFlash.transform.localRotation = weapon.muzzleFlash.transform.rotation;
         ParticleSystem MuzzleFlashParticle = muzzleFlash.GetComponent<ParticleSystem>();
         //weapon shoot
-        weaponShoot.SetAttributes(weapon.damage, weapon.firerate, weapon.bulletForce, weapon.shootType, 
-            weaponLocations.GetAimLocation(), weapon.shootLayer, MuzzleFlashParticle, weaponComponent);
+        weaponShoot.SetAttributes(weapon.damage, weapon.firerate,weapon.waitToShoot, weapon.bulletForce, weapon.shootType, 
+            weaponLocations.GetAimLocation(), weapon.shootLayer, MuzzleFlashParticle, reloadGun, ammo, weaponComponent);
         //weapon reload
         reloadGun.SetAttributes(weapon.reloadTime, weapon.reloadItem);
         //weapon audio

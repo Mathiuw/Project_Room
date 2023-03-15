@@ -91,9 +91,6 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     void Aim(bool b, Vector3 aimVector)
     {
-        if (!isHoldingWeapon) return;
-        if (currentWeapon.reloadGun.isReloading) return;
-
         isAiming = b;
 
         StopAllCoroutines();
@@ -103,6 +100,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
     void AimTrue()
     {
         if (!isHoldingWeapon) return;
+        if (currentWeapon.reloadGun.isReloading) return;
         Vector3 aimVector = -weaponHolderPositon - currentWeapon.shootGun.GetAimVector();
 
         Aim(true, aimVector);
@@ -111,6 +109,9 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     void AimFalse() 
     {
+        if (!isHoldingWeapon) return;
+        if (currentWeapon.reloadGun.isReloading) return;
+
         Aim(false, Vector3.zero);
         onAimEnd?.Invoke();
     }

@@ -9,6 +9,7 @@ public class SOWeapon : ScriptableObject
     public float bulletForce;
     public int maxAmmo;
     public float firerate;
+    public bool waitToShoot;
     public ShootType shootType;
     public enum ShootType { Single, Automatic, }
     public LayerMask shootLayer;
