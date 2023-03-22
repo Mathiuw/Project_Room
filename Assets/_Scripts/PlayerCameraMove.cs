@@ -13,9 +13,14 @@ public class PlayerCameraMove : MonoBehaviour
 
     void Awake() => instance = this;
 
-    void Start() => CursorState.CursorLock();   
+    void Start() 
+    {
+        CursorState.CursorLock();
+    }  
 
     void Update() => camMove();
+
+    public void SetSensiblility(float value) => sensibility = value;
 
     void camMove()
     {
