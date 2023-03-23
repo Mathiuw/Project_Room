@@ -62,7 +62,7 @@ public class UI_Inventory : MonoBehaviour
 
         for (int i = 0; i < inventory.InventorySize; i++)
         {
-            foreach (SetItem itemComp in inventory.inventory)
+            foreach (Item itemComp in inventory.inventory)
             {
                 if (inventory.inventory.IndexOf(itemComp) == i)
                 {

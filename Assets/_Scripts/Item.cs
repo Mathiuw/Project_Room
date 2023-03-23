@@ -1,19 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class SetItem : MonoBehaviour
+public class Item : MonoBehaviour
 {
+    public SOItem item;
     public int amount = 1;
 
-    public Items item;
-
-    private void Start()
+    void Start()
     {
         SpawnItem();
     }
 
-    private void SpawnItem()
+    void SpawnItem()
     {
         Transform itemTransform = item.itemPrefab.GetComponent<Transform>();
 
@@ -21,7 +18,7 @@ public class SetItem : MonoBehaviour
         gameObject.name = item.itemName;
         transform.eulerAngles = new Vector3(itemTransform.eulerAngles.x, transform.eulerAngles.y, itemTransform.eulerAngles.z);
         GetComponent<Name>().SetText(item.itemName);
-        GameObject prefab = Instantiate(item.itemPrefab,gameObject.transform);
+        GameObject prefab = Instantiate(item.itemPrefab,transform);
         prefab.transform.localPosition = Vector3.zero;
         prefab.transform.rotation = item.itemPrefab.transform.rotation;
     }

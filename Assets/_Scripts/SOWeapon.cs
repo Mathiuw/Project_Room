@@ -18,7 +18,7 @@ public class SOWeapon : ScriptableObject
     public AnimatorOverrideController animatorOverride;
     [Header("Reload")]
     public float reloadTime;
-    public Items reloadItem;
+    public SOItem reloadItem;
     [Header("Muzzle Flash")]
     public GameObject muzzleFlash;
     [Header("Audio")]

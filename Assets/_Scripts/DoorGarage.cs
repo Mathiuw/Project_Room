@@ -14,7 +14,7 @@ public class DoorGarage : MonoBehaviour
     [SerializeField] KeycardReader ReaderPrefab;
     KeycardReader[] Readers;
 
-    [SerializeField] public Items[] keyCards;
+    [SerializeField] public SOItem[] keyCards;
 
     [Header("Glow Materials")]
     [SerializeField] Material[] glows;

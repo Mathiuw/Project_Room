@@ -7,11 +7,11 @@ public class Inventory : MonoBehaviour
     [SerializeField] int inventorySize = 5;
     public int InventorySize { get => inventorySize; set => inventorySize = value; }
 
-    public List<SetItem> inventory = new List<SetItem>();
+    public List<Item> inventory = new List<Item>();
 
-    public bool AddItem(SetItem item)
+    public bool AddItem(Item item)
     {
-        foreach (SetItem i in inventory)
+        foreach (Item i in inventory)
         {
             if (item.item.itemName == i.item.itemName)
             {
@@ -34,9 +34,9 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public bool RemoveItem(Items item)
+    public bool RemoveItem(SOItem item)
     {
-        foreach (SetItem i in inventory)
+        foreach (Item i in inventory)
         {
             if (item.itemName == i.item.itemName)
             {
@@ -56,9 +56,9 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
-    public bool HaveItemSelected(Items item)
+    public bool HaveItemSelected(SOItem item)
     {
-        foreach (SetItem i in inventory)
+        foreach (Item i in inventory)
         {
             if (inventory.IndexOf(i) == UI_SelectItem.index && item.itemName == i.item.itemName)
             {
@@ -70,9 +70,9 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
-    public bool HaveItem(Items item)
+    public bool HaveItem(SOItem item)
     {
-        foreach (SetItem i in inventory)
+        foreach (Item i in inventory)
         {
             if (item.name == i.item.name)
             {

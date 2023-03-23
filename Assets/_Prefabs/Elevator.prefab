@@ -911,11 +911,21 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 214
+  m_VersionIndex: 79
   m_IsSelectable: 1
-  m_SelectedFaces: 
-  m_SelectedEdges: []
-  m_SelectedVertices: 
+  m_SelectedFaces: 00000000
+  m_SelectedEdges:
+  - a: 0
+    b: 0
+  - a: 0
+    b: 0
+  - a: 0
+    b: 0
+  - a: 0
+    b: 0
+  - a: 0
+    b: 0
+  m_SelectedVertices: 0000000000000000000000000000000000000000
 --- !u!23 &7526882873424523407
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -995,6 +1005,7 @@ GameObject:
   - component: {fileID: 7526882873475606171}
   - component: {fileID: 7526882873475606148}
   - component: {fileID: 7526882873475606149}
+  - component: {fileID: 9164762667069598116}
   m_Layer: 8
   m_Name: Mesh1
   m_TagString: Untagged
@@ -1538,7 +1549,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 16
+  m_VersionIndex: 87
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1607,6 +1618,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: -1
   m_Mesh: {fileID: 0}
+--- !u!208 &9164762667069598116
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7526882873475606151}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.125, y: 2.5, z: 1.5000001}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &7526882873659150271
 GameObject:
   m_ObjectHideFlags: 0
@@ -2094,7 +2121,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 16
+  m_VersionIndex: 83
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2176,6 +2203,7 @@ GameObject:
   - component: {fileID: 7526882874010157438}
   - component: {fileID: 7526882874010157439}
   - component: {fileID: 7526882874010157432}
+  - component: {fileID: 190301545011290885}
   m_Layer: 8
   m_Name: Mesh2
   m_TagString: Untagged
@@ -2719,7 +2747,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 16
+  m_VersionIndex: 87
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2788,6 +2816,22 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: -1
   m_Mesh: {fileID: 0}
+--- !u!208 &190301545011290885
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7526882874010157434}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.125, y: 2.5, z: 1.5000001}
+  m_MoveThreshold: 0.1
+  m_Carve: 0
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1001 &4547557822614922445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2821,7 +2865,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4926960487529195941, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
       propertyPath: m_VersionIndex
-      value: 16
+      value: 79
       objectReference: {fileID: 0}
     - target: {fileID: 4926960487529195941, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
       propertyPath: m_MeshFormatVersion
@@ -2841,7 +2885,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5050054610014287744, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
       propertyPath: m_VersionIndex
-      value: 16
+      value: 79
       objectReference: {fileID: 0}
     - target: {fileID: 5050054610014287744, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
       propertyPath: m_MeshFormatVersion
@@ -3073,7 +3117,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5333098369468241229, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
       propertyPath: m_VersionIndex
-      value: 16
+      value: 83
       objectReference: {fileID: 0}
     - target: {fileID: 5333098369468241229, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
       propertyPath: m_MeshFormatVersion
@@ -3126,7 +3170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4926960487529195941, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
       propertyPath: m_VersionIndex
-      value: 16
+      value: 79
       objectReference: {fileID: 0}
     - target: {fileID: 4926960487529195941, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
       propertyPath: m_MeshFormatVersion
@@ -3146,7 +3190,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5050054610014287744, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
       propertyPath: m_VersionIndex
-      value: 16
+      value: 79
       objectReference: {fileID: 0}
     - target: {fileID: 5050054610014287744, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
       propertyPath: m_MeshFormatVersion
@@ -3378,7 +3422,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5333098369468241229, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
       propertyPath: m_VersionIndex
-      value: 16
+      value: 79
       objectReference: {fileID: 0}
     - target: {fileID: 5333098369468241229, guid: 5cb19521ec042b8458c74d44fbc3caed, type: 3}
       propertyPath: m_MeshFormatVersion
@@ -3468,7 +3512,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5150464134741534919, guid: fcf31c5b136bbfd4583ad2255632d857, type: 3}
       propertyPath: m_VersionIndex
-      value: 16
+      value: 87
       objectReference: {fileID: 0}
     - target: {fileID: 5150464134741534936, guid: fcf31c5b136bbfd4583ad2255632d857, type: 3}
       propertyPath: m_Mesh

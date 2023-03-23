@@ -8,12 +8,12 @@ public class ReloadGun : MonoBehaviour
     public float reloadTime { get; private set; }
     public bool isReloading { get; private set; } = false;
 
-    Items reloadItem;
+    SOItem reloadItem;
 
     public event Action onReloadStart;
     public event Action onReloadEnd;
 
-    public void SetAttributes(float reloadTime, Items reloadItem) 
+    public void SetAttributes(float reloadTime, SOItem reloadItem) 
     {
         this.reloadTime = reloadTime;
         this.reloadItem = reloadItem;

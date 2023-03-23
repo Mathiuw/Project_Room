@@ -24,9 +24,9 @@ public class PlayerItemInteraction : MonoBehaviour
 
     public void UseItem()
     {
-        foreach (SetItem item in inventory.inventory)
+        foreach (Item item in inventory.inventory)
         {
-            if (inventory.inventory.IndexOf(item) == UI_SelectItem.index && item.item.isConsumable)
+            if (inventory.inventory.IndexOf(item) == UI_SelectItem.index && item.item.itemType == SOItem.ItemType.consumable)
             {
                 GetComponent<Health>().AddHealth(item.item.recoverHealth);
 
@@ -49,14 +49,14 @@ public class PlayerItemInteraction : MonoBehaviour
 
     void SpawnDropItem()
     {
-        foreach (SetItem item in inventory.inventory)
+        foreach (Item item in inventory.inventory)
         {
             if (inventory.inventory.IndexOf(item) == UI_SelectItem.index)
             {
                 if (item.amount == 1) inventory.inventory.RemoveAt(UI_SelectItem.index);
                 else item.amount--;
                 GameObject itemSpawned = Instantiate(itemPrefab, transform.position, transform.rotation);
-                itemSpawned.GetComponent<SetItem>().item = item.item;
+                itemSpawned.GetComponent<Item>().item = item.item;
                 onDrop?.Invoke(itemSpawned.transform);
                 break;
             }

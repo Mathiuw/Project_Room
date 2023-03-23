@@ -16,8 +16,8 @@ MonoBehaviour:
   damage: 25
   bulletForce: 10
   maxAmmo: 7
-  firerate: 5
-  waitToShoot: 0
+  firerate: 6
+  waitToShoot: 1
   shootType: 0
   shootLayer:
     serializedVersion: 2

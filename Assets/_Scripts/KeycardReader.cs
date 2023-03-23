@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(Name))]
 public class KeycardReader : Interact
 {
-    public Items keycard { get; set; }
+    public SOItem keycard { get; set; }
 
     public bool used { get; set; } = false;
 

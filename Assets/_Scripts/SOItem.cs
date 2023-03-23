@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Item", menuName = "Item")]
-public class Items : ScriptableObject
+public class SOItem : ScriptableObject
 {
     public ItemType itemType;
 
@@ -14,12 +11,11 @@ public class Items : ScriptableObject
         blueKeycard,
         yellowKeycard,
         greenKeycard,
-        PistolMag,
-        RecoverHealth,
-        RecoverStamina,
+        reloadWeapon,
+        consumable,
     }
 
-    [Header("Name of the item")]
+    [Header("Name")]
     public string itemName;
 
     [Header("Sprite and mesh")]
@@ -30,9 +26,6 @@ public class Items : ScriptableObject
     public bool isStackable;
     public int maxStack;
 
-    [Header("Item effects")]
-    public bool isConsumable;
-    public bool canInfiniteSprint;
-    public float infiniteAdrenalineDuration;
+    [Header("Consumable effects")]
     public int recoverHealth;
 }
