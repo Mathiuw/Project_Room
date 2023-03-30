@@ -15,7 +15,7 @@ public class EnemyAi : MonoBehaviour
     [Header("Patroling")]
     [SerializeField] Transform path;
     Vector3[] waypoints;
-    Vector3 target;
+    Transform target;
     int waypointIndex = 0;
 
     [Header("Field of view")]
@@ -33,7 +33,6 @@ public class EnemyAi : MonoBehaviour
     public event Action onAttack;
 
     NavMeshAgent navMeshAgent;
-    Health health;
     EnemyWeaponInteraction enemyWeaponInteraction;
     Collider[] rangeCheck;
 
@@ -42,7 +41,6 @@ public class EnemyAi : MonoBehaviour
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
-        health = GetComponent<Health>();
         enemyWeaponInteraction = GetComponent<EnemyWeaponInteraction>();
         
         waypoints = new Vector3[path.childCount]; 
@@ -56,11 +54,40 @@ public class EnemyAi : MonoBehaviour
 
     void Update() 
     {
-        target = Player.instance.transform.position;
-
         FieldOfViewCheck();
-        if (health.HealthAmount < health.MaxHealthAmount) canSeeTarget = true;
         Behavior();
+    }
+
+    public void SetTarget(Transform target) 
+    {
+        if (target == null) 
+        {
+            this.target = null;
+            canSeeTarget = false;
+            canAttackTarget = false;
+            return;
+        }
+
+        canSeeTarget = true;
+        this.target = target; 
+    }
+
+    bool isTargetDead(Transform target) 
+    {
+        Health health;
+
+        if (!target.TryGetComponent(out health)) return true;
+
+        else if (health.Isdead()) return true;
+        else return false; 
+    }
+
+    bool targetHasHealth(Transform target) 
+    {
+        Health health;
+
+        if (!target.TryGetComponent(out health)) return true;
+        else return false;
     }
 
     void FieldOfViewCheck()
@@ -68,31 +95,41 @@ public class EnemyAi : MonoBehaviour
         canAttackTarget = false;
 
         rangeCheck = Physics.OverlapSphere(transform.position, radius, targetMask);
+
         if (rangeCheck.Length == 0) return;
 
-        Transform target = rangeCheck[0].transform;
-        Vector3 directionToTarget = (target.position - transform.position).normalized;
-        float distanceToTarget = Vector3.Distance(transform.position, target.position);
+        foreach (Collider collider in rangeCheck) 
+        {
+            Transform target = collider.transform;
+            Vector3 directionToTarget = (target.position - transform.position).normalized;
+            float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-        if (!(Vector3.Angle(transform.forward, directionToTarget) < angle / 2)) return;
-        if (Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask)) return;
+            if (!(Vector3.Angle(transform.forward, directionToTarget) < angle / 2)) return;
+            if (Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask)) return;
 
-        canSeeTarget = true;
-        if (distanceToTarget < radius / 1.1f) canAttackTarget = true;
+            if (this.target == null && target != transform && targetHasHealth(target))
+            {
+                SetTarget(target);
+            }
+
+            if (distanceToTarget < radius / 1.1f) canAttackTarget = true;
+
+            break;
+        }
     }
 
     void Behavior()
     {
-        if (!canSeeTarget && !canAttackTarget && !isPatrolling) StartCoroutine(PatrolRoute(navMeshAgent, waypoints));
-        if (canSeeTarget && !canAttackTarget) Chase(navMeshAgent, target);
+        if (!canSeeTarget && !canAttackTarget && !isPatrolling && target == null) StartCoroutine(PatrolRoute());
+        if (canSeeTarget && !canAttackTarget) Chase();
         if (canSeeTarget && canAttackTarget) 
         {
-            transform.LookAt(target);
-            if (!isAttacking) StartCoroutine(ShootWeapon(navMeshAgent, enemyWeaponInteraction));
+            transform.LookAt(target.position);
+            if (!isAttacking) StartCoroutine(ShootWeapon(enemyWeaponInteraction));
         } 
     }
 
-    IEnumerator PatrolRoute(NavMeshAgent navMeshAgent, Vector3[] waypoints)
+    IEnumerator PatrolRoute()
     {
         isPatrolling= true;
         Debug.Log("Started Patrolling");
@@ -127,14 +164,14 @@ public class EnemyAi : MonoBehaviour
         }
     }
 
-    void Chase(NavMeshAgent navMeshAgent, Vector3 target) 
+    void Chase() 
     {
-        navMeshAgent.SetDestination(target);
+        navMeshAgent.SetDestination(target.position);
         Debug.Log("Chasing");
         onChase?.Invoke();
     } 
 
-    IEnumerator ShootWeapon(NavMeshAgent navMeshAgent, EnemyWeaponInteraction enemyWeaponInteraction)
+    IEnumerator ShootWeapon(EnemyWeaponInteraction enemyWeaponInteraction)
     {
         if (enemyWeaponInteraction.currentWeapon == null)
         {
@@ -148,22 +185,27 @@ public class EnemyAi : MonoBehaviour
 
         WeaponShoot weaponShoot = enemyWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>();
         Ammo ammo = enemyWeaponInteraction.currentWeapon.GetComponent<Ammo>();
-
         Debug.Log("Started Attacking");
 
         yield return new WaitForSeconds(nextBurst);
+
         while (true) 
         {         
             for (int i = 0; i < burst; i++)
             {
                 if (ammo.ammo == 0) ammo.AddAmmo(ammo.maxAmmo);
-                weaponShoot.Shoot(raycastPos);
+
+                weaponShoot.Shoot(raycastPos);             
+
                 yield return new WaitForSeconds(timeBetweenBullets);
             }
+
+            //if (isTargetDead(target)) SetTarget(null);
 
             if (!canAttackTarget) 
             {
                 isAttacking = false;
+
                 Debug.Log("Stopped Attacking");
                 yield break;
             }

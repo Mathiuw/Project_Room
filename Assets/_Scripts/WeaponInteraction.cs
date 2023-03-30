@@ -9,9 +9,13 @@ public abstract class WeaponInteraction : MonoBehaviour
 
     public Weapon currentWeapon { get; protected set; }
 
-    void Start() 
+    IEnumerator Start() 
     {
-        if (gunHolder.childCount != 0) StartCoroutine(PickUpWeapon(gunHolder.GetChild(0)));
+        yield return new WaitForEndOfFrame();
+
+        Weapon weapon;
+
+        if (gunHolder.childCount != 0 && gunHolder.GetChild(0).TryGetComponent(out weapon)) StartCoroutine(PickUpWeapon(gunHolder.GetChild(0)));
     }
 
     protected abstract IEnumerator PickUpWeapon(Transform gun);

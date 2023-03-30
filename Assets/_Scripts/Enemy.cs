@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
@@ -7,12 +6,11 @@ public class Enemy : MonoBehaviour
 
     void OnDead() 
     {
-        GetComponentInChildren<WeaponInteraction>().DropWeapon();
-        GetComponentInChildren<EnemyAi>().enabled = false;
-        GetComponentInChildren<NavMeshAgent>().enabled = false;
-        GetComponentInChildren<Animator>().enabled = false;
+        GetComponent<WeaponInteraction>().DropWeapon();
+        Destroy(GetComponentInChildren<Animator>());
         GetComponentInChildren<Ragdoll>().RagdollActive(true);
-        GetComponentInChildren<Ragdoll>().transform.SetParent(transform);
-        for (int i = 0; i < transform.childCount - 1; i++) Destroy(transform.GetChild(i).gameObject);
+        GetComponentInChildren<Ragdoll>().transform.SetParent(null);
+
+        Destroy(gameObject);
     }
 }

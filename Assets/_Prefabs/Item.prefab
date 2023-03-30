@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8270332264307256698}
   - component: {fileID: 304304816661539403}
-  - component: {fileID: 8270332264307256699}
+  - component: {fileID: 7158209162483908567}
   - component: {fileID: -4812910522190507024}
   - component: {fileID: 6683650745250878522}
   m_Layer: 9
@@ -30,6 +30,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -50,7 +51,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &8270332264307256699
+--- !u!114 &7158209162483908567
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -59,11 +60,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8270332264307256688}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07911cffeb029f04089dc6dca87b3334, type: 3}
+  m_Script: {fileID: 11500000, guid: 2246e8dd532bb5c49a06efc737d167be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 1
   item: {fileID: 0}
+  amount: 1
 --- !u!114 &-4812910522190507024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,7 +77,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  text: 
 --- !u!114 &6683650745250878522
 MonoBehaviour:
   m_ObjectHideFlags: 0

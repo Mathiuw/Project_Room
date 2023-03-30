@@ -52,12 +52,12 @@ public class UI_Ammo : MonoBehaviour
     void AddWeaponEvents(Transform weapon) 
     {
         weapon.GetComponent<WeaponShoot>().onShoot += SetUIAmmo;
-        weapon.GetComponent<ReloadGun>().onReloadEnd += SetUIAmmo;
+        weapon.GetComponent<WeaponReload>().onReloadEnd += SetUIAmmo;
     }
 
     void RemoveWeaponEvents(Transform weapon) 
     {
         weapon.GetComponent<WeaponShoot>().onShoot -= SetUIAmmo;
-        weapon.GetComponent<ReloadGun>().onReloadEnd -= SetUIAmmo;
+        weapon.GetComponent<WeaponReload>().onReloadEnd -= SetUIAmmo;
     } 
 }

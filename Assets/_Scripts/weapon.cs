@@ -3,37 +3,42 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    public SOWeapon weaponSO { get; private set; }
+
     public bool isBeingHold { get; private set; } = false;
     public bool isBeingAim { get; private set; } = false;
 
+    public Transform holder { get; private set; }
     public Name weaponName { get; private set; }
     public WeaponShoot shootGun { get; private set; }
-    public ReloadGun reloadGun { get; private set; }
+    public WeaponReload reloadGun { get; private set; }
     public Rigidbody rb { get; private set; }
-
-    public Action<PlayerWeaponInteraction, bool> onHoldStateChange;
 
     void Start() 
     {
         weaponName = GetComponent<Name>();
         shootGun = GetComponent<WeaponShoot>();
-        reloadGun = GetComponent<ReloadGun>();
+        reloadGun = GetComponent<WeaponReload>();
         rb = GetComponent<Rigidbody>(); 
 
-        SetHoldState(false);
-    } 
+        SetHoldState(false, null);
+    }
 
-    void SetAimFalse() { isBeingAim = false; }
+    public void SetWeaponSO(SOWeapon weaponSO) => this.weaponSO = weaponSO; 
 
-    void SetAimTrue() { isBeingAim = true; }
+    public void SetAimFalse() { isBeingAim = false; }
 
-    void DropAim(Transform weapon) { isBeingAim = false; }
+    public void SetAimTrue() { isBeingAim = true; }
 
-    public void SetHoldState(bool b, PlayerWeaponInteraction playerWeaponInteraction = null) 
+    public void DropAim(Transform weapon) { isBeingAim = false; }
+
+    public void SetHoldState(bool b, Transform holder) 
     {
         isBeingHold = b;
         weaponName.enabled = !b;
         rb.isKinematic = b;
+
+        this.holder = holder;
 
         if (b) rb.interpolation = RigidbodyInterpolation.None;
         else rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -46,27 +51,6 @@ public class Weapon : MonoBehaviour
         {
             if (b) renderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
             else renderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
-        }
-
-        SetPlayerEvents(playerWeaponInteraction, b);
-        onHoldStateChange?.Invoke(playerWeaponInteraction, b);
-    }
-
-    public void SetPlayerEvents(PlayerWeaponInteraction playerWeaponInteraction, bool state) 
-    {
-        if (playerWeaponInteraction == null) return;
-
-        if (state)
-        {
-            playerWeaponInteraction.onAimStart += SetAimTrue;
-            playerWeaponInteraction.onAimEnd += SetAimFalse;
-            playerWeaponInteraction.onDrop += DropAim;
-        }
-        else
-        {
-            playerWeaponInteraction.onAimStart -= SetAimTrue;
-            playerWeaponInteraction.onAimEnd -= SetAimFalse;
-            playerWeaponInteraction.onDrop -= DropAim;
         }
     }
 }

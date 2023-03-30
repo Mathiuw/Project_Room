@@ -2,13 +2,13 @@
 
 public class SpawnWeapon : MonoBehaviour
 {
-    [SerializeField] SOWeapon weapon;
+    [SerializeField] SOWeapon weaponSO;
 
     void Start() 
     {
-        if (weapon == null)
+        if (weaponSO == null)
         {
-            Debug.LogError("Weapon is Null");
+            Debug.LogError("Weapon SO is Null");
             return;
         }
 
@@ -19,43 +19,40 @@ public class SpawnWeapon : MonoBehaviour
 
     public void SpawnMesh() 
     {
-        GameObject model = Instantiate(weapon.Model, transform);
+        GameObject model = Instantiate(weaponSO.Model, transform);
+
         model.transform.localPosition = Vector3.zero;
         model.transform.localRotation = Quaternion.identity;
     }
 
     void SetWeaponComponents() 
     {
-        Name weaponName = gameObject.AddComponent<Name>();
-        Animator animator = GetComponentInChildren<Animator>();
-        Ammo ammo = gameObject.AddComponent<Ammo>();
-        WeaponLocations weaponLocations = GetComponentInChildren<WeaponLocations>();
-        Weapon weaponComponent = gameObject.AddComponent<Weapon>();
-        WeaponShoot weaponShoot = gameObject.AddComponent<WeaponShoot>();
-        ReloadGun reloadGun = gameObject.AddComponent<ReloadGun>();
-        WeaponAnimationManager weaponAnimationManager = gameObject.AddComponent<WeaponAnimationManager>();
+        Weapon weapon = gameObject.AddComponent<Weapon>();
+        weapon.SetWeaponSO(weaponSO);
+
+        //Add components
+        gameObject.AddComponent<Ammo>();
+        gameObject.AddComponent<WeaponShoot>();
+        gameObject.AddComponent<WeaponReload>();
+        gameObject.AddComponent<WeaponAnimationManager>();
 
         //weapon name
-        name = weapon.weaponName;
-        weaponName.SetText(weapon.weaponName);
+        Name weaponName = gameObject.AddComponent<Name>();
+        name = weaponSO.weaponName;
+        weaponName.SetText(weaponSO.weaponName);
+
         //weapon animator
-        if (weapon.animatorOverride != null) animator.runtimeAnimatorController= weapon.animatorOverride;
-        //weapon ammo
-        ammo.SetAttributes(weapon.maxAmmo);         
+        Animator animator = GetComponentInChildren<Animator>();
+        if (weaponSO.animatorOverride != null) animator.runtimeAnimatorController= weaponSO.animatorOverride;
+
         //weapon muzzle flash
-        GameObject muzzleFlash = Instantiate(weapon.muzzleFlash, transform);
+        WeaponLocations weaponLocations = GetComponentInChildren<WeaponLocations>();
+        GameObject muzzleFlash = Instantiate(weaponSO.muzzleFlash, transform);
         muzzleFlash.transform.localPosition= weaponLocations.GetMuzzleFlashLocation();
-        muzzleFlash.transform.localRotation = weapon.muzzleFlash.transform.rotation;
-        ParticleSystem MuzzleFlashParticle = muzzleFlash.GetComponent<ParticleSystem>();
-        //weapon shoot
-        weaponShoot.SetAttributes(weapon.damage, weapon.firerate,weapon.waitToShoot, weapon.bulletForce, weapon.shootType, 
-            weaponLocations.GetAimLocation(), weapon.shootLayer, MuzzleFlashParticle, reloadGun, ammo, weaponComponent);
-        //weapon reload
-        reloadGun.SetAttributes(weapon.reloadTime, weapon.reloadItem);
+        muzzleFlash.transform.localRotation = weaponSO.muzzleFlash.transform.rotation;
+
         //weapon audio
-        GetComponent<AudioSource>().clip = weapon.shootAudio;
-        //weapon animation manager
-        weaponAnimationManager.SetAttributes(weaponShoot, animator, weaponComponent);
+        GetComponent<AudioSource>().clip = weaponSO.shootAudio;
     }
 
     void OnDrawGizmos() 

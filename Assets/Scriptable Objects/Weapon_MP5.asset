@@ -21,7 +21,7 @@ MonoBehaviour:
   shootType: 1
   shootLayer:
     serializedVersion: 2
-    m_Bits: 12032
+    m_Bits: 9992
   Model: {fileID: 6401145719867435353, guid: f2022527f100d2a44af1ec975021b88b, type: 3}
   animatorOverride: {fileID: 0}
   reloadTime: 4

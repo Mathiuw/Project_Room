@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
-using UnityEngine.Animations;
 
 public class DynamicDOF : MonoBehaviour
 {
@@ -16,8 +13,12 @@ public class DynamicDOF : MonoBehaviour
 
     void Start()
     {
-        postProcessVolume = GameObject.FindGameObjectWithTag("Post Processing").transform.GetComponent<PostProcessVolume>();
-        postProcessVolume.profile.TryGetSettings(out dof);
+        if (GameObject.FindGameObjectWithTag("Post Processing"))
+        {
+            postProcessVolume = GameObject.FindGameObjectWithTag("Post Processing").transform.GetComponent<PostProcessVolume>();
+            postProcessVolume.profile.TryGetSettings(out dof);
+        }
+        else Destroy(this);
     }
 
     void Update()

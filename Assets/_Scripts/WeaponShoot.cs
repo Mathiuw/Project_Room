@@ -1,51 +1,33 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class WeaponShoot : MonoBehaviour
 {
-    int damage;
-    float bulletForce;
-
-    public float firerate { get; private set; }
-    public bool waitToShoot { get; private set; }
     float nextTimeToFire = 0;
 
-    public SOWeapon.ShootType shootType { get; private set; }
-
-    LayerMask shootLayer;
-    Vector3 aimVector;
-
+    Weapon weapon;
+    SOWeapon weaponSO;
     AudioSource gunSound;
-    ReloadGun reloadGun;
+    WeaponReload reloadGun;
     Ammo ammo;
     ParticleSystem muzzleFlash;
+    public RaycastHit hit;
 
     public event Action onShoot;
     public event Action<Health> onHit;
 
-    public void SetAttributes(int damage, float firerate,bool waitToshoot, float bulletForce, SOWeapon.ShootType shootType, 
-        Vector3 aimVector, LayerMask shootLayer, ParticleSystem muzzleFlash, ReloadGun reloadGun,Ammo ammo, Weapon weapon)
+    IEnumerator Start() 
     {
-        this.damage = damage;
-        this.firerate = firerate;
-        this.waitToShoot = waitToshoot;
-        this.bulletForce = bulletForce;
-        this.shootType = shootType;
-        this.aimVector = aimVector;
-        this.shootLayer = shootLayer;
-        this.muzzleFlash = muzzleFlash;
-        this.reloadGun = reloadGun;
-        this.ammo = ammo;
+        yield return new WaitForEndOfFrame();
 
-        weapon.onHoldStateChange += SetPlayerEvents;
-    }
-
-    void Start() 
-    {
+        weapon = GetComponent<Weapon>();
+        weaponSO = weapon.weaponSO;
         gunSound = GetComponent<AudioSource>();
+        reloadGun = GetComponent<WeaponReload>();
+        ammo = GetComponent<Ammo>();
+        muzzleFlash = GetComponentInChildren<ParticleSystem>();
     }
-
-    public Vector3 GetAimVector() { return aimVector; }
 
     void AddForceToRbs(Transform t, Transform directionForce, float forceAmount)
     {
@@ -64,9 +46,9 @@ public class WeaponShoot : MonoBehaviour
 
     bool SingleShoot() { return Input.GetKeyDown(KeyCode.Mouse0); }
 
-    public void InputShoot(Transform raycastPos, Ammo ammo, bool isReloading)
+    public void InputShoot(Transform raycastPos)
     {
-        switch (shootType)
+        switch (weaponSO.shootType)
         {
             case SOWeapon.ShootType.Single: if (SingleShoot()) { Shoot(raycastPos); }
                 break;
@@ -79,35 +61,30 @@ public class WeaponShoot : MonoBehaviour
     {
         if (reloadGun.isReloading) return;
         if (ammo.ammo == 0) return;
+        if (!(Time.time > +nextTimeToFire)) return;
 
-        if (!(Time.time > +nextTimeToFire) && waitToShoot) return;
-
-        RaycastHit hit;
-
+        nextTimeToFire = Time.time + (1f / weaponSO.firerate);
         GunEffects();
         ammo.RemoveAmmo(1);
         onShoot?.Invoke();
-        nextTimeToFire = Time.time + (1f / firerate);
 
-        if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000, shootLayer))
+        if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000, weaponSO.shootLayer))
         {
             Health health;
+            EnemyAi enemyAi;
+
+            if ((enemyAi = hit.transform.GetComponentInParent<EnemyAi>()) && weapon.holder != null)
+            {
+                enemyAi.SetTarget(weapon.holder);
+            }
 
             if (health = hit.transform.GetComponentInParent<Health>())
             {
                 onHit?.Invoke(health);
-                health.RemoveHealth(damage);
-                if (health.Isdead()) AddForceToRbs(hit.transform, raycastPos, bulletForce);
+                health.RemoveHealth(weaponSO.damage);
+                if (health.Isdead()) AddForceToRbs(hit.transform, raycastPos, weaponSO.bulletForce);
             }
-            else AddForceToRbs(hit.transform, raycastPos, bulletForce);
+            else AddForceToRbs(hit.transform, raycastPos, weaponSO.bulletForce);
         }
-    }
-
-    public void SetPlayerEvents(PlayerWeaponInteraction playerWeaponInteraction, bool state) 
-    {
-        if (playerWeaponInteraction == null) return;
-
-        if (state) playerWeaponInteraction.onShoot += InputShoot;
-        else playerWeaponInteraction.onShoot -= InputShoot;
     }
 }

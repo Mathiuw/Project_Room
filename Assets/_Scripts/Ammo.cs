@@ -4,13 +4,16 @@ using UnityEngine;
 public class Ammo : MonoBehaviour
 {
     public int ammo { get; private set; } 
-    public int maxAmmo { get; private set; } 
+    public int maxAmmo { get; private set; }
 
-    public void SetAttributes(int maxAmmo) => this.maxAmmo = maxAmmo; 
+    SOWeapon weaponSO;
 
     IEnumerator Start() 
     {
         yield return new WaitForEndOfFrame();
+
+        weaponSO = GetComponent<Weapon>().weaponSO;
+        maxAmmo = weaponSO.maxAmmo;
         AddAmmo(maxAmmo); 
     }
 

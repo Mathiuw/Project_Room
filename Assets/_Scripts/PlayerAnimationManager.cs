@@ -43,7 +43,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
     void OnPickup(Transform gun) 
     {
-        ReloadGun reloadGun = gun.GetComponent<ReloadGun>();
+        WeaponReload reloadGun = gun.GetComponent<WeaponReload>();
 
         reloadGun.onReloadStart += ReloadStart;
         reloadGun.onReloadEnd += ReloadEnd;
@@ -51,7 +51,7 @@ public class PlayerAnimationManager : MonoBehaviour
 
     void OnDrop(Transform weapon) 
     {
-        ReloadGun reloadGun = weapon.GetComponent<ReloadGun>();
+        WeaponReload reloadGun = weapon.GetComponent<WeaponReload>();
 
         reloadGun.onReloadStart -= ReloadStart;
         reloadGun.onReloadEnd -= ReloadEnd;

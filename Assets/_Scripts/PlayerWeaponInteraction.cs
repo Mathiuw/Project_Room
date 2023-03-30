@@ -14,9 +14,9 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     Transform cameraTransform;
     Inventory inventory;
-    Vector3 weaponHolderPositon;
+    Vector3 defautHolderPosition;
 
-    public event Action<Transform, Ammo, bool> onShoot;
+    public event Action<Transform> onShoot;
     public event Action onAimStart;
     public event Action onAimEnd;
     public event Action<Transform> onPickupStart;
@@ -31,7 +31,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
         if (PlayerCamera.instance != null) gunHolder = PlayerCamera.instance.GunHolder;
 
-        weaponHolderPositon = gunHolder.transform.localPosition;
+        defautHolderPosition = gunHolder.transform.localPosition;
     } 
 
     void Update()
@@ -79,43 +79,6 @@ public class PlayerWeaponInteraction : WeaponInteraction
         isLerping = false;
     }
 
-    void Shoot()
-    {
-        if (!isHoldingWeapon) return;
-        if (isLerping) return;
-
-        Ammo ammo = currentWeapon.GetComponent<Ammo>();
-
-        onShoot?.Invoke(cameraTransform, ammo, currentWeapon.reloadGun.isReloading);
-    }
-
-    void Aim(bool b, Vector3 aimVector)
-    {
-        isAiming = b;
-
-        StopAllCoroutines();
-        StartCoroutine(LerpWeapon(aimTime, currentWeapon.transform, aimVector, Quaternion.identity));
-    }
-
-    void AimTrue()
-    {
-        if (!isHoldingWeapon) return;
-        if (currentWeapon.reloadGun.isReloading) return;
-        Vector3 aimVector = -weaponHolderPositon - currentWeapon.shootGun.GetAimVector();
-
-        Aim(true, aimVector);
-        onAimStart?.Invoke();
-    }
-
-    void AimFalse() 
-    {
-        if (!isHoldingWeapon) return;
-        if (currentWeapon.reloadGun.isReloading) return;
-
-        Aim(false, Vector3.zero);
-        onAimEnd?.Invoke();
-    }
-
     protected override IEnumerator PickUpWeapon(Transform weapon)
     {
         if (isHoldingWeapon) yield break;
@@ -129,13 +92,14 @@ public class PlayerWeaponInteraction : WeaponInteraction
             Debug.LogError("Gun already Picked up");
             yield break;
         }
-
         onPickupStart?.Invoke(weapon);
-        currentWeapon.SetHoldState(true, this);
+        currentWeapon.SetHoldState(true, transform);
+        
         StartCoroutine(LerpWeapon(0.2f, weapon, Vector3.zero, Quaternion.identity, gunHolder));
-        while (isLerping) yield return null;     
+        while (isLerping) yield return null;
 
         isHoldingWeapon = true;
+        SetWeaponEvents(true);
         onPickupEnd?.Invoke(weapon);
         Debug.Log("Picked up weapon");
     }
@@ -150,17 +114,57 @@ public class PlayerWeaponInteraction : WeaponInteraction
             StartCoroutine(PickUpWeapon(hit.transform));
     }
 
+    void Shoot()
+    {
+        if (!isHoldingWeapon) return;
+        if (isLerping) return;
+
+        Ammo ammo = currentWeapon.GetComponent<Ammo>();
+
+        onShoot?.Invoke(cameraTransform);
+    }
+
+    void Aim(bool b, Vector3 aimVector)
+    {
+        isAiming = b;
+
+        StopAllCoroutines();
+        StartCoroutine(LerpWeapon(aimTime, currentWeapon.transform, aimVector, Quaternion.identity));
+    }
+
+    void AimTrue()
+    {
+        if (!isHoldingWeapon) return;
+        if (currentWeapon.reloadGun.isReloading) return;
+
+        WeaponLocations weaponLocations = currentWeapon.GetComponentInChildren<WeaponLocations>();
+
+        Vector3 aimVector = -defautHolderPosition - weaponLocations.GetAimLocation();
+
+        Aim(true, aimVector);
+        onAimStart?.Invoke();
+    }
+
+    void AimFalse() 
+    {
+        if (!isHoldingWeapon) return;
+        if (currentWeapon.reloadGun.isReloading) return;
+
+        Aim(false, Vector3.zero);
+        onAimEnd?.Invoke();
+    }
+
     public override IEnumerator ReloadWeapon()  
     {
         if (!isHoldingWeapon) yield break;
         if (isAiming) yield break;
 
-        ReloadGun reloadGun = currentWeapon.reloadGun;
+        WeaponReload reloadGun = currentWeapon.reloadGun;
         Ammo ammo = currentWeapon.GetComponent<Ammo>();
 
         reloadGun.onReloadStart += UI_Inventory.instance.RefreshInventory;
 
-        StartCoroutine(reloadGun.Reload(reloadGun.reloadTime, ammo, inventory));
+        StartCoroutine(reloadGun.Reload(inventory));
         yield break;
     }
 
@@ -172,7 +176,8 @@ public class PlayerWeaponInteraction : WeaponInteraction
         Transform weaponTransform = currentWeapon.transform;
 
         StopAllCoroutines();
-        currentWeapon.SetHoldState(false, this);
+        currentWeapon.SetHoldState(false, null);
+        SetWeaponEvents(false);
         weaponTransform.SetParent(null);
         weaponTransform.localScale = Vector3.one;   
 
@@ -182,5 +187,35 @@ public class PlayerWeaponInteraction : WeaponInteraction
         currentWeapon = null;
         onDrop?.Invoke(weaponTransform);
         Debug.Log("Dropped weapon");
+    }
+
+    void SetWeaponEvents(bool b) 
+    {
+        if (!isHoldingWeapon) return;
+
+        WeaponShoot weaponShoot = currentWeapon.GetComponent<WeaponShoot>();
+        WeaponAnimationManager weaponAnimationManager = currentWeapon.GetComponent<WeaponAnimationManager>();
+        Animator animator = currentWeapon.GetComponentInChildren<Animator>();
+
+        animator.enabled = b;
+
+        if (b) 
+        {
+            onAimStart += currentWeapon.SetAimTrue;
+            onAimEnd += currentWeapon.SetAimFalse;
+            onDrop += currentWeapon.DropAim;
+
+            onShoot += weaponShoot.InputShoot;
+            weaponShoot.onShoot += weaponAnimationManager.ShootWeapon;
+        }
+        else
+        {
+            onAimStart -= currentWeapon.SetAimTrue;
+            onAimEnd -= currentWeapon.SetAimFalse;
+            onDrop -= currentWeapon.DropAim;
+
+            onShoot -= weaponShoot.InputShoot;
+            weaponShoot.onShoot -= weaponAnimationManager.ShootWeapon;
+        }
     }
 }
