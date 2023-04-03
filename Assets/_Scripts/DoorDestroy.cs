@@ -21,6 +21,7 @@ public class DoorDestroy : MonoBehaviour
             doorRB.isKinematic = false;
             doorRB.interpolation = RigidbodyInterpolation.Interpolate;            
             doorRB.AddForce(direction * force, ForceMode.VelocityChange);
+            doorRB.AddTorque(direction * force, ForceMode.VelocityChange);
         }
     }
 }

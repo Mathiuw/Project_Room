@@ -4,7 +4,7 @@ public class CanDestroyDoor : MonoBehaviour
 {
     [SerializeField] float force;
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision)
     {
         if (collision == null) return;
 

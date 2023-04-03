@@ -61,7 +61,7 @@ public class WeaponShoot : MonoBehaviour
     {
         if (reloadGun.isReloading) return;
         if (ammo.ammo == 0) return;
-        if (!(Time.time > +nextTimeToFire)) return;
+        if (!(Time.time > nextTimeToFire)) return;
 
         nextTimeToFire = Time.time + (1f / weaponSO.firerate);
         GunEffects();
