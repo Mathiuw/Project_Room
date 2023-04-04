@@ -184,7 +184,7 @@ public class EnemyAi : MonoBehaviour
         navMeshAgent.SetDestination(transform.position);
 
         WeaponShoot weaponShoot = enemyWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>();
-        Ammo ammo = enemyWeaponInteraction.currentWeapon.GetComponent<Ammo>();
+        WeaponAmmo ammo = enemyWeaponInteraction.currentWeapon.GetComponent<WeaponAmmo>();
         Debug.Log("Started Attacking");
 
         yield return new WaitForSeconds(nextBurst);

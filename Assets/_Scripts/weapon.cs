@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
@@ -9,22 +8,13 @@ public class Weapon : MonoBehaviour
     public bool isBeingAim { get; private set; } = false;
 
     public Transform holder { get; private set; }
-    public Name weaponName { get; private set; }
-    public WeaponShoot shootGun { get; private set; }
-    public WeaponReload reloadGun { get; private set; }
-    public Rigidbody rb { get; private set; }
 
     void Start() 
     {
-        weaponName = GetComponent<Name>();
-        shootGun = GetComponent<WeaponShoot>();
-        reloadGun = GetComponent<WeaponReload>();
-        rb = GetComponent<Rigidbody>(); 
-
         SetHoldState(false, null);
     }
 
-    public void SetWeaponSO(SOWeapon weaponSO) => this.weaponSO = weaponSO; 
+    public void SetWeaponSO(SOWeapon weaponSO) => this.weaponSO = weaponSO;
 
     public void SetAimFalse() { isBeingAim = false; }
 
@@ -34,6 +24,9 @@ public class Weapon : MonoBehaviour
 
     public void SetHoldState(bool b, Transform holder) 
     {
+        Name weaponName = GetComponent<Name>();
+        Rigidbody rb = GetComponent<Rigidbody>();
+
         isBeingHold = b;
         weaponName.enabled = !b;
         rb.isKinematic = b;

@@ -33,7 +33,7 @@ public class PlayerAnimationManager : MonoBehaviour
         if (playerWeaponInteraction.isHoldingWeapon) 
         {
             animator.SetBool("Aim", playerWeaponInteraction.isAiming);
-            animator.SetBool("Reload", playerWeaponInteraction.currentWeapon.reloadGun.isReloading);
+            animator.SetBool("Reload", playerWeaponInteraction.isReloading);
         } 
     } 
 
@@ -43,18 +43,14 @@ public class PlayerAnimationManager : MonoBehaviour
 
     void OnPickup(Transform gun) 
     {
-        WeaponReload reloadGun = gun.GetComponent<WeaponReload>();
-
-        reloadGun.onReloadStart += ReloadStart;
-        reloadGun.onReloadEnd += ReloadEnd;
+        playerWeaponInteraction.onReloadStart += ReloadStart;
+        playerWeaponInteraction.onReloadEnd += ReloadEnd;
     } 
 
-    void OnDrop(Transform weapon) 
+    void OnDrop(Transform gun) 
     {
-        WeaponReload reloadGun = weapon.GetComponent<WeaponReload>();
-
-        reloadGun.onReloadStart -= ReloadStart;
-        reloadGun.onReloadEnd -= ReloadEnd;
+        playerWeaponInteraction.onReloadStart -= ReloadStart;
+        playerWeaponInteraction.onReloadEnd -= ReloadEnd;
 
         animator.Rebind();
     }

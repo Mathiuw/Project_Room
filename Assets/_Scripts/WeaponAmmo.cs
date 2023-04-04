@@ -1,17 +1,14 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Ammo : MonoBehaviour
+public class WeaponAmmo : MonoBehaviour
 {
     public int ammo { get; private set; } 
     public int maxAmmo { get; private set; }
 
     SOWeapon weaponSO;
 
-    IEnumerator Start() 
+    void Awake() 
     {
-        yield return new WaitForEndOfFrame();
-
         weaponSO = GetComponent<Weapon>().weaponSO;
         maxAmmo = weaponSO.maxAmmo;
         AddAmmo(maxAmmo); 

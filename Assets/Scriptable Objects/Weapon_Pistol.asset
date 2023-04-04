@@ -27,6 +27,7 @@ MonoBehaviour:
   reloadTime: 3
   reloadItem: {fileID: 11400000, guid: f3a15256ebc23754dba563d6c9b03a55, type: 2}
   muzzleFlash: {fileID: 7285557099671381770, guid: be85a34377cf8d241a2ac441893a7ee6, type: 3}
+  wallHit: {fileID: 2553133760792651097, guid: f518402108b099b42bf42ae7231061e5, type: 3}
   shootAudio: {fileID: 8300000, guid: 039ad0fbe0f91294b80aa198a8d33e3e, type: 3}
   shootSouce: {fileID: 0}
   noAmmoAudio: {fileID: 0}

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "Weapon", menuName = "Weapon")]
 public class SOWeapon : ScriptableObject
@@ -14,13 +15,21 @@ public class SOWeapon : ScriptableObject
     public enum ShootType { Single, Automatic, }
     public LayerMask shootLayer;
     public GameObject Model;
+
+    [Header("Scripts that will be added")]
+    public MonoScript[] scripts;
+
     [Header("Animations")]
     public AnimatorOverrideController animatorOverride;
+
     [Header("Reload")]
     public float reloadTime;
     public SOItem reloadItem;
-    [Header("Muzzle Flash")]
+
+    [Header("Particles")]
     public GameObject muzzleFlash;
+    public GameObject wallHit;
+
     [Header("Audio")]
     public AudioClip shootAudio;
     public AudioSource shootSouce;

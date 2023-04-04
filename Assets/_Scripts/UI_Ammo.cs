@@ -5,7 +5,7 @@ public class UI_Ammo : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI ammoUI;
     PlayerWeaponInteraction playerWeaponInteraction;
-    Ammo ammo;
+    WeaponAmmo ammo;
 
     void Start() 
     {
@@ -17,13 +17,15 @@ public class UI_Ammo : MonoBehaviour
             playerWeaponInteraction.onPickupEnd += AddWeaponEvents;
             playerWeaponInteraction.onDrop += DropUISprite;
             playerWeaponInteraction.onDrop += RemoveWeaponEvents;
+            playerWeaponInteraction.onReloadStart += SetUIAmmo;
+            playerWeaponInteraction.onReloadEnd += SetUIAmmo;
         }
         CheckUISprite(playerWeaponInteraction);
     }
 
     void ActivateUISprite(Transform weapon) 
     {
-        ammo = weapon.GetComponent<Ammo>();
+        ammo = weapon.GetComponent<WeaponAmmo>();
         ammoUI.enabled = true;
         SetUIAmmo();
     }
@@ -52,12 +54,10 @@ public class UI_Ammo : MonoBehaviour
     void AddWeaponEvents(Transform weapon) 
     {
         weapon.GetComponent<WeaponShoot>().onShoot += SetUIAmmo;
-        weapon.GetComponent<WeaponReload>().onReloadEnd += SetUIAmmo;
     }
 
     void RemoveWeaponEvents(Transform weapon) 
     {
         weapon.GetComponent<WeaponShoot>().onShoot -= SetUIAmmo;
-        weapon.GetComponent<WeaponReload>().onReloadEnd -= SetUIAmmo;
     } 
 }

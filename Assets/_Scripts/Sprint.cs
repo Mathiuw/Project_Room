@@ -28,7 +28,7 @@ public class Sprint : MonoBehaviour
     {
         if (playerWeaponInteraction.isHoldingWeapon)
         {
-            if (!CanRun(playerWeaponInteraction.isAiming, playerWeaponInteraction.currentWeapon.reloadGun.isReloading)) return;
+            if (!CanRun(playerWeaponInteraction.isAiming, playerWeaponInteraction.isReloading)) return;
         }
 
         if (!CanRun(playerWeaponInteraction.isAiming)) return;

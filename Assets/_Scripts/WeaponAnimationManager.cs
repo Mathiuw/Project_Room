@@ -6,10 +6,8 @@ public class WeaponAnimationManager : MonoBehaviour
     Animator animator;
     Weapon weapon;
 
-    IEnumerator Start()
+    void Awake()
     {
-        yield return new WaitForEndOfFrame();
-        
         animator = GetComponentInChildren<Animator>();
         weapon = GetComponent<Weapon>();
 
@@ -17,14 +15,14 @@ public class WeaponAnimationManager : MonoBehaviour
         animator.enabled = false;
     }
 
+    void SetAnimationTime()
+    {
+        animator.SetFloat("Time", weapon.weaponSO.firerate);
+    }
+
     public void ShootWeapon() 
     {
         if (!weapon.isBeingAim) animator.Play("Shoot", -1, 0f);
         else animator.Play("Aim Shoot", - 1, 0f);
-    }
-
-    void SetAnimationTime() 
-    {
-        animator.SetFloat("Time", weapon.weaponSO.firerate); 
     }
 }

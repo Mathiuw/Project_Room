@@ -23,10 +23,17 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 9992
   Model: {fileID: 3866563901672650579, guid: 91e426bf8db83cb4d84dfbcecf602fe2, type: 3}
+  scripts:
+  - {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
+  - {fileID: 11500000, guid: bfbe6a89bbca44745a1c5c5ff02c3448, type: 3}
+  - {fileID: 11500000, guid: 5629be525d0e5a84f850a053c480d097, type: 3}
+  - {fileID: 11500000, guid: c5953c966cfd43c4d8069d93146dbe5a, type: 3}
+  - {fileID: 11500000, guid: 400cbb11d7734e641a586ecdf24d4b8e, type: 3}
   animatorOverride: {fileID: 22100000, guid: 256889344a1820d4f9d9ad130e20a49a, type: 2}
   reloadTime: 5
   reloadItem: {fileID: 11400000, guid: b936a3ffd96c47249a5c826bf08bdfc8, type: 2}
   muzzleFlash: {fileID: 2004880136692511860, guid: db3a34192a3b02f44ad5c5f4809c75b9, type: 3}
+  wallHit: {fileID: 2553133760792651097, guid: f518402108b099b42bf42ae7231061e5, type: 3}
   shootAudio: {fileID: 8300000, guid: 039ad0fbe0f91294b80aa198a8d33e3e, type: 3}
   shootSouce: {fileID: 0}
   noAmmoAudio: {fileID: 0}

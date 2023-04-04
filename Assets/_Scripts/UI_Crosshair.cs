@@ -36,7 +36,7 @@ public class UI_Crosshair : MonoBehaviour
 
             isHoldingWeapon = playerWeaponInteraction.isHoldingWeapon;
             isAiming = playerWeaponInteraction.isAiming;
-            isReloading = playerWeaponInteraction.currentWeapon.reloadGun.isReloading;
+            isReloading = playerWeaponInteraction.isReloading;
             duration = playerWeaponInteraction.currentWeapon.weaponSO.reloadTime;
 
             SetCrossHair(isHoldingWeapon, isReloading, isAiming, duration);

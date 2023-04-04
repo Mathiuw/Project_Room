@@ -4,7 +4,7 @@ public class SpawnWeapon : MonoBehaviour
 {
     [SerializeField] SOWeapon weaponSO;
 
-    void Start() 
+    void Awake() 
     {
         if (weaponSO == null)
         {
@@ -31,10 +31,7 @@ public class SpawnWeapon : MonoBehaviour
         weapon.SetWeaponSO(weaponSO);
 
         //Add components
-        gameObject.AddComponent<Ammo>();
-        gameObject.AddComponent<WeaponShoot>();
-        gameObject.AddComponent<WeaponReload>();
-        gameObject.AddComponent<WeaponAnimationManager>();
+        gameObject.AddComponent<WeaponAmmo>();
 
         //weapon name
         Name weaponName = gameObject.AddComponent<Name>();
@@ -44,6 +41,7 @@ public class SpawnWeapon : MonoBehaviour
         //weapon animator
         Animator animator = GetComponentInChildren<Animator>();
         if (weaponSO.animatorOverride != null) animator.runtimeAnimatorController= weaponSO.animatorOverride;
+        animator.enabled = false;
 
         //weapon muzzle flash
         WeaponLocations weaponLocations = GetComponentInChildren<WeaponLocations>();

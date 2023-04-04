@@ -47,11 +47,11 @@ public class UI_Hit : MonoBehaviour
 
     void AddPlayerEvents(Transform weapon) 
     {
-        weapon.GetComponent<Weapon>().shootGun.onHit += OnHit;
+        weapon.GetComponent<WeaponShoot>().onHit += OnHit;
     }
 
     void RemovePlayerEvents(Transform weapon) 
     {
-        weapon.GetComponent<Weapon>().shootGun.onHit -= OnHit;
+        weapon.GetComponent<WeaponShoot>().onHit -= OnHit;
     }
 }
