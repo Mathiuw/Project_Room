@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UI_Hit : MonoBehaviour
@@ -7,6 +6,7 @@ public class UI_Hit : MonoBehaviour
     public static UI_Hit Instance;
 
     AudioSource hitSound;
+    PlayerWeaponInteraction playerWeaponInteraction;
     [SerializeField] RectTransform[] hitSprite;
 
     void Awake() 
@@ -21,8 +21,7 @@ public class UI_Hit : MonoBehaviour
     {
         if (Player.instance != null)
         {
-            PlayerWeaponInteraction playerWeaponInteraction = Player.instance .GetComponent<PlayerWeaponInteraction>();
-
+            playerWeaponInteraction = Player.instance .GetComponent<PlayerWeaponInteraction>();
             playerWeaponInteraction.onPickupEnd += AddPlayerEvents;
             playerWeaponInteraction.onDrop += RemovePlayerEvents;
         }
@@ -45,13 +44,13 @@ public class UI_Hit : MonoBehaviour
         foreach (RectTransform r in hitSprite) r.gameObject.SetActive(b);
     }
 
-    void AddPlayerEvents(Transform weapon) 
+    void AddPlayerEvents() 
     {
-        weapon.GetComponent<WeaponShoot>().onHit += OnHit;
+        playerWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>().onHit += OnHit;
     }
 
-    void RemovePlayerEvents(Transform weapon) 
+    void RemovePlayerEvents() 
     {
-        weapon.GetComponent<WeaponShoot>().onHit -= OnHit;
+        playerWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>().onHit -= OnHit;
     }
 }

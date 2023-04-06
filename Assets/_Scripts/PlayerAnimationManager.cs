@@ -41,13 +41,13 @@ public class PlayerAnimationManager : MonoBehaviour
 
     void ReloadEnd() => animator.Play("End Reload");
 
-    void OnPickup(Transform gun) 
+    void OnPickup() 
     {
         playerWeaponInteraction.onReloadStart += ReloadStart;
         playerWeaponInteraction.onReloadEnd += ReloadEnd;
     } 
 
-    void OnDrop(Transform gun) 
+    void OnDrop() 
     {
         playerWeaponInteraction.onReloadStart -= ReloadStart;
         playerWeaponInteraction.onReloadEnd -= ReloadEnd;

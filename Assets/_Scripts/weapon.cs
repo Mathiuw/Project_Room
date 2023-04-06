@@ -20,7 +20,7 @@ public class Weapon : MonoBehaviour
 
     public void SetAimTrue() { isBeingAim = true; }
 
-    public void DropAim(Transform weapon) { isBeingAim = false; }
+    public void DropAim() { isBeingAim = false; }
 
     public void SetHoldState(bool b, Transform holder) 
     {

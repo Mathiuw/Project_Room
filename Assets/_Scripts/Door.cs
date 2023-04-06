@@ -12,7 +12,7 @@ public class Door : Interact
     [SerializeField] Transform[] doors;
     [SerializeField] Vector3[] startRotation;
     [SerializeField] Vector3[] desiredRotations;
-    bool open = false;
+    public bool open { get; private set; } = false;
     Name doorName;
 
     void Start() 

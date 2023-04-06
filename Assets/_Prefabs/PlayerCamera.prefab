@@ -193,6 +193,7 @@ GameObject:
   - component: {fileID: 4387262976083714492}
   - component: {fileID: 2921763719598365663}
   - component: {fileID: 7291666190967630243}
+  - component: {fileID: 665451415157456985}
   - component: {fileID: 410141734}
   m_Layer: 10
   m_Name: PlayerCamera
@@ -321,6 +322,22 @@ MonoBehaviour:
   collsionMask:
     serializedVersion: 2
     m_Bits: 8448
+--- !u!114 &665451415157456985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4469830242766119552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e998a9d22301d14799a943172849f5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxRotaion: {x: 2, y: 2, z: 2}
+  speed: 8
+  growthIntensity: 1
+  decayIntensity: 1
 --- !u!114 &410141734
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class UI_Ammo : MonoBehaviour
 
             playerWeaponInteraction.onPickupEnd += ActivateUISprite;
             playerWeaponInteraction.onPickupEnd += AddWeaponEvents;
-            playerWeaponInteraction.onDrop += DropUISprite;
+            playerWeaponInteraction.onDrop += DisableUISprite;
             playerWeaponInteraction.onDrop += RemoveWeaponEvents;
             playerWeaponInteraction.onReloadStart += SetUIAmmo;
             playerWeaponInteraction.onReloadEnd += SetUIAmmo;
@@ -23,9 +23,9 @@ public class UI_Ammo : MonoBehaviour
         CheckUISprite(playerWeaponInteraction);
     }
 
-    void ActivateUISprite(Transform weapon) 
+    void ActivateUISprite() 
     {
-        ammo = weapon.GetComponent<WeaponAmmo>();
+        ammo = playerWeaponInteraction.currentWeapon.GetComponent<WeaponAmmo>();
         ammoUI.enabled = true;
         SetUIAmmo();
     }
@@ -36,28 +36,21 @@ public class UI_Ammo : MonoBehaviour
         ammoUI.enabled = false;
     }
 
-    void DropUISprite(Transform weapon) => DisableUISprite();
-
     void CheckUISprite(PlayerWeaponInteraction playerWeaponInteraction) 
     {     
-        if (playerWeaponInteraction.isHoldingWeapon) 
-        {
-            Transform weapon = playerWeaponInteraction.currentWeapon.transform;
-
-            ActivateUISprite(weapon);
-        } 
+        if (playerWeaponInteraction.isHoldingWeapon) ActivateUISprite();
         else DisableUISprite();
     }
 
     void SetUIAmmo() => ammoUI.SetText(ammo.ammo + "/" + ammo.maxAmmo);
 
-    void AddWeaponEvents(Transform weapon) 
+    void AddWeaponEvents() 
     {
-        weapon.GetComponent<WeaponShoot>().onShoot += SetUIAmmo;
+        playerWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>().onShoot += SetUIAmmo;
     }
 
-    void RemoveWeaponEvents(Transform weapon) 
+    void RemoveWeaponEvents() 
     {
-        weapon.GetComponent<WeaponShoot>().onShoot -= SetUIAmmo;
+        playerWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>().onShoot -= SetUIAmmo;
     } 
 }

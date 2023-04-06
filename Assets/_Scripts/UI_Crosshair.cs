@@ -4,96 +4,84 @@ using UnityEngine.UI;
 
 public class UI_Crosshair : MonoBehaviour
 {
+    [SerializeField] RectTransform crosshairTransform;
     [SerializeField] RectTransform dot;
-    [SerializeField] RectTransform weapon;
     [SerializeField] RectTransform reload;
     PlayerWeaponInteraction playerWeaponInteraction;
-    bool isHoldingWeapon;
-    bool isAiming;
-    bool isReloading;
     bool isLerping = false;
     float duration = 0;
-
 
     void Start() 
     {
         if (Player.instance != null) 
         {
             playerWeaponInteraction = Player.instance.GetComponent<PlayerWeaponInteraction>();
+            playerWeaponInteraction.onPickupEnd += SetCrossHair;
+            playerWeaponInteraction.onAimStart += SetCrossHair;
+            playerWeaponInteraction.onAimEnd += SetCrossHair;
+            playerWeaponInteraction.onDrop += SetCrossHair;
+            SetCrossHair();
+            reload.gameObject.SetActive(false);
         } 
         else 
         {
             Debug.LogError("Cant Find Player");
-            enabled = false;
+            Destroy(this);
         }
     }
 
-    void Update() 
+    void DespawnSprite() 
     {
-        if (playerWeaponInteraction.isHoldingWeapon) 
+        for (int i = 0; i < crosshairTransform.childCount; i++)
         {
-            if (isLerping && !isReloading) ResetLerp();
-
-            isHoldingWeapon = playerWeaponInteraction.isHoldingWeapon;
-            isAiming = playerWeaponInteraction.isAiming;
-            isReloading = playerWeaponInteraction.isReloading;
-            duration = playerWeaponInteraction.currentWeapon.weaponSO.reloadTime;
-
-            SetCrossHair(isHoldingWeapon, isReloading, isAiming, duration);
-        } 
-        else SetCrossHair();
+            Destroy(crosshairTransform.GetChild(i).gameObject);
+        }
     }
 
-    void SetSprites(RectTransform crosshair, bool b = false) 
+    void SpawnCrosshairSprite(GameObject crosshair) 
     {
-        if (crosshair.gameObject.activeSelf == b) return; 
-        crosshair.gameObject.SetActive(b);
+        DespawnSprite();
+
+        GameObject crosshairSprite = Instantiate(crosshair, crosshairTransform);
+        crosshairSprite.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
     }
 
-    public void SetCrossHair(bool isHolding = false, bool isReloading = false, bool isAiming = false, float duration = 0)
+    public void SetCrossHair()
     {
-        if (!isHolding) 
+        if (!playerWeaponInteraction.isHoldingWeapon) 
         {
-            SetSprites(dot, true);
-            SetSprites(weapon);
-            SetSprites(reload);
+            SpawnCrosshairSprite(dot.gameObject);
             return;
         }
 
-        if (!isAiming && !isReloading)
+        if (!playerWeaponInteraction.isAiming && !playerWeaponInteraction.isReloading)
         {
-            SetSprites(dot);
-            SetSprites(weapon, true);
-            SetSprites(reload);
+            SpawnCrosshairSprite(playerWeaponInteraction.currentWeapon.weaponSO.Crosshair);
             return;
         }
 
-        if (isAiming && !isReloading)
+        if (playerWeaponInteraction.isAiming && !playerWeaponInteraction.isReloading)
         {
-            SetSprites(dot);
-            SetSprites(weapon);
-            SetSprites(reload);
+            DespawnSprite();
             return;
         }
 
-        if (isReloading)
+        if (playerWeaponInteraction.isReloading)
         {
-            SetSprites(dot);
-            SetSprites(weapon);
-            SetSprites(reload, true);
-            if(!isLerping) StartCoroutine(ReloadLerp(duration, reload));
+            DespawnSprite();
+            if(!isLerping) StartCoroutine(ReloadLerp(duration));
         }
     }
 
-    IEnumerator ReloadLerp(float duration, RectTransform crosshair)
+    IEnumerator ReloadLerp(float duration)
     {
-        Image ring = crosshair.GetComponent<Image>();
+        Image ring = reload.GetComponent<Image>();
 
         float timeElapsed = 0;
 
         isLerping = true;
-
         ring.fillAmount = 0;
+
         while (timeElapsed < duration) 
         {
             ring.fillAmount = Mathf.Lerp(0, 1f, timeElapsed);
@@ -102,16 +90,10 @@ public class UI_Crosshair : MonoBehaviour
 
             yield return null;
         }
-        ring.fillAmount = 1;
 
+        ring.fillAmount = 1;
         isLerping = false;
 
         yield break;
-    }
-
-    void ResetLerp() 
-    {
-        isLerping = false;
-        StopAllCoroutines();   
     }
 }

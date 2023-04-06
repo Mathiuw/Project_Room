@@ -14,6 +14,7 @@ public class WeaponParticlesManager : MonoBehaviour
 
         weaponShoot.onShoot += MuzzleFlashPlay;
         weaponShoot.onShoot += WallHitPlay;
+        weaponShoot.onHit += BloodPlay;
     }
 
     void MuzzleFlashPlay() 
@@ -27,6 +28,13 @@ public class WeaponParticlesManager : MonoBehaviour
         if (!weaponShoot.hit.transform.gameObject.isStatic) return;
 
         GameObject particle = Instantiate(weaponSO.wallHit);
+        particle.transform.position = weaponShoot.hit.point;
+        particle.transform.forward = weaponShoot.hit.normal;
+    }
+
+    void BloodPlay(Health health) 
+    {
+        GameObject particle = Instantiate(weaponSO.Blood);
         particle.transform.position = weaponShoot.hit.point;
         particle.transform.forward = weaponShoot.hit.normal;
     }

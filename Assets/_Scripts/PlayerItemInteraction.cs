@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerItemInteraction : MonoBehaviour
 {
     Inventory inventory;
+    PlayerDrop playerDrop;
 
     [Header("Drop item")]
     [SerializeField] GameObject itemPrefab;

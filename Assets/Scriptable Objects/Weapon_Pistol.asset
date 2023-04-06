@@ -19,15 +19,19 @@ MonoBehaviour:
   firerate: 7
   waitToShoot: 1
   shootType: 0
-  shootLayer:
+  shootMask:
     serializedVersion: 2
-    m_Bits: 9992
+    m_Bits: 9993
   Model: {fileID: 53250435727361313, guid: 3506d0d7280e5314e8368499a967254d, type: 3}
+  Crosshair: {fileID: 5277375365027224371, guid: 2a87bf875f250674fbc09daad9bcc8e3, type: 3}
+  intensity: 0.5
+  speed: 10
   animatorOverride: {fileID: 22100000, guid: 4f547759e1dd5c041b6017e80dc64ee7, type: 2}
   reloadTime: 3
   reloadItem: {fileID: 11400000, guid: f3a15256ebc23754dba563d6c9b03a55, type: 2}
   muzzleFlash: {fileID: 7285557099671381770, guid: be85a34377cf8d241a2ac441893a7ee6, type: 3}
   wallHit: {fileID: 2553133760792651097, guid: f518402108b099b42bf42ae7231061e5, type: 3}
+  Blood: {fileID: 5750085299204580770, guid: 3a5dae8569d4f374e8c66e8fef3d1f31, type: 3}
   shootAudio: {fileID: 8300000, guid: 039ad0fbe0f91294b80aa198a8d33e3e, type: 3}
   shootSouce: {fileID: 0}
   noAmmoAudio: {fileID: 0}

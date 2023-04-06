@@ -16,24 +16,33 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     Transform cameraTransform;
     Inventory inventory;
+    PlayerDrop playerDrop;
+    CameraShake cameraShake;
     Vector3 defautHolderPosition;
 
     public event Action<Transform> onShoot;
     public event Action onAimStart;
     public event Action onAimEnd;
-    public event Action<Transform> onPickupStart;
-    public event Action<Transform> onPickupEnd;
+    public event Action onPickupEnd;
     public event Action onReloadStart;
     public event Action onReloadEnd;
-    public event Action<Transform> onDrop;
+    public event Action onDrop;
 
-    void Awake() => inventory = GetComponent<Inventory>();
+    void Awake() 
+    {
+        inventory = GetComponent<Inventory>();
+        playerDrop = GetComponent<PlayerDrop>();
+    } 
 
     void Start() 
     {
         cameraTransform = Camera.main.transform;
 
-        if (PlayerCamera.instance != null) gunHolder = PlayerCamera.instance.GunHolder;
+        if (PlayerCamera.instance != null) 
+        {
+            gunHolder = PlayerCamera.instance.GunHolder;
+            cameraShake = PlayerCamera.instance.GetComponent<CameraShake>();
+        } 
 
         defautHolderPosition = gunHolder.transform.localPosition;
     } 
@@ -102,8 +111,8 @@ public class PlayerWeaponInteraction : WeaponInteraction
         currentWeapon.AddComponent<WeaponShoot>();
         currentWeapon.AddComponent<WeaponAnimationManager>();
         currentWeapon.AddComponent<WeaponParticlesManager>();
-
-        onPickupStart?.Invoke(weapon);
+        
+        //Set weapon hold state
         currentWeapon.SetHoldState(true, transform);
         
         //Lerp weapon to player
@@ -112,7 +121,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
         isHoldingWeapon = true;
         SetWeaponEvents(true);
-        onPickupEnd?.Invoke(weapon);
+        onPickupEnd?.Invoke();
 
         Debug.Log("Picked up weapon");
     }
@@ -127,15 +136,29 @@ public class PlayerWeaponInteraction : WeaponInteraction
             StartCoroutine(PickUpWeapon(hit.transform));
     }
 
+    bool InputShoot() 
+    {
+        switch (currentWeapon.weaponSO.shootType) 
+        {
+            case SOWeapon.ShootType.Single: 
+                return Input.GetKeyDown(KeyCode.Mouse0);
+            case SOWeapon.ShootType.Automatic:
+                return Input.GetKey(KeyCode.Mouse0);
+            default: return false;
+        }
+    }
+
     void Shoot()
     {
         if (!isHoldingWeapon) return;
         if (isReloading) return;
         if (isLerping) return;
 
-        WeaponAmmo ammo = currentWeapon.GetComponent<WeaponAmmo>();
-
-        onShoot?.Invoke(cameraTransform);
+        if (InputShoot())
+        {
+            
+            onShoot?.Invoke(cameraTransform);
+        }   
     }
 
     void Aim(bool b, Vector3 aimVector)
@@ -171,9 +194,12 @@ public class PlayerWeaponInteraction : WeaponInteraction
     public override IEnumerator ReloadWeapon()  
     {
         if (!isHoldingWeapon) yield break;
+        if (isReloading) yield break;
         if (isAiming) yield break;
 
         WeaponAmmo ammo = currentWeapon.GetComponent<WeaponAmmo>();
+
+        if(ammo.ammo == ammo.maxAmmo) yield break;
 
         if (!inventory.HaveItem(currentWeapon.weaponSO.reloadItem)) yield break;
         inventory.RemoveItem(currentWeapon.weaponSO.reloadItem);
@@ -197,25 +223,33 @@ public class PlayerWeaponInteraction : WeaponInteraction
         if (!isHoldingWeapon) return;
         if (isReloading) return;
 
-        Transform weaponTransform = currentWeapon.transform;
+        Transform currentWeaponTransform = currentWeapon.transform;
 
         StopAllCoroutines();
         currentWeapon.SetHoldState(false, null);
         SetWeaponEvents(false);
-        weaponTransform.SetParent(null);
-        weaponTransform.localScale = Vector3.one;
+        currentWeaponTransform.SetParent(null);
+        currentWeaponTransform.localScale = Vector3.one;
 
         Destroy(currentWeapon.GetComponent<WeaponShoot>());
         Destroy(currentWeapon.GetComponent<WeaponAnimationManager>());
         Destroy(currentWeapon.GetComponent<WeaponParticlesManager>());
- 
+
         isLerping = false;
         isAiming = false;
         isReloading = false;
         isHoldingWeapon = false;
+
+        playerDrop.Drop(currentWeaponTransform);
+        onDrop?.Invoke();
+
         currentWeapon = null;
-        onDrop?.Invoke(weaponTransform);
         Debug.Log("Dropped weapon");
+    }
+
+    void WeaponCameraShake() 
+    {
+        cameraShake.AddCameraShake(currentWeapon.weaponSO.intensity, currentWeapon.weaponSO.speed);
     }
 
     void SetWeaponEvents(bool b) 
@@ -233,8 +267,9 @@ public class PlayerWeaponInteraction : WeaponInteraction
             onAimStart += currentWeapon.SetAimTrue;
             onAimEnd += currentWeapon.SetAimFalse;
             onDrop += currentWeapon.DropAim;
-
-            onShoot += weaponShoot.InputShoot;
+            onShoot += weaponShoot.Shoot;
+            
+            weaponShoot.onShoot += WeaponCameraShake;
             weaponShoot.onShoot += weaponAnimationManager.ShootWeapon;
         }
         else
@@ -242,8 +277,9 @@ public class PlayerWeaponInteraction : WeaponInteraction
             onAimStart -= currentWeapon.SetAimTrue;
             onAimEnd -= currentWeapon.SetAimFalse;
             onDrop -= currentWeapon.DropAim;
+            onShoot -= weaponShoot.Shoot;
 
-            onShoot -= weaponShoot.InputShoot;
+            weaponShoot.onShoot -= WeaponCameraShake;
             weaponShoot.onShoot -= weaponAnimationManager.ShootWeapon;
         }
     }

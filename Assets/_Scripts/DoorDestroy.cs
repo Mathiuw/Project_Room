@@ -9,7 +9,11 @@ public class DoorDestroy : MonoBehaviour
         Name nameScript;
         Door doorScript;
 
-        if (doorScript = GetComponent<Door>()) Destroy(doorScript);
+        if (doorScript = GetComponent<Door>()) 
+        {
+            if (doorScript.open) return;
+            Destroy(doorScript);
+        } 
         if (nameScript = GetComponent<Name>()) Destroy(nameScript);
 
         foreach (Transform door in doors)

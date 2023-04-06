@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "Weapon", menuName = "Weapon")]
 public class SOWeapon : ScriptableObject
@@ -13,11 +12,15 @@ public class SOWeapon : ScriptableObject
     public bool waitToShoot;
     public ShootType shootType;
     public enum ShootType { Single, Automatic, }
-    public LayerMask shootLayer;
+    public LayerMask shootMask;
     public GameObject Model;
 
-    [Header("Scripts that will be added")]
-    public MonoScript[] scripts;
+    [Header("Crosshair")]
+    public GameObject Crosshair;
+
+    [Header("Camera Shake")]
+    public float intensity;
+    public float speed;
 
     [Header("Animations")]
     public AnimatorOverrideController animatorOverride;
@@ -29,6 +32,7 @@ public class SOWeapon : ScriptableObject
     [Header("Particles")]
     public GameObject muzzleFlash;
     public GameObject wallHit;
+    public GameObject Blood;
 
     [Header("Audio")]
     public AudioClip shootAudio;

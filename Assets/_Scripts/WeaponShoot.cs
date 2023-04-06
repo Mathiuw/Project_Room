@@ -34,21 +34,6 @@ public class WeaponShoot : MonoBehaviour
         gunSound.Play();
     }
 
-    bool AutoShoot() { return Input.GetKey(KeyCode.Mouse0); }
-
-    bool SingleShoot() { return Input.GetKeyDown(KeyCode.Mouse0); }
-
-    public void InputShoot(Transform raycastPos)
-    {
-        switch (weaponSO.shootType)
-        {
-            case SOWeapon.ShootType.Single: if (SingleShoot()) { Shoot(raycastPos); }
-                break;
-            case SOWeapon.ShootType.Automatic: if (AutoShoot()) { Shoot(raycastPos); }
-                break;
-        }
-    }
-
     public void Shoot(Transform raycastPos)
     {
         if (ammo.ammo == 0) return;
@@ -58,7 +43,7 @@ public class WeaponShoot : MonoBehaviour
         GunSound();
         ammo.RemoveAmmo(1);
         
-        if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000))
+        if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000, weaponSO.shootMask))
         {
             Health health;
             EnemyAi enemyAi;
@@ -72,6 +57,7 @@ public class WeaponShoot : MonoBehaviour
             {
                 onHit?.Invoke(health);
                 health.RemoveHealth(weaponSO.damage);
+
                 if (health.Isdead()) AddForceToRbs(hit.transform, raycastPos, weaponSO.bulletForce);
             }
             else AddForceToRbs(hit.transform, raycastPos, weaponSO.bulletForce);
