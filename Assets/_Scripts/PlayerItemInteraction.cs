@@ -14,6 +14,7 @@ public class PlayerItemInteraction : MonoBehaviour
     void Awake() 
     {
         inventory = GetComponent<Inventory>();   
+        playerDrop = GetComponent<PlayerDrop>();
     }
 
     void Update() 
@@ -57,8 +58,9 @@ public class PlayerItemInteraction : MonoBehaviour
                 if (item.amount == 1) inventory.inventory.RemoveAt(UI_SelectItem.index);
                 else item.amount--;
                 GameObject itemSpawned = Instantiate(itemPrefab, transform.position, transform.rotation);
-                itemSpawned.GetComponent<Item>().item = item.item;
+                itemSpawned.GetComponent<Item>().item = item.item;                
                 onDrop?.Invoke(itemSpawned.transform);
+                playerDrop.Drop(itemSpawned.transform);
                 break;
             }
         }
