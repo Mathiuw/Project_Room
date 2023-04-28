@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2593643781204899279
+--- !u!1 &3773342547676875318
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,30 +8,30 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2593643781204899276}
+  - component: {fileID: 3773342547676875313}
   m_Layer: 9
-  m_Name: Keycard_Blue
+  m_Name: Item_Keycard_Yellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2593643781204899276
+--- !u!4 &3773342547676875313
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2593643781204899279}
+  m_GameObject: {fileID: 3773342547676875318}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_Children:
-  - {fileID: 8378999830654922917}
+  - {fileID: 6148940158033739909}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
---- !u!1 &9152439651864078879
+--- !u!1 &6782065700372224575
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -39,10 +39,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8378999830654922917}
-  - component: {fileID: 4893148243265961728}
-  - component: {fileID: 7206607329442221002}
-  - component: {fileID: 4697194286330828792}
+  - component: {fileID: 6148940158033739909}
+  - component: {fileID: 7132215182233915168}
+  - component: {fileID: 4980489304135678954}
+  - component: {fileID: 2329440733956726533}
   m_Layer: 9
   m_Name: Mesh
   m_TagString: Untagged
@@ -50,35 +50,35 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8378999830654922917
+--- !u!4 &6148940158033739909
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9152439651864078879}
+  m_GameObject: {fileID: 6782065700372224575}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2593643781204899276}
+  m_Father: {fileID: 3773342547676875313}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &4893148243265961728
+--- !u!33 &7132215182233915168
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9152439651864078879}
+  m_GameObject: {fileID: 6782065700372224575}
   m_Mesh: {fileID: 5697637368414676610, guid: ad2c58818db714b40a6aa849161ff16a, type: 3}
---- !u!23 &7206607329442221002
+--- !u!23 &4980489304135678954
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9152439651864078879}
+  m_GameObject: {fileID: 6782065700372224575}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -90,7 +90,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 474ce3efd8274354bacd373515968de6, type: 2}
+  - {fileID: 2100000, guid: 18ef28681979beb4dbf94280fb1ad74c, type: 2}
   - {fileID: 2100000, guid: 7fc1cf9321c1a074e80dc3a3c25555c5, type: 2}
   - {fileID: 2100000, guid: 7fc1cf9321c1a074e80dc3a3c25555c5, type: 2}
   m_StaticBatchInfo:
@@ -113,13 +113,13 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &4697194286330828792
+--- !u!65 &2329440733956726533
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9152439651864078879}
+  m_GameObject: {fileID: 6782065700372224575}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
