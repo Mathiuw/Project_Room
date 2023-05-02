@@ -216,6 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aimLocation: {fileID: 9019454924810367428}
   muzzleFlashLocation: {fileID: 1023189051818108254}
+  ammoMeshTransform: {fileID: 1761762439967628006}
 --- !u!1 &8057750256921505943
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ public class PlayerInteract : MonoBehaviour
 
     void Update() 
     {
-        if(Input.GetKeyDown(KeyCode.E))Interacting(transform);
+        if (Input.GetKeyDown(KeyCode.E)) Interacting(transform);
     } 
 
     public void Interacting(Transform t) 

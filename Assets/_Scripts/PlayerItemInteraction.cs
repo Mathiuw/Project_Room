@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerItemInteraction : MonoBehaviour
 {
@@ -8,8 +7,6 @@ public class PlayerItemInteraction : MonoBehaviour
 
     [Header("Drop item")]
     [SerializeField] GameObject itemPrefab;
-
-    public Action<Transform> onDrop;
 
     void Awake() 
     {
@@ -44,13 +41,6 @@ public class PlayerItemInteraction : MonoBehaviour
 
     public void DropItem()
     {
-        SpawnDropItem();
-        if(UI_Inventory.instance != null) UI_Inventory.instance.RefreshInventory();
-        Debug.Log("Item Droped");
-    }
-
-    void SpawnDropItem()
-    {
         foreach (Item item in inventory.inventory)
         {
             if (inventory.inventory.IndexOf(item) == UI_SelectItem.index)
@@ -58,9 +48,11 @@ public class PlayerItemInteraction : MonoBehaviour
                 if (item.amount == 1) inventory.inventory.RemoveAt(UI_SelectItem.index);
                 else item.amount--;
                 GameObject itemSpawned = Instantiate(itemPrefab, transform.position, transform.rotation);
-                itemSpawned.GetComponent<Item>().item = item.item;                
-                onDrop?.Invoke(itemSpawned.transform);
+                itemSpawned.GetComponent<SpawnItem>().item = item.item;
                 playerDrop.Drop(itemSpawned.transform);
+
+                if (UI_Inventory.instance != null) UI_Inventory.instance.RefreshInventory();
+                Debug.Log("Item Droped");
                 break;
             }
         }

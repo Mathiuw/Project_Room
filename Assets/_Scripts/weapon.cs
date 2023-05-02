@@ -24,11 +24,9 @@ public class Weapon : MonoBehaviour
 
     public void SetHoldState(bool b, Transform holder) 
     {
-        Name weaponName = GetComponent<Name>();
         Rigidbody rb = GetComponent<Rigidbody>();
 
         isBeingHold = b;
-        weaponName.enabled = !b;
         rb.isKinematic = b;
 
         this.holder = holder;

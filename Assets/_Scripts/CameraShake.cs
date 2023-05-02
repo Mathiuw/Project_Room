@@ -15,7 +15,7 @@ public class CameraShake : MonoBehaviour
     float seedZ;
 
     //How much the shake increase/decrease
-    [SerializeField] float growthIntensity = 1;
+    //SerializeField] float growthIntensity = 1;
     [SerializeField] float decayIntensity = 1;
 
     void Start()

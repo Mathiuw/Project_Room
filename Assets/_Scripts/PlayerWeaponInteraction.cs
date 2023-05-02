@@ -18,7 +18,8 @@ public class PlayerWeaponInteraction : WeaponInteraction
     Inventory inventory;
     PlayerDrop playerDrop;
     CameraShake cameraShake;
-    Vector3 defautHolderPosition;
+    //Set hold position for whem mot aiming
+    Vector3 defautHoldPosition;
 
     public event Action<Transform> onShoot;
     public event Action onAimStart;
@@ -44,7 +45,8 @@ public class PlayerWeaponInteraction : WeaponInteraction
             cameraShake = PlayerCamera.instance.GetComponent<CameraShake>();
         } 
 
-        defautHolderPosition = gunHolder.transform.localPosition;
+        // set holder position for aimming
+        defautHoldPosition = gunHolder.transform.localPosition;
     } 
 
     void Update()
@@ -111,7 +113,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
         currentWeapon.AddComponent<WeaponShoot>();
         currentWeapon.AddComponent<WeaponAnimationManager>();
         currentWeapon.AddComponent<WeaponParticlesManager>();
-        
+
         //Set weapon hold state
         currentWeapon.SetHoldState(true, transform);
         
@@ -132,8 +134,10 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
         RaycastHit hit;
 
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, maxPickupDistance, WeaponMask))
-            StartCoroutine(PickUpWeapon(hit.transform));
+        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, maxPickupDistance, WeaponMask)) 
+        {
+            if (hit.transform.GetComponent<Weapon>()) StartCoroutine(PickUpWeapon(hit.transform));
+        }
     }
 
     bool InputShoot() 
@@ -154,11 +158,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
         if (isReloading) return;
         if (isLerping) return;
 
-        if (InputShoot())
-        {
-            
-            onShoot?.Invoke(cameraTransform);
-        }   
+        if (InputShoot()) onShoot?.Invoke(cameraTransform);
     }
 
     void Aim(bool b, Vector3 aimVector)
@@ -176,7 +176,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
         WeaponLocations weaponLocations = currentWeapon.GetComponentInChildren<WeaponLocations>();
 
-        Vector3 aimVector = -defautHolderPosition - weaponLocations.GetAimLocation();
+        Vector3 aimVector = -defautHoldPosition - weaponLocations.GetAimLocation();
 
         Aim(true, aimVector);
         onAimStart?.Invoke();

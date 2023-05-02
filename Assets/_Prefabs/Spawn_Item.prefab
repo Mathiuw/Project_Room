@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8270332264307256698}
   - component: {fileID: 304304816661539403}
-  - component: {fileID: 7158209162483908567}
+  - component: {fileID: 5030177635536273589}
   - component: {fileID: -4812910522190507024}
   - component: {fileID: 6683650745250878522}
   m_Layer: 9
-  m_Name: Item
+  m_Name: Spawn_Item
   m_TagString: Untagged
   m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -51,7 +51,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &7158209162483908567
+--- !u!114 &5030177635536273589
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60,11 +60,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8270332264307256688}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2246e8dd532bb5c49a06efc737d167be, type: 3}
+  m_Script: {fileID: 11500000, guid: 0cc55f9e1b7e8164ab575b4345b20ef2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 0}
-  amount: 1
 --- !u!114 &-4812910522190507024
 MonoBehaviour:
   m_ObjectHideFlags: 0

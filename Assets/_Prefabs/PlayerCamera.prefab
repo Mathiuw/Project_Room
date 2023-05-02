@@ -334,7 +334,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e998a9d22301d14799a943172849f5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxRotaion: {x: 2, y: 2, z: 2}
+  maxRotaion: {x: 2.5, y: 2.5, z: 2.5}
   speed: 8
   growthIntensity: 1
   decayIntensity: 1
