@@ -1,16 +1,16 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Elevator : MonoBehaviour
 {
+    [SerializeField] int changeSceneID;
     [SerializeField] ElevatorPanel panelToEnd;
 
     void Start() => panelToEnd.onButtomPress += EndGame;
 
-    void EndGame() => StartCoroutine(End());
+    void EndGame() => StartCoroutine(ChangeScene());
 
-    IEnumerator End() 
+    IEnumerator ChangeScene() 
     {
         UI_Fade.instance.FadeIn();
         
@@ -18,7 +18,7 @@ public class Elevator : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        ManagerGame.instance.LoadLevel(2);
+        ManagerGame.instance.LoadLevel(changeSceneID);
         yield break;
     }
 }

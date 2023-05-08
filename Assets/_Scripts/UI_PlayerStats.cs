@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_PlayerStats : MonoBehaviour
@@ -18,6 +15,9 @@ public class UI_PlayerStats : MonoBehaviour
 
         SetHealthUI(health.HealthAmount);
         SetStaminaUI(sprint.stamina);
+
+        healthBar.maxValue = health.MaxHealthAmount;
+        staminaBar.maxValue = sprint.maxStamina;
 
         health.healthUpdated += SetHealthUI;
         sprint.staminaUpdated += SetStaminaUI;

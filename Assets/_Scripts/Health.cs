@@ -1,20 +1,23 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Die))]
 public class Health : MonoBehaviour
 {
-    [SerializeField] int healthAmount = 100;
-    [SerializeField] int maxHealthAmount = 100;
+    [SerializeField] int healthAmount;
+    int maxHealthAmount;
 
     public int HealthAmount { get => healthAmount; private set => healthAmount = value; }
     public int MaxHealthAmount { get => maxHealthAmount; private set => maxHealthAmount = value; }
 
     public event Action<int> healthUpdated;
 
-    void Start() => healthUpdated?.Invoke(healthAmount);
+    void Awake() => maxHealthAmount = healthAmount;
+
+    void Start() 
+    {
+        healthUpdated?.Invoke(healthAmount);
+    } 
 
     //Adiciona Vida
     public void AddHealth(int amount)

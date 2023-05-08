@@ -58,7 +58,7 @@ public class EnemyAi : MonoBehaviour
         Behavior();
     }
 
-    public void SetTarget(Transform target) 
+    public void SetTarget(Transform target = null) 
     {
         if (target == null) 
         {
@@ -125,6 +125,7 @@ public class EnemyAi : MonoBehaviour
         if (canSeeTarget && canAttackTarget) 
         {
             transform.LookAt(target.position);
+            navMeshAgent.SetDestination(transform.position);
             if (!isAttacking) StartCoroutine(ShootWeapon(enemyWeaponInteraction));
         } 
     }
@@ -181,7 +182,6 @@ public class EnemyAi : MonoBehaviour
 
         isAttacking = true;
         onAttack?.Invoke();
-        navMeshAgent.SetDestination(transform.position);
 
         WeaponShoot weaponShoot = enemyWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>();
         WeaponAmmo ammo = enemyWeaponInteraction.currentWeapon.GetComponent<WeaponAmmo>();
