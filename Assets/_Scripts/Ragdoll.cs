@@ -1,24 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Ragdoll : MonoBehaviour
 {
     [SerializeField] bool ActivateOnStart = false;
-    [SerializeField] Rigidbody[] rbs;
+    Rigidbody[] rbs;
    
     void Start() 
     {
+        //Pega todos os rigidbodies na herança
         rbs = GetComponentsInChildren<Rigidbody>();
 
         if (ActivateOnStart) RagdollActive(true);    
         else RagdollActive(false);
     }   
 
-    //Ativa ou Desativa o Ragdoll
+    //Ativa ou desativa os rigidbodies
     public void RagdollActive(bool b) 
     {
         foreach (Rigidbody rb in rbs) rb.isKinematic = !b;
-        Debug.Log("Ragdoll = " + b);
+
+        Debug.Log("<b><color=magenta>" + transform.name + "</color></b> ragdoll = <b><color=cyan>" + b + "</color></b>");
     }
 }

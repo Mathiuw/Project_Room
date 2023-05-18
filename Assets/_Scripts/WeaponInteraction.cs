@@ -3,19 +3,20 @@ using UnityEngine;
 
 public abstract class WeaponInteraction : MonoBehaviour
 {
-    [SerializeField] protected Transform gunHolder;
+    [SerializeField] protected Transform weaponHolder;
 
     public bool isHoldingWeapon { get; protected set; } = false;
 
     public Weapon currentWeapon { get; protected set; }
 
-    IEnumerator Start() 
+    void Start() 
     {
-        yield return new WaitForEndOfFrame();
-
         Weapon weapon;
 
-        if (gunHolder.childCount != 0 && gunHolder.GetChild(0).TryGetComponent(out weapon)) StartCoroutine(PickUpWeapon(gunHolder.GetChild(0)));
+        if (weaponHolder.childCount != 0 && (weapon = weaponHolder.GetComponentInChildren<Weapon>()))
+        {
+            StartCoroutine(PickUpWeapon(weapon.transform));
+        } 
     }
 
     protected abstract IEnumerator PickUpWeapon(Transform gun);

@@ -16,7 +16,7 @@ public class WeaponAmmoPickup : Interact
             WeaponLocations weaponLocations = GetComponentInChildren<WeaponLocations>();
             if(weaponLocations.GetAmmoMeshTransform() != null) Destroy(weaponLocations.GetAmmoMeshTransform().gameObject);
 
-            Debug.Log(t.name + " Picked ammo from " + name);
+            Debug.Log("<b><color=magenta>" + t.name + "</color></b> Picked ammo from <b><color=cyan>" + transform.name + "</color></b>");
 
             Destroy(this);
         }

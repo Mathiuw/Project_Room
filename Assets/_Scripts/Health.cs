@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Die))]
 public class Health : MonoBehaviour
 {
     [SerializeField] int healthAmount;
@@ -9,8 +8,10 @@ public class Health : MonoBehaviour
 
     public int HealthAmount { get => healthAmount; private set => healthAmount = value; }
     public int MaxHealthAmount { get => maxHealthAmount; private set => maxHealthAmount = value; }
+    public bool isDead { get; private set; }
 
     public event Action<int> healthUpdated;
+    public event Action onDead;
 
     void Awake() => maxHealthAmount = healthAmount;
 
@@ -30,6 +31,8 @@ public class Health : MonoBehaviour
     //Remove Vida e Checa Morte
     public void RemoveHealth(int amount)
     {
+        if (isDead) return;
+
         HealthAmount -= amount;
         healthAmount = Mathf.Clamp(healthAmount, 0, maxHealthAmount);
         healthUpdated?.Invoke(healthAmount);
@@ -37,11 +40,12 @@ public class Health : MonoBehaviour
     }
 
     //Checa Morte
-    public bool Isdead()
+    bool Isdead()
     {
         if (HealthAmount <= 0)
         {
-            GetComponent<Die>().Dead();
+            isDead = true;
+            onDead?.Invoke();
             return true;
         }
         else return false;

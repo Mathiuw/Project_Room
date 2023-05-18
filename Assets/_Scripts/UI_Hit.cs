@@ -31,7 +31,7 @@ public class UI_Hit : MonoBehaviour
 
     IEnumerator Hitmarker(Health health) 
     {
-        if (health.Isdead()) yield break;
+        if (health.isDead) yield break;
         hitSound.Play();
         SetHitmarkerSprite(true);
         yield return new WaitForSeconds(hitSound.clip.length);

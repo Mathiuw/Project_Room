@@ -19,7 +19,7 @@ public class Player : MonoBehaviour
         rb = GetComponentInChildren<Rigidbody>();
         playerWeaponInteraction = GetComponentInChildren<PlayerWeaponInteraction>();
 
-        GetComponent<Die>().onDead += OnDead;
+        GetComponent<Health>().onDead += OnDead;
     }
 
     void Start() 

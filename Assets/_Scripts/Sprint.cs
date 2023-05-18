@@ -87,7 +87,7 @@ public class Sprint : MonoBehaviour
             SetRunState(true);
             RemoveStamina(staminaCost * Time.deltaTime);
 
-            Debug.Log("Sprinting");
+            Debug.Log("<b><color=magenta>" + transform.name + "</color></b> running | <b><color=cyan>stamina = " + stamina + "</color></b>");
             return;
         }
         else 

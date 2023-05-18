@@ -8,8 +8,8 @@ public class UI_Player : MonoBehaviour
 
     void Start() 
     {
-        if (Player.instance != null) Player.instance.GetComponent<Die>().onDead += OnDead;
-        else Debug.LogError("Cant Find Player");
+        if (Player.instance != null) Player.instance.GetComponent<Health>().onDead += OnDead;
+        else Debug.LogError("Cant Find <color=magenta><b>Player</color></b>");
     }
 
     void OnDead() 

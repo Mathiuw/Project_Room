@@ -6,7 +6,7 @@ public class EnemyWeaponInteraction : WeaponInteraction
 {
     protected override IEnumerator PickUpWeapon(Transform gun)
     {
-        gun.SetParent(gunHolder);
+        gun.SetParent(weaponHolder);
         gun.transform.localScale = Vector3.one;
         currentWeapon = gun.GetComponent<Weapon>();
         currentWeapon.SetHoldState(true, transform);
@@ -14,6 +14,10 @@ public class EnemyWeaponInteraction : WeaponInteraction
         Destroy(currentWeapon.GetComponent<Name>());
         currentWeapon.AddComponent<WeaponShoot>();
         currentWeapon.AddComponent<WeaponParticlesManager>();
+        
+        isHoldingWeapon = true;
+
+        Debug.Log("<b><color=magenta>" + transform.name + "</color></b> picked up gun");
 
         yield break;
     }

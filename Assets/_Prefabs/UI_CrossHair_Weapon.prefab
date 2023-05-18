@@ -162,7 +162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6743503505180653457}
   m_Layer: 10
-  m_Name: CrossHair_Weapon
+  m_Name: UI_CrossHair_Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

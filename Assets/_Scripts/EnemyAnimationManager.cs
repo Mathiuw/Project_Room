@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EnemyAnimationManager : MonoBehaviour
 {
@@ -15,16 +13,28 @@ public class EnemyAnimationManager : MonoBehaviour
 
     void Start() 
     {
+        //Patrol animations
         enemyAi.onPatrol += StartWalk;
+        //Chase animations
         enemyAi.onChase += StartWalk;
-        enemyAi.onChase += StartAim;
+        enemyAi.onChase += StopAim;
+        enemyAi.onChase += SpeedMultiplier;
+        enemyAi.onStopChase += StopAim;
+        enemyAi.onStopChase += StopWalk;
+        //Attack animations
         enemyAi.onAttack += StopWalk;
         enemyAi.onAttack += StartAim;
+        enemyAi.onStopAttack += StartWalk;
+        enemyAi.onStopAttack += StopAim;
     }
 
-    void StartWalk() => animator.SetFloat("walk", 1f);
+    void StartWalk() => animator.SetBool("walk", true);
 
-    void StopWalk() => animator.SetFloat("walk", 0f);
+    void StopWalk() => animator.SetBool("walk", false);
 
-    void StartAim() => animator.SetBool("Aim", true);
+    void StartAim() => animator.SetBool("aim", true);
+
+    void StopAim() => animator.SetBool("aim", false);
+
+    void SpeedMultiplier() => animator.SetFloat("speed multiplier", enemyAi.GetSpeedMultiplier());
 }

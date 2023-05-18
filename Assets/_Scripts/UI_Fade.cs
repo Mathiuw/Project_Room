@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UI_Fade : MonoBehaviour
@@ -25,7 +23,7 @@ public class UI_Fade : MonoBehaviour
         SetValue(1f);
         yield return new WaitForSeconds(0.5f);
         FadeOut();
-        if (Player.instance != null) Player.instance.GetComponentInChildren<Die>().onDead += RestartLevelFadeIn;
+        if (Player.instance != null) Player.instance.GetComponentInChildren<Health>().onDead += RestartLevelFadeIn;
         yield break;
     } 
 

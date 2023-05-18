@@ -8,9 +8,9 @@ public class EnemyAi : MonoBehaviour
 {
     [Header("Attack")]
     [SerializeField] Transform raycastPos;
-    [SerializeField] int burst = 3;
-    [SerializeField] float nextBurst = 1f;
-    [SerializeField] float timeBetweenBullets = 0.1f;
+    [SerializeField] float runningSpeedMultiplier;
+    [SerializeField] int burst;
+    [SerializeField] float nextBurst;
 
     [Header("Patroling")]
     [SerializeField] Transform path;
@@ -24,19 +24,41 @@ public class EnemyAi : MonoBehaviour
     [SerializeField] LayerMask targetMask, obstructionMask;
 
     public bool isPatrolling { get; private set; }
+    public bool isChasing { get; private set; }
     public bool isAttacking { get; private set; }
+    public bool isRunning { get; private set; }
     public bool canSeeTarget { get; private set; }
     public bool canAttackTarget { get; private set; }
 
     public event Action onPatrol;
     public event Action onChase;
+    public event Action onStopChase;
     public event Action onAttack;
+    public event Action onStopAttack;
 
-    NavMeshAgent navMeshAgent;
     EnemyWeaponInteraction enemyWeaponInteraction;
+    NavMeshAgent navMeshAgent;
     Collider[] rangeCheck;
 
-    void OnDisable() => StopAllCoroutines();
+    public Transform GetPath() { return path; }
+
+    public float GetSpeedMultiplier() { return runningSpeedMultiplier; }
+
+    public void SetTarget(Transform target = null)
+    {
+        if (target == null)
+        {
+            this.target = null;
+            canSeeTarget = false;
+            canAttackTarget = false;
+            return;
+        }
+
+        canSeeTarget = true;
+        this.target = target;
+    }
+
+    void OnDestroy() => StopAllCoroutines();
 
     void Start()
     {
@@ -58,35 +80,10 @@ public class EnemyAi : MonoBehaviour
         Behavior();
     }
 
-    public void SetTarget(Transform target = null) 
+    bool TargetHasHealth(Transform target) 
     {
-        if (target == null) 
-        {
-            this.target = null;
-            canSeeTarget = false;
-            canAttackTarget = false;
-            return;
-        }
-
-        canSeeTarget = true;
-        this.target = target; 
-    }
-
-    bool isTargetDead(Transform target) 
-    {
-        Health health;
-
-        if (!target.TryGetComponent(out health)) return true;
-
-        else if (health.Isdead()) return true;
-        else return false; 
-    }
-
-    bool targetHasHealth(Transform target) 
-    {
-        Health health;
-
-        if (!target.TryGetComponent(out health)) return true;
+        if (target.GetComponent<Health>()) return true;
+        else if (target.GetComponentInParent<Health>()) return true;
         else return false;
     }
 
@@ -104,36 +101,42 @@ public class EnemyAi : MonoBehaviour
             Vector3 directionToTarget = (target.position - transform.position).normalized;
             float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-            if (!(Vector3.Angle(transform.forward, directionToTarget) < angle / 2)) return;
-            if (Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask)) return;
-
-            if (this.target == null && target != transform && targetHasHealth(target))
+            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
             {
-                SetTarget(target);
+                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask)) 
+                {
+                    if (this.target == null && target != transform && TargetHasHealth(target)) SetTarget(target);
+
+                    if (distanceToTarget < radius / 1.1f) canAttackTarget = true;
+                    else canAttackTarget = false;
+
+                    break;
+                }
             }
-
-            if (distanceToTarget < radius / 1.1f) canAttackTarget = true;
-
-            break;
+            else canAttackTarget = false;
         }
     }
 
     void Behavior()
     {
-        if (!canSeeTarget && !canAttackTarget && !isPatrolling && target == null) StartCoroutine(PatrolRoute());
-        if (canSeeTarget && !canAttackTarget) Chase();
+        if (!canSeeTarget && !canAttackTarget && !isPatrolling && target == null) StartCoroutine(BehaviorPatrol());
+        if (canSeeTarget && !canAttackTarget) 
+        {
+            if(!isChasing) BehaviorChase();
+            navMeshAgent.SetDestination(target.position);
+        } 
         if (canSeeTarget && canAttackTarget) 
         {
             transform.LookAt(target.position);
             navMeshAgent.SetDestination(transform.position);
-            if (!isAttacking) StartCoroutine(ShootWeapon(enemyWeaponInteraction));
+            if (!isAttacking) BehaviorAttack();
         } 
     }
 
-    IEnumerator PatrolRoute()
+    IEnumerator BehaviorPatrol()
     {
         isPatrolling= true;
-        Debug.Log("Started Patrolling");
+        Debug.Log("<color=magenta><b>" + transform.name + "</b></color><color=green> started patrolling</color>");
         onPatrol?.Invoke();
 
         Vector2 position = new Vector2(transform.position.x, transform.position.z);
@@ -150,7 +153,7 @@ public class EnemyAi : MonoBehaviour
                 if (canSeeTarget)
                 {
                     isPatrolling = false;
-                    Debug.Log("Stopped Patrolling");
+                    Debug.Log("<color=magenta><b>" + transform.name + " </b></color><color=red> stopped patrolling</color>");
                     yield break;
                 }
                 yield return null;
@@ -165,49 +168,63 @@ public class EnemyAi : MonoBehaviour
         }
     }
 
-    void Chase() 
-    {
-        navMeshAgent.SetDestination(target.position);
-        Debug.Log("Chasing");
-        onChase?.Invoke();
-    } 
+    void Run() 
+    {   
+        float oldSpeed = navMeshAgent.speed;
 
-    IEnumerator ShootWeapon(EnemyWeaponInteraction enemyWeaponInteraction)
+        navMeshAgent.speed *= runningSpeedMultiplier;
+        isRunning = true;
+        Debug.Log("<b><color=magenta>" + transform.name + "</color></b> started running" +
+            " | Old speed = <b><color=red>" + oldSpeed + "</color></b>" +
+            " | New speed = <b><color=green>" + navMeshAgent.speed + "</color></b>");
+    }
+    void BehaviorChase()
+    {
+        isChasing = true;
+        isAttacking = false;
+        if (!isRunning) Run();
+        onChase?.Invoke();
+    }
+
+    void BehaviorAttack() 
+    {
+        onStopChase?.Invoke();
+        isChasing = false;
+        isAttacking = true;
+        onAttack?.Invoke();
+    }
+
+    public IEnumerator ShootWeapon()
     {
         if (enemyWeaponInteraction.currentWeapon == null)
         {
-            Debug.LogError("Enemy Doesnt Have Gun");
+            Debug.LogError("<b><color=red>Enemy Doesnt Have Gun</color></b>");
             yield break;
         }
 
-        isAttacking = true;
-        onAttack?.Invoke();
-
+        //Pega os scripts
         WeaponShoot weaponShoot = enemyWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>();
         WeaponAmmo ammo = enemyWeaponInteraction.currentWeapon.GetComponent<WeaponAmmo>();
-        Debug.Log("Started Attacking");
-
-        yield return new WaitForSeconds(nextBurst);
+        Debug.Log("<b><color=magenta>" + transform.name + "</color></b><color=green> started attacking </color>");
 
         while (true) 
         {         
             for (int i = 0; i < burst; i++)
             {
+                //Checa se consegue atacar
+                if (!canAttackTarget)
+                {
+                    isAttacking = false;
+                    onStopAttack?.Invoke();
+                    Debug.Log("<b><color=magenta>" + transform.name + "</color></b> <color=red> stopped attacking </color>");
+                    yield break;
+                }
+
+                //Se estiver sem munição recarrega
                 if (ammo.ammo == 0) ammo.AddAmmo(ammo.maxAmmo);
+                weaponShoot.Shoot(raycastPos);
 
-                weaponShoot.Shoot(raycastPos);             
-
-                yield return new WaitForSeconds(timeBetweenBullets);
-            }
-
-            //if (isTargetDead(target)) SetTarget(null);
-
-            if (!canAttackTarget) 
-            {
-                isAttacking = false;
-
-                Debug.Log("Stopped Attacking");
-                yield break;
+                yield return new WaitForSeconds(1f / enemyWeaponInteraction.currentWeapon.weaponSO.firerate);
             }
 
             yield return new WaitForSeconds(nextBurst);
@@ -228,5 +245,9 @@ public class EnemyAi : MonoBehaviour
             previousPosition = waypoint.position;
         }
         Gizmos.DrawLine(previousPosition, startPosition);
+
+        Gizmos.color = Color.green;
+
+        if (target != null) Gizmos.DrawLine(transform.position, target.position);
     }
 }

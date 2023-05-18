@@ -19,6 +19,7 @@ public class Elevator : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         ManagerGame.instance.LoadLevel(changeSceneID);
+        Debug.Log("<b><color=green>Finished game</color></b>");
         yield break;
     }
 }

@@ -41,12 +41,12 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
         if (PlayerCamera.instance != null) 
         {
-            gunHolder = PlayerCamera.instance.GunHolder;
+            weaponHolder = PlayerCamera.instance.GunHolder;
             cameraShake = PlayerCamera.instance.GetComponent<CameraShake>();
         } 
 
         // set holder position for aimming
-        defautHoldPosition = gunHolder.transform.localPosition;
+        defautHoldPosition = weaponHolder.transform.localPosition;
     } 
 
     void Update()
@@ -118,7 +118,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
         currentWeapon.SetHoldState(true, transform);
         
         //Lerp weapon to player
-        StartCoroutine(LerpWeapon(0.2f, weapon, Vector3.zero, Quaternion.identity, gunHolder));
+        StartCoroutine(LerpWeapon(0.2f, weapon, Vector3.zero, Quaternion.identity, weaponHolder));
         while (isLerping) yield return null;
 
         isHoldingWeapon = true;

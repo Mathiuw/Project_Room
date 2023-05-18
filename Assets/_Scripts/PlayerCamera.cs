@@ -15,7 +15,7 @@ public class PlayerCamera : MonoBehaviour
     {
         if (Pause.instance != null) Pause.instance.onPause += OnPause;
         else Debug.LogError("Cant Find Player UI");
-        Player.instance.GetComponent<Die>().onDead += OnDead; 
+        Player.instance.GetComponent<Health>().onDead += OnDead; 
     }
 
     void OnPause(bool b) 

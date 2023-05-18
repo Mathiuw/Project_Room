@@ -58,7 +58,7 @@ public class WeaponShoot : MonoBehaviour
                 onHit?.Invoke(health);
                 health.RemoveHealth(weaponSO.damage);
 
-                if (health.Isdead()) AddForceToRbs(hit.transform, raycastPos, weaponSO.bulletForce);
+                if (health.isDead) AddForceToRbs(hit.transform, raycastPos, weaponSO.bulletForce);
             }
             else AddForceToRbs(hit.transform, raycastPos, weaponSO.bulletForce);
         }

@@ -1,16 +1,33 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.Animations.Rigging;
 
 public class Enemy : MonoBehaviour
 {
-    void Awake() => GetComponentInChildren<Die>().onDead += OnDead;
+    void Start() => GetComponentInChildren<Health>().onDead += OnDead;
 
     void OnDead() 
     {
-        GetComponent<WeaponInteraction>().DropWeapon();
-        Destroy(GetComponentInChildren<Animator>());
-        GetComponentInChildren<Ragdoll>().RagdollActive(true);
-        GetComponentInChildren<Ragdoll>().transform.SetParent(null);
+        WeaponInteraction weaponInteraction = GetComponent<WeaponInteraction>();
 
-        Destroy(gameObject);
+        //Dropa a arma
+        if (weaponInteraction.currentWeapon != null) weaponInteraction.DropWeapon();
+        
+        //Destroi os componentes
+        Destroy(GetComponent<RigBuilder>());
+        Destroy(GetComponent<Animator>());
+        Destroy(GetComponent<EnemyWeaponInteraction>());
+        Destroy(GetComponent<EnemyAnimationManager>());
+        Destroy(GetComponent<EnemyAi>().GetPath().gameObject);
+        Destroy(GetComponent<EnemyAi>());
+        Destroy(GetComponent<CanDestroyDoor>());
+        Destroy(GetComponent<NavMeshAgent>());
+        Destroy(GetComponent<CapsuleCollider>());
+        Destroy(GetComponent<CapsuleCollider>());
+        Destroy(GetComponent<Rigidbody>());
+        //Ativa o ragdoll
+        GetComponent<Ragdoll>().RagdollActive(true);
+        Destroy(GetComponent<Ragdoll>());
+        Destroy(this);
     }
 }

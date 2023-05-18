@@ -21,7 +21,11 @@ public class PlayerInteract : MonoBehaviour
         {
             Interact interact;
 
-            if ((interact = hit.transform.GetComponentInParent<Interact>()) && interact.enabled) interact.Interacting(t);
+            if ((interact = hit.transform.GetComponentInParent<Interact>()) && interact.enabled) 
+            {
+                interact.Interacting(t);
+                Debug.Log("<b><color=magenta>" + transform.name + "</color></b> interacted with <b><color=cyan>" + interact.transform.name + "</color></b>");
+            } 
         }
     }
 }

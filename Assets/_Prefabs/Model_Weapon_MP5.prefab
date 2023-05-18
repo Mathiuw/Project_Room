@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 976492462055954766}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2403, z: -0.646}
+  m_LocalPosition: {x: 0, y: 0.346, z: -0.267}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -138,7 +138,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4858540714637816366}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.099, z: 0.678}
+  m_LocalPosition: {x: 0, y: 0.2047, z: 1.128}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -157,9 +157,9 @@ GameObject:
   - component: {fileID: 3209923789521418467}
   - component: {fileID: 7434461918910824703}
   m_Layer: 0
-  m_Name: WeaponModel_MP5
+  m_Name: Model_Weapon_MP5
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -245,15 +245,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8057750256921505943}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -0.419}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.105699986, z: 0.031000033}
   m_LocalScale: {x: 0.4, y: 0.40000004, z: 0.40000004}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1761762439967628006}
   m_Father: {fileID: 7046516514582021817}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: -90, y: 180, z: -180}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &5996237322895566216
 MeshFilter:
   m_ObjectHideFlags: 0
