@@ -15,7 +15,7 @@ public class EnemyAi : MonoBehaviour
     [Header("Patroling")]
     [SerializeField] Transform path;
     Vector3[] waypoints;
-    Transform target;
+    public Transform target { get; private set; }
     int waypointIndex = 0;
 
     [Header("Field of view")]
@@ -23,6 +23,7 @@ public class EnemyAi : MonoBehaviour
     [Range(0, 360)] public float angle;
     [SerializeField] LayerMask targetMask, obstructionMask;
 
+    //Booleans de comportamento
     public bool isPatrolling { get; private set; }
     public bool isChasing { get; private set; }
     public bool isAttacking { get; private set; }
@@ -30,6 +31,7 @@ public class EnemyAi : MonoBehaviour
     public bool canSeeTarget { get; private set; }
     public bool canAttackTarget { get; private set; }
 
+    //Eventos
     public event Action onPatrol;
     public event Action onChase;
     public event Action onStopChase;
@@ -117,18 +119,19 @@ public class EnemyAi : MonoBehaviour
         }
     }
 
+    //Comportamento do inimigo
     void Behavior()
     {
         if (!canSeeTarget && !canAttackTarget && !isPatrolling && target == null) StartCoroutine(BehaviorPatrol());
         if (canSeeTarget && !canAttackTarget) 
         {
             if(!isChasing) BehaviorChase();
+            navMeshAgent.isStopped = false;
             navMeshAgent.SetDestination(target.position);
         } 
         if (canSeeTarget && canAttackTarget) 
         {
-            transform.LookAt(target.position);
-            navMeshAgent.SetDestination(transform.position);
+            navMeshAgent.isStopped = true;
             if (!isAttacking) BehaviorAttack();
         } 
     }
@@ -192,6 +195,7 @@ public class EnemyAi : MonoBehaviour
         isChasing = false;
         isAttacking = true;
         onAttack?.Invoke();
+        StartCoroutine(ShootWeapon());
     }
 
     public IEnumerator ShootWeapon()
@@ -206,6 +210,8 @@ public class EnemyAi : MonoBehaviour
         WeaponShoot weaponShoot = enemyWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>();
         WeaponAmmo ammo = enemyWeaponInteraction.currentWeapon.GetComponent<WeaponAmmo>();
         Debug.Log("<b><color=magenta>" + transform.name + "</color></b><color=green> started attacking </color>");
+
+        yield return new WaitForSeconds(nextBurst);
 
         while (true) 
         {         

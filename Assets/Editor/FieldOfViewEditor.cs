@@ -22,7 +22,7 @@ public class FIeldOfViewEditor : Editor
         Handles.DrawLine(fov.transform.position, fov.transform.position + viewAngle02 * fov.radius);
     }
 
-    private Vector3 DirectionFromAngle(float eulerY, float angleInDegrees)
+    Vector3 DirectionFromAngle(float eulerY, float angleInDegrees)
     {
         angleInDegrees += eulerY;
 

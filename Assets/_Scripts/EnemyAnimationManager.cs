@@ -17,15 +17,13 @@ public class EnemyAnimationManager : MonoBehaviour
         enemyAi.onPatrol += StartWalk;
         //Chase animations
         enemyAi.onChase += StartWalk;
-        enemyAi.onChase += StopAim;
+        enemyAi.onChase += StartAim;
         enemyAi.onChase += SpeedMultiplier;
-        enemyAi.onStopChase += StopAim;
         enemyAi.onStopChase += StopWalk;
         //Attack animations
         enemyAi.onAttack += StopWalk;
         enemyAi.onAttack += StartAim;
         enemyAi.onStopAttack += StartWalk;
-        enemyAi.onStopAttack += StopAim;
     }
 
     void StartWalk() => animator.SetBool("walk", true);
