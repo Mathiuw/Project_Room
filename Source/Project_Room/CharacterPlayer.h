@@ -7,6 +7,8 @@
 #include "InputActionValue.h"
 #include "CharacterPlayer.generated.h"
 
+class AConsumableBase;
+
 /**
  * 
  */
@@ -30,7 +32,13 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	float GetInteractDistance() const;
+
 private:
+	//VARIABLES
+	UPROPERTY(EditDefaultsOnly, Category = "Interact Settings")
+	float InteractDistance = 750;
+
 	//FUNCTIONS
 	void Move(const FInputActionValue& Value);
 
@@ -50,6 +58,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* InteractInputAction;
+
 
 	//COMPONENTS
 	UPROPERTY(VisibleAnywhere)

@@ -6,6 +6,8 @@
 #include "InputMappingContext.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "InteractableBase.h"
+#include "Inventory.h"
 
 ACharacterPlayer::ACharacterPlayer()
 {
@@ -46,43 +48,64 @@ void ACharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	//Get the input component to bind the actions
 	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
 	
-	//Move input
-	EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::Move);
-
-	//Look input
-	EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::Look);
-
-	//Interact input
-	EnhancedInputComponent->BindAction(InteractInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::InteractLineTrace);
+	if (EnhancedInputComponent)
+	{
+		//Move input
+		EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::Move);
+		//Look input
+		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::Look);
+		//Interact input
+		EnhancedInputComponent->BindAction(InteractInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::InteractLineTrace);
+	}
 }
 
+//Returns the max distance to interact
+float ACharacterPlayer::GetInteractDistance() const
+{
+	return InteractDistance;
+}
+
+//Move player logic
 void ACharacterPlayer::Move(const FInputActionValue& Value)
 {
 	FVector2D MoveVector = Value.Get<FVector2D>();
 
-	//Add movement
+	//Add Movement
 	AddMovementInput(GetActorForwardVector(), MoveVector.X);
 	AddMovementInput(GetActorRightVector(), MoveVector.Y);
 }
 
+//Look player camera logic
 void ACharacterPlayer::Look(const FInputActionValue& Value)
 {
 	FVector2D LookVector = Value.Get<FVector2D>();
 
-	//Add camera movement
+	//Add Camera Movement
 	AddControllerYawInput(LookVector.X);
 	AddControllerPitchInput(LookVector.Y);
 }
 
+//Line trace to interact with the AInteractable class
 void ACharacterPlayer::InteractLineTrace(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Display, TEXT("Player tried to interact"));
-
 	FHitResult HitResult;
+	FVector Start = CameraComponent->GetComponentLocation();
+	FVector End = CameraComponent->GetComponentLocation() + (CameraComponent->GetForwardVector() * InteractDistance);
 
-	//Line trace to try to interact
-	//if (GetWorld()->LineTraceSingleByChannel())
-	//{
+	//Debug Line
+	DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1);
+	//LineTrace
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_Visibility))
+	{	
+		if (AInteractableBase* interactableActor = Cast<AInteractableBase>(HitResult.GetActor()))
+		{
+			//Interact with interactable
+			interactableActor->Interact(this);
+		}
 
-	//} 
+		//Debug Point
+		DrawDebugPoint(GetWorld(), HitResult.ImpactPoint, 10, FColor::Red, false, 1);
+	} 
+
+	UE_LOG(LogTemp, Display, TEXT("Player tried to interact"));
 }
