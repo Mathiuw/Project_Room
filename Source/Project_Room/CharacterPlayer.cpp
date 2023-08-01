@@ -8,6 +8,7 @@
 #include "EnhancedInputComponent.h"
 #include "InteractableBase.h"
 #include "Inventory.h"
+#include "WeaponBase.h"
 
 ACharacterPlayer::ACharacterPlayer()
 {
@@ -15,6 +16,10 @@ ACharacterPlayer::ACharacterPlayer()
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	CameraComponent->SetupAttachment(RootComponent);
+
+	WeaponLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Weapon Location"));
+	WeaponLocation->SetupAttachment(CameraComponent);
+
 }
 
 void ACharacterPlayer::BeginPlay()
@@ -56,6 +61,10 @@ void ACharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::Look);
 		//Interact input
 		EnhancedInputComponent->BindAction(InteractInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::InteractLineTrace);
+		//Shoot Weapon
+		EnhancedInputComponent->BindAction(ShootWeaponInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::PawnShoot);
+		//Drop Weapon
+		EnhancedInputComponent->BindAction(DropWeaponInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::DropWeapon);
 	}
 }
 
@@ -63,6 +72,59 @@ void ACharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 float ACharacterPlayer::GetInteractDistance() const
 {
 	return InteractDistance;
+}
+
+//Pickup the weapon
+void ACharacterPlayer::PickupWeapon(AWeaponBase* WeaponPicked)
+{
+	Super::PickupWeapon(WeaponPicked);
+
+	if (Weapon)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Player Already Has A Weapon"))
+		return;
+	}
+
+	WeaponPicked->SetOwner(this);
+
+	Weapon = WeaponPicked;
+
+	Weapon->SetActorEnableCollision(false);
+
+	//Enable physics
+	if (UPrimitiveComponent* PrimitiveComponent = Weapon->GetComponentByClass<UPrimitiveComponent>())
+	{
+		PrimitiveComponent->SetSimulatePhysics(false);
+	}
+
+	Weapon->AttachToComponent(WeaponLocation, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+	UE_LOG(LogTemp, Warning, TEXT("Player Picked up Weapon"))
+}
+
+//Drop the weapon
+void ACharacterPlayer::DropWeapon()
+{
+	Super::DropWeapon();
+
+	if (Weapon)
+	{
+		//Detach weapon from player
+		Weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+		//Enable physics
+		if (UPrimitiveComponent* PrimitiveComponent = Weapon->GetComponentByClass<UPrimitiveComponent>())
+		{
+			PrimitiveComponent->SetSimulatePhysics(true);
+		}
+
+		//Enable collision
+		Weapon->SetActorEnableCollision(true);
+
+		Weapon = nullptr;
+
+		UE_LOG(LogTemp, Warning, TEXT("Player Dropped Weapon"))
+	}
 }
 
 //Move player logic

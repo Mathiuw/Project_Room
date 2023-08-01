@@ -7,7 +7,7 @@
 #include "InputActionValue.h"
 #include "CharacterPlayer.generated.h"
 
-class AConsumableBase;
+class UInputAction;
 
 /**
  * 
@@ -22,21 +22,28 @@ public:
 	ACharacterPlayer();
 
 protected:
-	// Called when the game starts or when spawned
+	//Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
+	//Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
+	//Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//Return the interact radius
 	float GetInteractDistance() const;
+
+	//Try to pick up the weapon
+	virtual void PickupWeapon(AWeaponBase* WeaponPicked) override;
+
+	//Drop the holding weapon
+	virtual void DropWeapon() override;
 
 private:
 	//VARIABLES
-	UPROPERTY(EditDefaultsOnly, Category = "Interact Settings")
+	UPROPERTY(EditDefaultsOnly, Category = "Interact")
 	float InteractDistance = 750;
 
 	//FUNCTIONS
@@ -51,17 +58,25 @@ private:
 	class UInputMappingContext* PlayerInputMappingContext;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	class UInputAction* MoveInputAction;
+	UInputAction* MoveInputAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	class UInputAction* LookInputAction;
+	UInputAction* LookInputAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	class UInputAction* InteractInputAction;
+	UInputAction* InteractInputAction;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* DropWeaponInputAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* ShootWeaponInputAction;
 
 	//COMPONENTS
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* CameraComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* WeaponLocation;
 
 };

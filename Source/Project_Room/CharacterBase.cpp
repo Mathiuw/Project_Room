@@ -2,6 +2,7 @@
 
 
 #include "CharacterBase.h"
+#include "WeaponBase.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
@@ -30,5 +31,23 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void ACharacterBase::PawnShoot()
+{
+	if (Weapon)
+	{
+		Weapon->ShootWeapon();
+
+		UE_LOG(LogTemp, Warning, TEXT("Player Shot Weapon"))
+	}
+}
+
+void ACharacterBase::PickupWeapon(AWeaponBase* WeaponPicked)
+{
+}
+
+void ACharacterBase::DropWeapon()
+{
 }
 

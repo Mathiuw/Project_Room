@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
+class AWeaponBase;
+
 UCLASS()
 class PROJECT_ROOM_API ACharacterBase : public ACharacter
 {
@@ -19,6 +21,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	//Pawn Weapon
+	UPROPERTY(VisibleAnywhere, Category = "Weapon")
+	AWeaponBase* Weapon;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -26,4 +32,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	//Shoot the weapon
+	void PawnShoot();
+
+	//Try to pick up the weapon
+	virtual void PickupWeapon(AWeaponBase* WeaponPicked);
+
+	//Drop the holding weapon
+	virtual void DropWeapon();
 };
