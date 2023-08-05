@@ -7,6 +7,7 @@
 #include "CharacterBase.generated.h"
 
 class AWeaponBase;
+class UHealthComponent;
 
 UCLASS()
 class PROJECT_ROOM_API ACharacterBase : public ACharacter
@@ -40,4 +41,21 @@ public:
 
 	//Drop the holding weapon
 	virtual void DropWeapon();
+
+	//Take damage override
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	//Function to handle death
+	virtual void Die();
+
+private:
+
+	//VARIABLES
+	UPROPERTY(VisibleAnywhere, Category = "Health")
+	bool IsDead = false;
+
+	//COMPONENTS
+	UPROPERTY(VisibleAnywhere)
+	UHealthComponent* HealthComponent;
+
 };

@@ -41,6 +41,9 @@ public:
 	//Drop the holding weapon
 	virtual void DropWeapon() override;
 
+	//Function to handle death
+	virtual void Die() override;
+
 private:
 	//VARIABLES
 	UPROPERTY(EditDefaultsOnly, Category = "Interact")

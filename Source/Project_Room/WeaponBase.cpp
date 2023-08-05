@@ -5,6 +5,13 @@
 #include "CharacterBase.h"
 #include "Kismet/GameplayStatics.h"
 
+void AWeaponBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Ammo = MaxAmmo;
+}
+
 void AWeaponBase::Interact(ACharacterBase* interactor)
 {
 	Super::Interact(interactor);
@@ -17,6 +24,12 @@ void AWeaponBase::Interact(ACharacterBase* interactor)
 
 void AWeaponBase::ShootWeapon()
 {
+	if (Ammo <= 0)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Weapon Out Of Ammo"))
+		return;
+	}
+
 	if (ACharacterBase* Character = Cast<ACharacterBase>(GetOwner()))
 	{
 		FVector CameraLocation;
@@ -31,10 +44,13 @@ void AWeaponBase::ShootWeapon()
 		//Debug line
 		DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 1);
 
-		if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_Visibility))
+		Ammo--;
+
+		if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_GameTraceChannel3))
 		{
 			//Debug point
 			DrawDebugPoint(GetWorld(), HitResult.ImpactPoint, 10, FColor::Red, false, 1);
+
 			//Apply damage
 			UGameplayStatics::ApplyDamage(HitResult.GetActor(), Damage, Character->GetController(), this, UDamageType::StaticClass());
 

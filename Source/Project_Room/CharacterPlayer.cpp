@@ -97,7 +97,9 @@ void ACharacterPlayer::PickupWeapon(AWeaponBase* WeaponPicked)
 		PrimitiveComponent->SetSimulatePhysics(false);
 	}
 
-	Weapon->AttachToComponent(WeaponLocation, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	Weapon->AttachToComponent(WeaponLocation, FAttachmentTransformRules::KeepWorldTransform);
+	Weapon->SetActorRelativeLocation(FVector::ZeroVector);
+	Weapon->SetActorRelativeRotation(FRotator::ZeroRotator);
 
 	UE_LOG(LogTemp, Warning, TEXT("Player Picked up Weapon"))
 }
@@ -109,22 +111,39 @@ void ACharacterPlayer::DropWeapon()
 
 	if (Weapon)
 	{
+		FVector CameraLocation;
+		FRotator CameraRotation;
+
+		//Get camera location and rotation
+		GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
+
 		//Detach weapon from player
 		Weapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
-		//Enable physics
+		//Enable collision
+		Weapon->SetActorEnableCollision(true);
+
+		//Enable physics and add impulse
 		if (UPrimitiveComponent* PrimitiveComponent = Weapon->GetComponentByClass<UPrimitiveComponent>())
 		{
 			PrimitiveComponent->SetSimulatePhysics(true);
+
+			PrimitiveComponent->AddImpulse(CameraRotation.Vector() * 10000);
 		}
 
-		//Enable collision
-		Weapon->SetActorEnableCollision(true);
+		Weapon->SetActorLocation(CameraLocation);
 
 		Weapon = nullptr;
 
 		UE_LOG(LogTemp, Warning, TEXT("Player Dropped Weapon"))
 	}
+}
+
+void ACharacterPlayer::Die()
+{
+	Super::Die();
+
+	UE_LOG(LogTemp, Warning, TEXT("Player Died"))
 }
 
 //Move player logic

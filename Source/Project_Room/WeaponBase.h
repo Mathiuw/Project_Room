@@ -13,7 +13,12 @@ UCLASS()
 class PROJECT_ROOM_API AWeaponBase : public AItemBase
 {
 	GENERATED_BODY()
-	
+
+protected:
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 public:
 
 	virtual void Interact(ACharacterBase* interactor)override;

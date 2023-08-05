@@ -3,12 +3,16 @@
 
 #include "CharacterBase.h"
 #include "WeaponBase.h"
+#include "HealthComponent.h"
 
 // Sets default values
 ACharacterBase::ACharacterBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	//Creates health component for the character
+	HealthComponent = CreateAbstractDefaultSubobject<UHealthComponent>(TEXT("Health"));
 
 }
 
@@ -38,16 +42,42 @@ void ACharacterBase::PawnShoot()
 	if (Weapon)
 	{
 		Weapon->ShootWeapon();
-
-		UE_LOG(LogTemp, Warning, TEXT("Player Shot Weapon"))
 	}
 }
 
-void ACharacterBase::PickupWeapon(AWeaponBase* WeaponPicked)
+void ACharacterBase::PickupWeapon(AWeaponBase* WeaponPicked) 
 {
 }
 
-void ACharacterBase::DropWeapon()
+void ACharacterBase::DropWeapon() 
 {
 }
 
+float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	//Return if character is dead
+	if (IsDead)
+	{
+		return Damage;
+	}
+
+	//Remove health from component
+	HealthComponent->RemoveHealth(Damage);
+
+	if (HealthComponent->GetHealth() <= 0.f)
+	{
+		//Character die
+		Die();
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Character took damage: %f life remaining"), HealthComponent->GetHealth())
+
+	return Damage;
+}
+
+void ACharacterBase::Die()
+{	
+	IsDead = true;
+}

@@ -28,13 +28,14 @@ public:
 
 	void RemoveHealth(int32 Value);
 
+	float GetHealth();
+
 private:
 
-	void RemoveHealthOnTakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
-
-	UPROPERTY(EditDefaultsOnly, Category = "Health Settings")
+	UPROPERTY(EditDefaultsOnly, Category = "Health")
 	int32 MaxHealth = 100;
 
-	UPROPERTY(VisibleAnywhere, Category = "Health Settings")
+	UPROPERTY(VisibleAnywhere, Category = "Health")
 	int32 Health;
+
 };

@@ -2,6 +2,7 @@
 
 
 #include "HealthComponent.h"
+#include "CharacterBase.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -13,17 +14,13 @@ UHealthComponent::UHealthComponent()
 	// ...
 }
 
-
 // Called when the game starts
 void UHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	
 	Health = MaxHealth;
-
-	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::RemoveHealthOnTakeDamage);
 }
-
 
 // Called every frame
 void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -48,7 +45,7 @@ void UHealthComponent::RemoveHealth(int32 Value)
 	Health = FMath::Clamp(Health, 0, MaxHealth);
 }
 
-void UHealthComponent::RemoveHealthOnTakeDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
+float UHealthComponent::GetHealth()
 {
-	RemoveHealth((int32)Damage);
+	return Health;
 }
