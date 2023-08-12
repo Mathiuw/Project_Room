@@ -2,26 +2,8 @@
 
 
 #include "ConsumableBase.h"
-#include "CharacterBase.h"
 #include "HealthComponent.h"
-#include "CharacterPlayer.h"
-#include "Inventory.h"
-
-class ACharacterPlayer;
-
-void AConsumableBase::Interact(ACharacterBase* interactor)
-{
-	Super::Interact(interactor);
-
-	if (ACharacterPlayer* player = Cast<ACharacterPlayer>(interactor))
-	{
-		if (UInventory* inventoryComponent = player->GetComponentByClass<UInventory>())
-		{
-			inventoryComponent->PickupConsumable(this);
-			UE_LOG(LogTemp, Warning, TEXT("Player Picked Up Consumable"));
-		}
-	}
-}
+#include "CharacterBase.h"
 
 void AConsumableBase::UseItem(ACharacterBase* user)
 {	
@@ -29,14 +11,4 @@ void AConsumableBase::UseItem(ACharacterBase* user)
 	{
 		UserHealth->AddHealth(HealthHealAmount);
 	}
-}
-
-void AConsumableBase::AddAmount()
-{
-	Amount++;
-}
-
-void AConsumableBase::RemoveAmount()
-{
-	Amount--;
 }

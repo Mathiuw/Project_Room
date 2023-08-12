@@ -38,7 +38,7 @@ void UInventory::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompo
 
 }
 
-void UInventory::PickupConsumable(AConsumableBase* item)
+void UInventory::PickupConsumable(AInventoryItem* item)
 {
 	Inventory.Add(item);
 	item->Destroy();
@@ -54,7 +54,7 @@ void UInventory::DropConsumable()
 			return;
 		}
 		
-		AConsumableBase* ItemToBeRemoved = Inventory[Index];
+		AInventoryItem* ItemToBeRemoved = Inventory[Index];
 
 		FVector CameraLocation;
 		FRotator CameraRotator;

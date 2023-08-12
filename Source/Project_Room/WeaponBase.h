@@ -21,9 +21,22 @@ protected:
 
 public:
 
+	//Pickpup Weapon
 	virtual void Interact(ACharacterBase* interactor)override;
 
+	//Shoot Weapon
 	virtual void ShootWeapon();
+
+	//Reload Weapon
+	virtual void ReloadWeapon();
+
+	//Getter for Ammo
+	UFUNCTION(BlueprintPure)
+	float GetAmmo();
+
+	//Getter for Max Ammo
+	UFUNCTION(BlueprintPure)
+	float GetMaxAmmo();
 
 private:
 

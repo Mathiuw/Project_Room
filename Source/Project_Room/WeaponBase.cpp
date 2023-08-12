@@ -30,12 +30,12 @@ void AWeaponBase::ShootWeapon()
 		return;
 	}
 
-	if (ACharacterBase* Character = Cast<ACharacterBase>(GetOwner()))
+	if (APawn* Pawn = Cast<APawn>(GetOwner()))
 	{
 		FVector CameraLocation;
 		FRotator CameraRotator;
 		//Get character camera location and rotation
-		Character->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotator);
+		Pawn->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotator);
 
 		FHitResult HitResult;
 		FVector Start = CameraLocation;
@@ -46,16 +46,41 @@ void AWeaponBase::ShootWeapon()
 
 		Ammo--;
 
-		if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_GameTraceChannel3))
+		FCollisionQueryParams CollisionQueryParams;
+		CollisionQueryParams.AddIgnoredActor(Pawn);
+
+		if (GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECollisionChannel::ECC_GameTraceChannel3, CollisionQueryParams))
 		{
 			//Debug point
 			DrawDebugPoint(GetWorld(), HitResult.ImpactPoint, 10, FColor::Red, false, 1);
 
 			//Apply damage
-			UGameplayStatics::ApplyDamage(HitResult.GetActor(), Damage, Character->GetController(), this, UDamageType::StaticClass());
+			UGameplayStatics::ApplyDamage(HitResult.GetActor(), Damage, Pawn->GetController(), this, UDamageType::StaticClass());
 
 			UE_LOG(LogTemp, Warning, TEXT("Weapon Shot"))
 		}
 	}
 
+}
+
+void AWeaponBase::ReloadWeapon()
+{
+	if (Ammo == MaxAmmo)
+	{
+		return;
+	}
+
+	Ammo = MaxAmmo;
+
+	UE_LOG(LogTemp, Warning, TEXT("Weapon Reloaded"))
+}
+
+float AWeaponBase::GetAmmo()
+{
+	return Ammo;
+}
+
+float AWeaponBase::GetMaxAmmo()
+{
+	return MaxAmmo;
 }

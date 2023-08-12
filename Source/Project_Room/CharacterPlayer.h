@@ -70,10 +70,13 @@ private:
 	UInputAction* InteractInputAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	UInputAction* DropWeaponInputAction;
+	UInputAction* ShootWeaponInputAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
-	UInputAction* ShootWeaponInputAction;
+	UInputAction* ReloadWeaponInputAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* DropWeaponInputAction;
 
 	//COMPONENTS
 	UPROPERTY(VisibleAnywhere)

@@ -34,7 +34,14 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	//Shoot the weapon
-	void PawnShoot();
+	void CharacterShoot();
+
+	//Reload the weapon
+	void CharacterReload();
+
+	//Getter for Weapon if Not Null
+	UFUNCTION(BlueprintPure)
+	AWeaponBase* GetWeapon();
 
 	//Try to pick up the weapon
 	virtual void PickupWeapon(AWeaponBase* WeaponPicked);

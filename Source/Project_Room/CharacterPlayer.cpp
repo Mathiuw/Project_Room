@@ -62,7 +62,9 @@ void ACharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		//Interact input
 		EnhancedInputComponent->BindAction(InteractInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::InteractLineTrace);
 		//Shoot Weapon
-		EnhancedInputComponent->BindAction(ShootWeaponInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::PawnShoot);
+		EnhancedInputComponent->BindAction(ShootWeaponInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::CharacterShoot);
+		//Reload Weapon
+		EnhancedInputComponent->BindAction(ReloadWeaponInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::CharacterReload);
 		//Drop Weapon
 		EnhancedInputComponent->BindAction(DropWeaponInputAction, ETriggerEvent::Triggered, this, &ACharacterPlayer::DropWeapon);
 	}

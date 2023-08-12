@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "Inventory.generated.h"
 
-class AConsumableBase;
+class AInventoryItem;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class PROJECT_ROOM_API UInventory : public UActorComponent
@@ -25,22 +25,22 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void PickupConsumable(AConsumableBase* item);
+	void PickupConsumable(AInventoryItem* item);
 		
 	void DropConsumable();
 	
 private:	
 
-	UPROPERTY(VisibleAnywhere, Category = "Inventory Settings")
-	TArray<AConsumableBase*> Inventory;
+	UPROPERTY(VisibleAnywhere, Category = "Inventory")
+	TArray<AInventoryItem*> Inventory;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Inventory Settings")
+	UPROPERTY(EditDefaultsOnly, Category = "Inventory")
 	int32 InventorySize = 5;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Inventory Settings")
+	UPROPERTY(EditDefaultsOnly, Category = "Inventory")
 	float DropForce = 75000;
 
-	UPROPERTY(VisibleAnywhere, Category = "Inventory Settings")
+	UPROPERTY(VisibleAnywhere, Category = "Inventory")
 	int32 Index;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")

@@ -37,12 +37,29 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
-void ACharacterBase::PawnShoot()
+void ACharacterBase::CharacterShoot()
 {
 	if (Weapon)
 	{
 		Weapon->ShootWeapon();
 	}
+}
+
+void ACharacterBase::CharacterReload()
+{
+	if (Weapon)
+	{
+		Weapon->ReloadWeapon();
+	}
+}
+
+AWeaponBase* ACharacterBase::GetWeapon()
+{
+	if (Weapon)
+	{
+		return Weapon;
+	}
+	else return nullptr;
 }
 
 void ACharacterBase::PickupWeapon(AWeaponBase* WeaponPicked) 
@@ -80,4 +97,6 @@ float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 void ACharacterBase::Die()
 {	
 	IsDead = true;
+
+	DetachFromControllerPendingDestroy();
 }

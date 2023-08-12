@@ -20,6 +20,6 @@ public:
 
 private:
 
-	UPROPERTY(EditDefaultsOnly, Category = "Item Settings")
+	UPROPERTY(EditDefaultsOnly, Category = "Item")
 	FString ItemName;
 };
