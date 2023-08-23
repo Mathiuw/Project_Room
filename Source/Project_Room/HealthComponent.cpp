@@ -49,3 +49,8 @@ float UHealthComponent::GetHealth()
 {
 	return Health;
 }
+
+float UHealthComponent::GetMaxHealth()
+{
+	return MaxHealth;
+}

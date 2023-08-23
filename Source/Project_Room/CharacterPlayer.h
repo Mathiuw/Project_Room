@@ -82,7 +82,4 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* CameraComponent;
 
-	UPROPERTY(VisibleAnywhere)
-	USceneComponent* WeaponLocation;
-
 };

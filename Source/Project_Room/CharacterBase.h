@@ -26,6 +26,17 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	AWeaponBase* Weapon;
 
+	//COMPONENTS
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* WeaponLocation;
+
+	UPROPERTY(VisibleAnywhere)
+	UHealthComponent* HealthComponent;
+
+	//VARIABLES
+	UPROPERTY(VisibleAnywhere, Category = "Health")
+	bool IsDead = false;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -34,6 +45,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	//Shoot the weapon
+	UFUNCTION(BlueprintCallable)
 	void CharacterShoot();
 
 	//Reload the weapon
@@ -41,7 +53,15 @@ public:
 
 	//Getter for Weapon if Not Null
 	UFUNCTION(BlueprintPure)
-	AWeaponBase* GetWeapon();
+	AWeaponBase* GetWeapon() const;
+
+	//Getter For The Character Health Percent
+	UFUNCTION(BlueprintPure)
+	float GetHealthPercent() const;
+
+	//Getter For If The Character Is Dead
+	UFUNCTION(BlueprintPure)
+	bool GetIsDead();
 
 	//Try to pick up the weapon
 	virtual void PickupWeapon(AWeaponBase* WeaponPicked);
@@ -54,15 +74,5 @@ public:
 
 	//Function to handle death
 	virtual void Die();
-
-private:
-
-	//VARIABLES
-	UPROPERTY(VisibleAnywhere, Category = "Health")
-	bool IsDead = false;
-
-	//COMPONENTS
-	UPROPERTY(VisibleAnywhere)
-	UHealthComponent* HealthComponent;
 
 };

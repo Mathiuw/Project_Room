@@ -81,29 +81,6 @@ void ACharacterPlayer::PickupWeapon(AWeaponBase* WeaponPicked)
 {
 	Super::PickupWeapon(WeaponPicked);
 
-	if (Weapon)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Player Already Has A Weapon"))
-		return;
-	}
-
-	WeaponPicked->SetOwner(this);
-
-	Weapon = WeaponPicked;
-
-	Weapon->SetActorEnableCollision(false);
-
-	//Enable physics
-	if (UPrimitiveComponent* PrimitiveComponent = Weapon->GetComponentByClass<UPrimitiveComponent>())
-	{
-		PrimitiveComponent->SetSimulatePhysics(false);
-	}
-
-	Weapon->AttachToComponent(WeaponLocation, FAttachmentTransformRules::KeepWorldTransform);
-	Weapon->SetActorRelativeLocation(FVector::ZeroVector);
-	Weapon->SetActorRelativeRotation(FRotator::ZeroRotator);
-
-	UE_LOG(LogTemp, Warning, TEXT("Player Picked up Weapon"))
 }
 
 //Drop the weapon

@@ -75,12 +75,12 @@ void AWeaponBase::ReloadWeapon()
 	UE_LOG(LogTemp, Warning, TEXT("Weapon Reloaded"))
 }
 
-float AWeaponBase::GetAmmo()
+float AWeaponBase::GetAmmo() const
 {
 	return Ammo;
 }
 
-float AWeaponBase::GetMaxAmmo()
+float AWeaponBase::GetMaxAmmo() const
 {
 	return MaxAmmo;
 }

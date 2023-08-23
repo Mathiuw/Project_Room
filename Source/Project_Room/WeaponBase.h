@@ -32,11 +32,11 @@ public:
 
 	//Getter for Ammo
 	UFUNCTION(BlueprintPure)
-	float GetAmmo();
+	float GetAmmo() const;
 
 	//Getter for Max Ammo
 	UFUNCTION(BlueprintPure)
-	float GetMaxAmmo();
+	float GetMaxAmmo() const;
 
 private:
 

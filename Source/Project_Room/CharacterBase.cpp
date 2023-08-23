@@ -12,7 +12,7 @@ ACharacterBase::ACharacterBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//Creates health component for the character
-	HealthComponent = CreateAbstractDefaultSubobject<UHealthComponent>(TEXT("Health"));
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health"));
 
 }
 
@@ -53,7 +53,7 @@ void ACharacterBase::CharacterReload()
 	}
 }
 
-AWeaponBase* ACharacterBase::GetWeapon()
+AWeaponBase* ACharacterBase::GetWeapon() const
 {
 	if (Weapon)
 	{
@@ -62,8 +62,50 @@ AWeaponBase* ACharacterBase::GetWeapon()
 	else return nullptr;
 }
 
+float ACharacterBase::GetHealthPercent() const
+{
+	return (HealthComponent->GetHealth()/HealthComponent->GetMaxHealth());
+}
+
+bool ACharacterBase::GetIsDead()
+{
+	return IsDead;
+}
+
 void ACharacterBase::PickupWeapon(AWeaponBase* WeaponPicked) 
 {
+
+	if (Weapon)
+	{
+		//Already has Weapon
+		UE_LOG(LogTemp, Warning, TEXT("Character Already Has A Weapon"))
+		return;
+	}
+
+	if (WeaponPicked == nullptr)
+	{
+		//ERROR Finding Weapon to Pickup
+		UE_LOG(LogTemp, Warning, TEXT("WeaponPicked is NULL"))
+		return;
+	}
+
+	WeaponPicked->SetOwner(this);
+
+	Weapon = WeaponPicked;
+
+	Weapon->SetActorEnableCollision(false);
+
+	//Enable physics
+	if (UPrimitiveComponent* PrimitiveComponent = Weapon->GetComponentByClass<UPrimitiveComponent>())
+	{
+		PrimitiveComponent->SetSimulatePhysics(false);
+	}
+
+	//Attach Weapon
+	Weapon->AttachToComponent(WeaponLocation, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+
+	UE_LOG(LogTemp, Warning, TEXT("Character Picked up Weapon"))
+
 }
 
 void ACharacterBase::DropWeapon() 
@@ -87,6 +129,7 @@ float ACharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, 
 	{
 		//Character die
 		Die();
+		return Damage;
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("Character took damage: %f life remaining"), HealthComponent->GetHealth())

@@ -30,6 +30,8 @@ public:
 
 	float GetHealth();
 
+	float GetMaxHealth();
+
 private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Health")

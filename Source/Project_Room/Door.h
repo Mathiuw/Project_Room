@@ -3,43 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InteractableBase.h"
+#include "DoorBase.h"
 #include "Door.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECT_ROOM_API ADoor : public AInteractableBase
+class PROJECT_ROOM_API ADoor : public ADoorBase
 {
 	GENERATED_BODY()
 
 public:
 
-	ADoor();
-
+	//Function To Open Door
 	virtual void Interact(ACharacterBase* interactor) override;
-
-private:
-
-	//COMPONENTS
-
-	//Door Frame
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* DoorFrameStaticMeshComponent;
-
-	//Door
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* DoorStaticMeshComponent;
-
-	//VARIABLES
-	UPROPERTY(EditAnywhere)
-	FRotator OpenRotation;
-
-	UPROPERTY(EditAnywhere)
-	FRotator ClosedRotation;
-
-	UPROPERTY(VisibleAnywhere)
-	bool IsOpen = false;
 
 };
