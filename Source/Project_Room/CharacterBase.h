@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GenericTeamAgentInterface.h"
 #include "GameFramework/Character.h"
 #include "CharacterBase.generated.h"
 
@@ -10,7 +11,7 @@ class AWeaponBase;
 class UHealthComponent;
 
 UCLASS()
-class PROJECT_ROOM_API ACharacterBase : public ACharacter
+class PROJECT_ROOM_API ACharacterBase : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -36,6 +37,11 @@ protected:
 	//VARIABLES
 	UPROPERTY(VisibleAnywhere, Category = "Health")
 	bool IsDead = false;
+
+
+
+	//Affiliation System
+	FGenericTeamId TeamID;
 
 public:	
 	// Called every frame
@@ -69,10 +75,16 @@ public:
 	//Drop the holding weapon
 	virtual void DropWeapon();
 
-	//Take damage override
+	//Take Damage Override
 	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	//Function to handle death
 	virtual void Die();
 
+	//Team ID
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI")
+	int32 ID = 0;
+
+	//Getters for the team ID
+	virtual FGenericTeamId GetGenericTeamId() const override { return TeamID; }
 };

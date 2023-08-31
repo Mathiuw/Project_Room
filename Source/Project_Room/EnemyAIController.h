@@ -13,7 +13,7 @@ UCLASS()
 class PROJECT_ROOM_API AEnemyAIController : public AAIController
 {
 	GENERATED_BODY()
-	
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -22,7 +22,7 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-private:
+protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	UBehaviorTree* BehaviorTree;
