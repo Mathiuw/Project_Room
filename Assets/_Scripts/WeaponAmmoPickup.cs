@@ -2,21 +2,22 @@ using UnityEngine;
 
 public class WeaponAmmoPickup : Interact
 {
-    public override void Interacting(Transform t)
+    public override void Interacting(Transform Interactor)
     {
         Inventory inventory;
 
-        if ((inventory = t.GetComponent<Inventory>()) && inventory.AddItem(GetComponent<Item>()))
+        if ((inventory = Interactor.GetComponent<Inventory>()) && inventory.AddItem(GetComponent<Item>()))
         {
-            UI_Inventory.instance.RefreshInventory();
-
             Destroy(GetComponent<Name>());
 
             //Despawn the gun mag (if they have)
-            WeaponLocations weaponLocations = GetComponentInChildren<WeaponLocations>();
-            if(weaponLocations.GetAmmoMeshTransform() != null) Destroy(weaponLocations.GetAmmoMeshTransform().gameObject);
+            Weapon weapon = GetComponentInChildren<Weapon>();
+            if (weapon.GetAmmoMeshTransform() != null) 
+            {
+                Destroy(weapon.GetAmmoMeshTransform().gameObject);
+            } 
 
-            Debug.Log("<b><color=magenta>" + t.name + "</color></b> Picked ammo from <b><color=cyan>" + transform.name + "</color></b>");
+            Debug.Log("<b><color=magenta>" + Interactor.name + "</color></b> Picked ammo from <b><color=cyan>" + transform.name + "</color></b>");
 
             Destroy(this);
         }

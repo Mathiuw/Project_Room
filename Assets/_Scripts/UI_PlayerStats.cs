@@ -5,22 +5,26 @@ public class UI_PlayerStats : MonoBehaviour
 {
     [SerializeField] Slider healthBar;
     [SerializeField] Slider staminaBar;
-    Health health;
-    Sprint sprint;
 
     void Start() 
     {
-        health = Player.instance.GetComponentInChildren<Health>();
-        sprint= Player.instance.GetComponentInChildren<Sprint>();
+        Player player = FindObjectOfType<Player>();
 
-        SetHealthUI(health.HealthAmount);
-        SetStaminaUI(sprint.stamina);
+        if (player != null)
+        {
+            Health health = player.GetComponent<Health>();
+            Sprint sprint = player.GetComponent<Sprint>();
 
-        healthBar.maxValue = health.MaxHealthAmount;
-        staminaBar.maxValue = sprint.maxStamina;
+            SetHealthUI(health.HealthAmount);
+            SetStaminaUI(sprint.stamina);
 
-        health.healthUpdated += SetHealthUI;
-        sprint.staminaUpdated += SetStaminaUI;
+            healthBar.maxValue = health.MaxHealthAmount;
+            staminaBar.maxValue = sprint.maxStamina;
+
+            health.healthUpdated += SetHealthUI;
+            sprint.staminaUpdated += SetStaminaUI;
+        }
+        else Debug.LogError("Cant find Player");
     }
 
     void SetStaminaUI(float stamina)

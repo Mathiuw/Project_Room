@@ -7,17 +7,9 @@ public abstract class WeaponInteraction : MonoBehaviour
 
     public bool isHoldingWeapon { get; protected set; } = false;
 
-    public Weapon currentWeapon { get; protected set; }
-
-    void Start() 
-    {
-        Weapon weapon;
-
-        if (weaponHolder.childCount != 0 && (weapon = weaponHolder.GetComponentInChildren<Weapon>()))
-        {
-            StartCoroutine(PickUpWeapon(weapon.transform));
-        } 
-    }
+    [Header("Weapon settings")]
+    [SerializeField]Weapon weapon;
+    public Weapon Weapon { get => weapon; protected set => Weapon = value; }
 
     protected abstract IEnumerator PickUpWeapon(Transform gun);
 

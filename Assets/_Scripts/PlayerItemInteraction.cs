@@ -3,15 +3,14 @@
 public class PlayerItemInteraction : MonoBehaviour
 {
     Inventory inventory;
-    PlayerDrop playerDrop;
 
-    [Header("Drop item")]
+    [Header("Drop item settings")]
     [SerializeField] GameObject itemPrefab;
+    [SerializeField] float dropForce = 3.5f;
 
     void Awake() 
     {
         inventory = GetComponent<Inventory>();   
-        playerDrop = GetComponent<PlayerDrop>();
     }
 
     void Update() 
@@ -25,15 +24,13 @@ public class PlayerItemInteraction : MonoBehaviour
     {
         foreach (Item item in inventory.inventory)
         {
-            if (inventory.inventory.IndexOf(item) == UI_SelectItem.index && item.item.itemType == SOItem.ItemType.consumable)
+            if (inventory.inventory.IndexOf(item) == UI_SelectItem.index && item.SOItem.itemType == SOItem.ItemType.consumable)
             {
-                GetComponent<Health>().AddHealth(item.item.recoverHealth);
+                GetComponent<Health>().AddHealth(item.SOItem.recoverHealth);
 
-                if (item.amount > 1) item.amount--;
-                else inventory.inventory.Remove(item);
+                inventory.RemoveItem(item.SOItem);
 
-                if (UI_Inventory.instance != null) UI_Inventory.instance.RefreshInventory();
-                Debug.Log(item.item.name + " used and removed");
+                Debug.Log(item.SOItem.name + " used and removed");
                 break;
             }
         }
@@ -45,13 +42,21 @@ public class PlayerItemInteraction : MonoBehaviour
         {
             if (inventory.inventory.IndexOf(item) == UI_SelectItem.index)
             {
-                if (item.amount == 1) inventory.inventory.RemoveAt(UI_SelectItem.index);
-                else item.amount--;
+                //Remove item from inventory
+                inventory.RemoveItem(item.SOItem);
+            
+                //Intantiate and set item
                 GameObject itemSpawned = Instantiate(itemPrefab, transform.position, transform.rotation);
-                itemSpawned.GetComponent<SpawnItem>().item = item.item;
-                playerDrop.Drop(itemSpawned.transform);
+                itemSpawned.GetComponent<SpawnItem>().item = item.SOItem;
 
-                if (UI_Inventory.instance != null) UI_Inventory.instance.RefreshInventory();
+                //Set item transform
+                itemSpawned.transform.localPosition = transform.position;
+                itemSpawned.transform.rotation = transform.rotation;
+
+                //Apply force to item
+                Rigidbody dropRigidbody = itemSpawned.GetComponent<Rigidbody>();
+                dropRigidbody.AddForce(transform.forward * dropForce, ForceMode.VelocityChange);
+
                 Debug.Log("Item Droped");
                 break;
             }

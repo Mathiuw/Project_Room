@@ -17,12 +17,18 @@ public class WeaponAnimationManager : MonoBehaviour
 
     void SetAnimationTime()
     {
-        animator.SetFloat("Time", weapon.weaponSO.firerate);
+        animator.SetFloat("Time", weapon.GetFirerate());
     }
 
-    public void ShootWeapon() 
+    public void ShootWeaponAnimation() 
     {
-        if (!weapon.isBeingAim) animator.Play("Shoot", -1, 0f);
-        else animator.Play("Aim Shoot", - 1, 0f);
+        PlayerWeaponInteraction playerWeaponInteraction = weapon.holder.GetComponent<PlayerWeaponInteraction>();
+
+        if (playerWeaponInteraction != null) 
+        {
+
+            if (!playerWeaponInteraction.isAiming) animator.Play("Shoot", -1, 0f);
+            else animator.Play("Aim Shoot", -1, 0f);
+        }
     }
 }

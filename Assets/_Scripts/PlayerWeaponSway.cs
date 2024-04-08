@@ -9,8 +9,7 @@ public class PlayerWeaponSway : MonoBehaviour
 
     void Start() 
     {
-        if (Player.instance != null) playerWeaponInteraction = Player.instance.GetComponent<PlayerWeaponInteraction>();
-        else Destroy(this);
+        playerWeaponInteraction = FindObjectOfType<Player>().GetComponent<PlayerWeaponInteraction>();
 
         if (Pause.instance != null) Pause.instance.onPause += OnPause;
     }
@@ -19,7 +18,7 @@ public class PlayerWeaponSway : MonoBehaviour
     {
         if (!playerWeaponInteraction.isHoldingWeapon) return;
 
-        Transform weapon = playerWeaponInteraction.currentWeapon.transform;
+        Transform weapon = playerWeaponInteraction.Weapon.transform;
 
         if (playerWeaponInteraction.isAiming) Sway(weapon, swayMultiplier / 20);
         else Sway(weapon, swayMultiplier);

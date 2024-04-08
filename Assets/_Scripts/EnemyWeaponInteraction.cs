@@ -8,12 +8,10 @@ public class EnemyWeaponInteraction : WeaponInteraction
     {
         gun.SetParent(weaponHolder);
         gun.transform.localScale = Vector3.one;
-        currentWeapon = gun.GetComponent<Weapon>();
-        currentWeapon.SetHoldState(true, transform);
+        Weapon = gun.GetComponent<Weapon>();
+        Weapon.SetHoldState(true, transform);
 
-        Destroy(currentWeapon.GetComponent<Name>());
-        currentWeapon.AddComponent<WeaponShoot>();
-        currentWeapon.AddComponent<WeaponParticlesManager>();
+        Destroy(Weapon.GetComponent<Name>());
         
         isHoldingWeapon = true;
 
@@ -26,9 +24,7 @@ public class EnemyWeaponInteraction : WeaponInteraction
     {
         if (!isHoldingWeapon) yield break;
 
-        WeaponAmmo weaponAmmo = currentWeapon.GetComponent<WeaponAmmo>();
-
-        weaponAmmo.AddAmmo(weaponAmmo.maxAmmo);
+        Weapon.AddAmmo(Weapon.GetMaxAmmo());
         
         yield break;
     }
@@ -36,25 +32,22 @@ public class EnemyWeaponInteraction : WeaponInteraction
     public override void DropWeapon()
     {
         //Destroy components
-        Destroy(currentWeapon.GetComponent<Weapon>());
-        Destroy(currentWeapon.GetComponent<WeaponShoot>());
-        Destroy(currentWeapon.GetComponent<WeaponAmmo>());
-        Destroy(currentWeapon.GetComponent<WeaponParticlesManager>());
+        Destroy(Weapon.GetComponent<Weapon>());
 
         //set Ammo drop for player
-        Item ammoDrop = currentWeapon.AddComponent<Item>();
-        ammoDrop.item = currentWeapon.weaponSO.reloadItem;
+        Item ammoDrop = Weapon.AddComponent<Item>();
+        ammoDrop.SOItem = Weapon.GetReloadItem();
         ammoDrop.amount = 1;
         //Ammo drop pickup
-        currentWeapon.AddComponent<WeaponAmmoPickup>();
+        Weapon.AddComponent<WeaponAmmoPickup>();
         //Ammo drop name
-        Name ammoDropName = currentWeapon.AddComponent<Name>();
+        Name ammoDropName = Weapon.AddComponent<Name>();
         ammoDropName.SetText("Pickup ammo");
 
         //Sets weapon state and current weapon NULL
-        currentWeapon.transform.SetParent(null);
-        currentWeapon.SetHoldState(false, null);
-        currentWeapon = null;
+        Weapon.transform.SetParent(null);
+        Weapon.SetHoldState(false, null);
+        Weapon = null;
 
         Debug.Log(name + " dropped weapon");
     }

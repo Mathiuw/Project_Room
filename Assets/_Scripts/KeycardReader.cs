@@ -16,15 +16,14 @@ public class KeycardReader : Interact
 
     public event Action onAccept;
 
-    public override void Interacting(Transform t)
+    public override void Interacting(Transform interactor)
     {
-        Inventory inventory= t.GetComponent<Inventory>();
+        Inventory inventory= interactor.GetComponent<Inventory>();
 
         if (inventory.HaveItemSelected(keycard))
         {
             inventory.RemoveItem(keycard);
             transform.GetComponentInChildren<Name>().SetText("");
-            UI_Inventory.instance.RefreshInventory();
             used = true;
             ChangeMeshMaterials();
 

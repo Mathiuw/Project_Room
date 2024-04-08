@@ -7,87 +7,76 @@ public class UI_Crosshair : MonoBehaviour
     [SerializeField] RectTransform crosshairTransform;
     [SerializeField] RectTransform dot;
     [SerializeField] RectTransform reload;
-    PlayerWeaponInteraction playerWeaponInteraction;
-    bool isLerping = false;
+
+    void Awake()
+    {
+        reload.gameObject.SetActive(false);
+        SetDotCrosshair();
+    }
 
     void Start() 
     {
-        if (Player.instance != null) 
-        {
-            playerWeaponInteraction = Player.instance.GetComponent<PlayerWeaponInteraction>();
-            playerWeaponInteraction.onPickupEnd += SetCrossHair;
-            playerWeaponInteraction.onAimStart += SetCrossHair;
-            playerWeaponInteraction.onAimEnd += SetCrossHair;
-            playerWeaponInteraction.onDrop += SetCrossHair;
-            playerWeaponInteraction.onReloadStart += SetCrossHair;
-            playerWeaponInteraction.onReloadEnd += SetCrossHair;
-            SetCrossHair();
-            reload.gameObject.SetActive(false);
-        } 
-        else 
-        {
-            Debug.LogError("Cant Find Player");
-            Destroy(this);
-        }
+        PlayerWeaponInteraction playerWeaponInteraction = FindObjectOfType<Player>().GetComponent<PlayerWeaponInteraction>();
+        playerWeaponInteraction.onPickupEnd += SetCrossHair;
+        playerWeaponInteraction.onAimStart += DisableCrosshair;
+        playerWeaponInteraction.onAimEnd += EnableCrosshair;
+        playerWeaponInteraction.onDrop += SetDotCrosshair;
+        playerWeaponInteraction.onReloadStart += OnReloadFunc;
     }
 
-    void DespawnSprite() 
+    void OnReloadFunc(float duration)
     {
-        for (int i = 0; i < crosshairTransform.childCount; i++)
-        {
-            Destroy(crosshairTransform.GetChild(i).gameObject);
-        }
+        StartCoroutine(ReloadLerp(duration));
+    }
+
+    void EnableCrosshair() 
+    {
+        crosshairTransform.gameObject.SetActive(true);
+    }
+
+    void DisableCrosshair() 
+    {
+        crosshairTransform.gameObject.SetActive(false);
+    }
+
+    //Set the dafault crosshair
+    void SetDotCrosshair() 
+    {
+        DestroyCrosshairSprite();
+        SpawnCrosshairSprite(dot.gameObject);
     }
 
     void SpawnCrosshairSprite(GameObject crosshair) 
     {
-        DespawnSprite();
+        DestroyCrosshairSprite();
 
         GameObject crosshairSprite = Instantiate(crosshair, crosshairTransform);
         crosshairSprite.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
     }
 
-    public void SetCrossHair()
+    void DestroyCrosshairSprite()
     {
-        if (!playerWeaponInteraction.isHoldingWeapon) 
+        for (int i = 0; i < crosshairTransform.childCount; i++)
         {
-            Debug.Log("UI dot crosshair");
-            SpawnCrosshairSprite(dot.gameObject);
-            return;
+            Destroy(crosshairTransform.GetChild(i).gameObject);
         }
-
-        if (!playerWeaponInteraction.isAiming && !playerWeaponInteraction.isReloading)
-        {
-            Debug.Log("UI weapon crosshair");
-            SpawnCrosshairSprite(playerWeaponInteraction.currentWeapon.weaponSO.Crosshair);
-            return;
-        }
-
-        if (playerWeaponInteraction.isAiming && !playerWeaponInteraction.isReloading)
-        {
-            Debug.Log("UI aim crosshair");
-            DespawnSprite();
-            return;
-        }
-
-        if (playerWeaponInteraction.isReloading)
-        {
-            Debug.Log("UI reload crosshair");
-            DespawnSprite();
-            if (!isLerping) StartCoroutine(ReloadLerp());
-        }
+        Debug.Log("Destroyed crosshair sprite");
     }
 
-    IEnumerator ReloadLerp()
+    void SetCrossHair(Weapon weaponPicked)
+    {
+        SpawnCrosshairSprite(weaponPicked.Crosshair);
+    }
+
+    IEnumerator ReloadLerp(float duration)
     {
         Image ring = reload.GetComponent<Image>();
 
+        DisableCrosshair();
         reload.gameObject.SetActive(true);
 
         float timeElapsed = 0;
-        float duration = playerWeaponInteraction.currentWeapon.weaponSO.reloadTime;
 
-        isLerping = true;
         ring.fillAmount = 0;
 
         while (timeElapsed < duration) 
@@ -101,9 +90,9 @@ public class UI_Crosshair : MonoBehaviour
         }
 
         ring.fillAmount = 1;
-        isLerping = false;
 
         reload.gameObject.SetActive(false);
+        EnableCrosshair();
 
         yield break;
     }

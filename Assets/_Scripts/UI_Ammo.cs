@@ -1,39 +1,42 @@
 ﻿using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Ammo : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI ammoUI;
+    [SerializeField] Image ammoSprite;
     PlayerWeaponInteraction playerWeaponInteraction;
-    WeaponAmmo ammo;
 
     void Start() 
-    {
-        if (Player.instance != null) 
-        {
-            playerWeaponInteraction = Player.instance.GetComponent<PlayerWeaponInteraction>();
+    {        
+        playerWeaponInteraction = FindObjectOfType<Player>().GetComponent<PlayerWeaponInteraction>();
+        playerWeaponInteraction.onPickupEnd += ActivateUISprite;
+        playerWeaponInteraction.onPickupEnd += AddWeaponEvents;
+        playerWeaponInteraction.onDrop += DisableUISprite;
+        playerWeaponInteraction.onDrop += RemoveWeaponEvents;
+        playerWeaponInteraction.onReloadStart += OnRealoadFunc;
+        playerWeaponInteraction.onReloadEnd += SetUIAmmo;
 
-            playerWeaponInteraction.onPickupEnd += ActivateUISprite;
-            playerWeaponInteraction.onPickupEnd += AddWeaponEvents;
-            playerWeaponInteraction.onDrop += DisableUISprite;
-            playerWeaponInteraction.onDrop += RemoveWeaponEvents;
-            playerWeaponInteraction.onReloadStart += SetUIAmmo;
-            playerWeaponInteraction.onReloadEnd += SetUIAmmo;
-        }
         CheckUISprite(playerWeaponInteraction);
     }
 
-    void ActivateUISprite() 
+    void OnRealoadFunc(float duration) 
     {
-        ammo = playerWeaponInteraction.currentWeapon.GetComponent<WeaponAmmo>();
+        SetUIAmmo();
+    }
+
+    void ActivateUISprite(Weapon weaponPicked = null) 
+    {
         ammoUI.enabled = true;
+        ammoSprite.sprite = weaponPicked.GetAmmoSprite();
         SetUIAmmo();
     }
 
     void DisableUISprite() 
     {
-        ammo = null;
         ammoUI.enabled = false;
+        ammoSprite.enabled = false;
     }
 
     void CheckUISprite(PlayerWeaponInteraction playerWeaponInteraction) 
@@ -42,15 +45,15 @@ public class UI_Ammo : MonoBehaviour
         else DisableUISprite();
     }
 
-    void SetUIAmmo() => ammoUI.SetText(ammo.ammo + "/" + ammo.maxAmmo);
+    void SetUIAmmo() => ammoUI.SetText(playerWeaponInteraction.Weapon.GetAmmo() + "/" + playerWeaponInteraction.Weapon.GetMaxAmmo());
 
-    void AddWeaponEvents() 
+    void AddWeaponEvents(Weapon weaponPicked) 
     {
-        playerWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>().onShoot += SetUIAmmo;
+        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onShoot += SetUIAmmo;
     }
 
     void RemoveWeaponEvents() 
     {
-        playerWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>().onShoot -= SetUIAmmo;
+        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onShoot -= SetUIAmmo;
     } 
 }

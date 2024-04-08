@@ -19,7 +19,7 @@ public class SpawnItem : MonoBehaviour
 
         //Add an ser item component
         Item itemComponent = gameObject.AddComponent<Item>();
-        itemComponent.item = item;
+        itemComponent.SOItem = item;
         itemComponent.amount = 1;
 
         gameObject.name = item.itemName;

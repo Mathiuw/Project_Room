@@ -3,15 +3,12 @@ using UnityEngine;
 
 public class UI_Hit : MonoBehaviour
 {
-    public static UI_Hit Instance;
-
     AudioSource hitSound;
     PlayerWeaponInteraction playerWeaponInteraction;
     [SerializeField] RectTransform[] hitSprite;
 
     void Awake() 
     {
-        Instance= this;
         hitSound = GetComponent<AudioSource>();
 
         SetHitmarkerSprite(false);
@@ -19,12 +16,9 @@ public class UI_Hit : MonoBehaviour
 
     void Start() 
     {
-        if (Player.instance != null)
-        {
-            playerWeaponInteraction = Player.instance .GetComponent<PlayerWeaponInteraction>();
-            playerWeaponInteraction.onPickupEnd += AddPlayerEvents;
-            playerWeaponInteraction.onDrop += RemovePlayerEvents;
-        }
+        playerWeaponInteraction = FindObjectOfType<Player>().GetComponent<PlayerWeaponInteraction>();
+        playerWeaponInteraction.onPickupEnd += AddPlayerEvents;
+        playerWeaponInteraction.onDrop += RemovePlayerEvents;
     }
 
     public void OnHit(Health health) => StartCoroutine(Hitmarker(health));
@@ -44,13 +38,13 @@ public class UI_Hit : MonoBehaviour
         foreach (RectTransform r in hitSprite) r.gameObject.SetActive(b);
     }
 
-    void AddPlayerEvents() 
+    void AddPlayerEvents(Weapon weaponPicked) 
     {
-        playerWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>().onHit += OnHit;
+        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onHit += OnHit;
     }
 
     void RemovePlayerEvents() 
     {
-        playerWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>().onHit -= OnHit;
+        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onHit -= OnHit;
     }
 }

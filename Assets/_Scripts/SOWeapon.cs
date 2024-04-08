@@ -10,10 +10,8 @@ public class SOWeapon : ScriptableObject
     public int maxAmmo;
     public float firerate;
     public bool waitToShoot;
-    public ShootType shootType;
-    public enum ShootType { Single, Automatic, }
+    public Weapon.ShootType shootType;
     public LayerMask shootMask;
-    public GameObject Model;
 
     [Header("Crosshair")]
     public GameObject Crosshair;

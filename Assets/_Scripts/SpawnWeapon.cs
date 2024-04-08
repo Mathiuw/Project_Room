@@ -19,20 +19,14 @@ public class SpawnWeapon : MonoBehaviour
 
     public void SpawnMesh() 
     {
-        GameObject model = Instantiate(weaponSO.Model, transform);
+        //GameObject model = Instantiate(weaponSO.Model, transform);
 
-        model.transform.localPosition = Vector3.zero;
-        model.transform.localRotation = Quaternion.identity;
+        //model.transform.localPosition = Vector3.zero;
+        //model.transform.localRotation = Quaternion.identity;
     }
 
     void SetWeaponComponents() 
     {
-        Weapon weapon = gameObject.AddComponent<Weapon>();
-        weapon.SetWeaponSO(weaponSO);
-
-        //Add components
-        gameObject.AddComponent<WeaponAmmo>();
-
         //weapon name
         Name weaponName = gameObject.AddComponent<Name>();
         name = weaponSO.weaponName;
@@ -44,9 +38,8 @@ public class SpawnWeapon : MonoBehaviour
         animator.enabled = false;
 
         //weapon muzzle flash
-        WeaponLocations weaponLocations = GetComponentInChildren<WeaponLocations>();
         GameObject muzzleFlash = Instantiate(weaponSO.muzzleFlash, transform);
-        muzzleFlash.transform.localPosition= weaponLocations.GetMuzzleFlashLocation();
+        muzzleFlash.transform.localPosition= GetComponent<Weapon>().GetMuzzleFlashLocation();
         muzzleFlash.transform.localRotation = weaponSO.muzzleFlash.transform.rotation;
 
         //weapon audio

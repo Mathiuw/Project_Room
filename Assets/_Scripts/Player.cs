@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public static Player instance { get; private set; }
     
     [SerializeField] Transform cameraPosition;
     public Transform CameraPosition { get => cameraPosition; set => cameraPosition = value; }
@@ -14,10 +13,8 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
-
-        rb = GetComponentInChildren<Rigidbody>();
-        playerWeaponInteraction = GetComponentInChildren<PlayerWeaponInteraction>();
+        rb = GetComponent<Rigidbody>();
+        playerWeaponInteraction = GetComponent<PlayerWeaponInteraction>();
 
         GetComponent<Health>().onDead += OnDead;
     }
@@ -42,6 +39,5 @@ public class Player : MonoBehaviour
         GetComponentInChildren<PlayerMovement>().enabled = false;
         GetComponentInChildren<PlayerInteract>().enabled = false;
         GetComponentInChildren<PlayerWeaponInteraction>().enabled = false;
-        GetComponentInChildren<PlayerBodyRotation>().enabled= false;
     }
 }

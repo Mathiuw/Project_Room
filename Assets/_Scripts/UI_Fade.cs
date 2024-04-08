@@ -20,10 +20,12 @@ public class UI_Fade : MonoBehaviour
 
     IEnumerator Start() 
     {
+        Health playerHealth = FindObjectOfType<Player>().GetComponent<Health>();
+
         SetValue(1f);
         yield return new WaitForSeconds(0.5f);
         FadeOut();
-        if (Player.instance != null) Player.instance.GetComponentInChildren<Health>().onDead += RestartLevelFadeIn;
+        playerHealth.GetComponentInChildren<Health>().onDead += RestartLevelFadeIn;
         yield break;
     } 
 

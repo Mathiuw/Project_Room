@@ -15,14 +15,13 @@ public class Pause : MonoBehaviour
     bool isPaused = false;
     public event Action<bool> onPause;
 
-    void Awake() => instance = this;
-
-    void Start() 
+    void Awake() 
     {
-        SetSprites();
+        instance = this;
+
+        AlternateSprites();
         resume.onClick.AddListener(SetPause);
         if (ManagerGame.instance != null) exit.onClick.AddListener(ManagerGame.instance.ExitGame);
-        else Debug.LogError("Cant Find Game Manager");
     } 
 
     void Update() 
@@ -30,27 +29,18 @@ public class Pause : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape)) SetPause();
     }
 
-    void SetSprites() 
+    void AlternateSprites() 
     {
-        if (isPaused) 
-        {
-            menuBackground.gameObject.SetActive(true);
-            menuPause.gameObject.SetActive(true);
-            menuOptions.gameObject.SetActive(false);
-        }
-        else
-        {
-            menuBackground.gameObject.SetActive(false);
-            menuPause.gameObject.SetActive(false);
-            menuOptions.gameObject.SetActive(false);
-        }
+        menuBackground.gameObject.SetActive(isPaused);
+        menuPause.gameObject.SetActive(isPaused);
+        menuOptions.gameObject.SetActive(false);
     }
 
     void SetPause()
     {
         isPaused = !isPaused;
 
-        SetSprites();
+        AlternateSprites();
 
         if (isPaused) CursorState.CursorUnlock();
         else CursorState.CursorLock();

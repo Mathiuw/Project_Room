@@ -6,6 +6,9 @@ using UnityEngine.SocialPlatforms;
 
 public class EnemyAi : MonoBehaviour
 {
+    [Header("AI settings")]
+    float loopTime = 0.1f;
+
     [Header("Attack")]
     [SerializeField] Transform raycastPos;
     [SerializeField] float runningSpeedMultiplier;
@@ -42,6 +45,30 @@ public class EnemyAi : MonoBehaviour
     NavMeshAgent navMeshAgent;
     Collider[] rangeCheck;
 
+    void OnDestroy() => StopAllCoroutines();
+
+    void Awake()
+    {
+        navMeshAgent = GetComponent<NavMeshAgent>();
+        enemyWeaponInteraction = GetComponent<EnemyWeaponInteraction>();
+    }
+
+    void Start()
+    {
+        waypoints = new Vector3[path.childCount];
+
+        for (int i = 0; i < path.childCount; i++)
+        {
+            waypoints[i] = path.GetChild(i).position;
+            waypoints[i] = new Vector3(waypoints[i].x, transform.position.y, waypoints[i].z);
+        }
+    }
+
+    void Update()
+    {
+        StartCoroutine(FieldOfViewCheck());
+    }
+
     public Transform GetPath() { return path; }
 
     public float GetSpeedMultiplier() { return runningSpeedMultiplier; }
@@ -60,28 +87,6 @@ public class EnemyAi : MonoBehaviour
         this.target = target;
     }
 
-    void OnDestroy() => StopAllCoroutines();
-
-    void Start()
-    {
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        enemyWeaponInteraction = GetComponent<EnemyWeaponInteraction>();
-        
-        waypoints = new Vector3[path.childCount]; 
-
-        for (int i = 0; i < path.childCount; i++)
-        {
-            waypoints[i] = path.GetChild(i).position;
-            waypoints[i] = new Vector3(waypoints[i].x, transform.position.y, waypoints[i].z);
-        }
-    }
-
-    void Update() 
-    {
-        FieldOfViewCheck();
-        Behavior();
-    }
-
     bool TargetHasHealth(Transform target) 
     {
         if (target.GetComponent<Health>()) return true;
@@ -89,33 +94,42 @@ public class EnemyAi : MonoBehaviour
         else return false;
     }
 
-    void FieldOfViewCheck()
+    IEnumerator FieldOfViewCheck()
     {
-        canAttackTarget = false;
-
-        rangeCheck = Physics.OverlapSphere(transform.position, radius, targetMask);
-
-        if (rangeCheck.Length == 0) return;
-
-        foreach (Collider collider in rangeCheck) 
+        while (true) 
         {
-            Transform target = collider.transform;
-            Vector3 directionToTarget = (target.position - transform.position).normalized;
-            float distanceToTarget = Vector3.Distance(transform.position, target.position);
+            canAttackTarget = false;
 
-            if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
+            rangeCheck = Physics.OverlapSphere(transform.position, radius, targetMask);
+
+            if (rangeCheck.Length == 0) yield return new WaitForSeconds(loopTime);
+
+            foreach (Collider collider in rangeCheck)
             {
-                if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask)) 
+                Transform target = collider.transform;
+                Vector3 directionToTarget = (target.position - transform.position).normalized;
+                float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+                if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
                 {
-                    if (this.target == null && target != transform && TargetHasHealth(target)) SetTarget(target);
+                    if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
+                    {
+                        if (this.target == null && target != transform && TargetHasHealth(target)) SetTarget(target);
 
-                    if (distanceToTarget < radius / 1.1f) canAttackTarget = true;
-                    else canAttackTarget = false;
+                        if (distanceToTarget < radius / 1.1f) canAttackTarget = true;
+                        else canAttackTarget = false;
 
-                    break;
+                        break;
+                    }
                 }
+                else canAttackTarget = false;
             }
-            else canAttackTarget = false;
+
+            //Behavior check
+            Behavior();
+
+            yield return new WaitForSeconds(loopTime);
+
         }
     }
 
@@ -200,15 +214,13 @@ public class EnemyAi : MonoBehaviour
 
     public IEnumerator ShootWeapon()
     {
-        if (enemyWeaponInteraction.currentWeapon == null)
+        if (enemyWeaponInteraction.Weapon == null)
         {
             Debug.LogError("<b><color=red>Enemy Doesnt Have Gun</color></b>");
             yield break;
         }
 
         //Pega os scripts
-        WeaponShoot weaponShoot = enemyWeaponInteraction.currentWeapon.GetComponent<WeaponShoot>();
-        WeaponAmmo ammo = enemyWeaponInteraction.currentWeapon.GetComponent<WeaponAmmo>();
         Debug.Log("<b><color=magenta>" + transform.name + "</color></b><color=green> started attacking </color>");
 
         yield return new WaitForSeconds(nextBurst);
@@ -227,10 +239,11 @@ public class EnemyAi : MonoBehaviour
                 }
 
                 //Se estiver sem munição recarrega
-                if (ammo.ammo == 0) ammo.AddAmmo(ammo.maxAmmo);
-                weaponShoot.Shoot(raycastPos);
+                StartCoroutine(enemyWeaponInteraction.ReloadWeapon());
+                //Shoot Weapon
+                enemyWeaponInteraction.Weapon.Shoot(raycastPos);
 
-                yield return new WaitForSeconds(1f / enemyWeaponInteraction.currentWeapon.weaponSO.firerate);
+                yield return new WaitForSeconds(1f / enemyWeaponInteraction.Weapon.GetFirerate());
             }
 
             yield return new WaitForSeconds(nextBurst);

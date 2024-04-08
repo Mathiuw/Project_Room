@@ -8,7 +8,6 @@ public class ItemPickup : Interact
 
         if ((inventory = t.GetComponent<Inventory>()) && inventory.AddItem(GetComponent<Item>()))
         {
-            UI_Inventory.instance.RefreshInventory();
             Destroy(gameObject);
             Debug.Log("Picked item");
         }

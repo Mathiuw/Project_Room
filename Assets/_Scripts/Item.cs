@@ -2,6 +2,6 @@
 
 public class Item : MonoBehaviour
 {
-    public SOItem item;
+    public SOItem SOItem;
     public int amount = 1;
 }

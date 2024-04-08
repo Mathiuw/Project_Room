@@ -9,13 +9,30 @@ public class PlayerCamera : MonoBehaviour
     [SerializeField] Transform gunHolder;
     public Transform GunHolder { get => gunHolder; private set => gunHolder = value; }
 
+    Transform DesiredCameraTransform;
+
     void Awake() => instance = this;
 
     void Start() 
     {
         if (Pause.instance != null) Pause.instance.onPause += OnPause;
-        else Debug.LogError("Cant Find Player UI");
-        Player.instance.GetComponent<Health>().onDead += OnDead; 
+        else Debug.LogError("Cant Find PauseUI");
+
+        Player player = FindObjectOfType<Player>();
+
+        if (player != null)
+        {
+            player.GetComponent<Health>().onDead += OnDead;
+
+            DesiredCameraTransform = player.CameraPosition;
+        }
+        else Debug.LogError("Cant find Player");
+
+    }
+
+    void Update()
+    {
+        transform.position = DesiredCameraTransform.position;
     }
 
     void OnPause(bool b) 

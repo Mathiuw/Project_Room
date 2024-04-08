@@ -11,13 +11,11 @@ public class PlayerAnimationManager : MonoBehaviour
 
     void Start() 
     {
-        if (Player.instance != null) 
-        {
-            playerWeaponInteraction = Player.instance.GetComponent<PlayerWeaponInteraction>();
-            sprint= Player.instance.GetComponent<Sprint>();
-            rb = Player.instance.GetComponent<Rigidbody>();
-        } 
-        else enabled = false;
+        Player player = FindObjectOfType<Player>();
+
+        playerWeaponInteraction = player.GetComponent<PlayerWeaponInteraction>();
+        sprint= player.GetComponent<Sprint>();
+        rb = player.GetComponent<Rigidbody>();
 
         playerWeaponInteraction.onPickupEnd += OnPickup;
         playerWeaponInteraction.onDrop += OnDrop;
@@ -37,11 +35,11 @@ public class PlayerAnimationManager : MonoBehaviour
         } 
     } 
 
-    void ReloadStart() => animator.Play("Start Reload");
+    void ReloadStart(float duration) => animator.Play("Start Reload");
 
     void ReloadEnd() => animator.Play("End Reload");
 
-    void OnPickup() 
+    void OnPickup(Weapon weaponPicked) 
     {
         playerWeaponInteraction.onReloadStart += ReloadStart;
         playerWeaponInteraction.onReloadEnd += ReloadEnd;

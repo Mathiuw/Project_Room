@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,15 +10,19 @@ public class Inventory : MonoBehaviour
 
     public List<Item> inventory = new List<Item>();
 
+    public event Action OnItemAdded;
+    public event Action OnItemRemoved;
+
     public bool AddItem(Item item)
     {
         foreach (Item i in inventory)
         {
-            if (item.item.itemName == i.item.itemName)
+            if (item.SOItem.itemName == i.SOItem.itemName)
             {
-                if (item.item.isStackable && i.amount < i.item.maxStack && inventory.Count <= inventorySize)
+                if (item.SOItem.isStackable && i.amount < i.SOItem.maxStack && inventory.Count <= inventorySize)
                 {
                     i.amount++;
+                    OnItemAdded.Invoke();
                     return true;
                 }
             }
@@ -25,6 +30,7 @@ public class Inventory : MonoBehaviour
         if (inventory.Count< inventorySize)
         {
             inventory.Add(item);
+            OnItemAdded.Invoke();
             return true;
         }
         else
@@ -38,16 +44,18 @@ public class Inventory : MonoBehaviour
     {
         foreach (Item i in inventory)
         {
-            if (item.itemName == i.item.itemName)
+            if (item.itemName == i.SOItem.itemName)
             {
                 if (item.isStackable && i.amount > 1)
                 {
                     i.amount--;
+                    OnItemRemoved.Invoke();
                     return true;
                 }
                 else
                 {
                     inventory.Remove(i);
+                    OnItemRemoved.Invoke();
                     return true;
                 }
             }
@@ -60,7 +68,7 @@ public class Inventory : MonoBehaviour
     {
         foreach (Item i in inventory)
         {
-            if (inventory.IndexOf(i) == UI_SelectItem.index && item.itemName == i.item.itemName)
+            if (inventory.IndexOf(i) == UI_SelectItem.index && item.itemName == i.SOItem.itemName)
             {
                 Debug.Log("Player has " + item.itemName + " in the Index");
                 return true;
@@ -74,7 +82,7 @@ public class Inventory : MonoBehaviour
     {
         foreach (Item i in inventory)
         {
-            if (item.name == i.item.name)
+            if (item.name == i.SOItem.name)
             {
                 Debug.Log("Player has " + item.itemName + " in the inventory");
                 return true;
