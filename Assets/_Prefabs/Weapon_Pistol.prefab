@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7474998426322120007}
   - component: {fileID: -8981847855321363238}
   - component: {fileID: 4056158318860744372}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Weapon_Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
@@ -101,29 +101,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponSO: {fileID: 0}
-  weaponName: 
+  weaponName: Pistol
   damage: 0
   maxAmmo: 11
   bulletForce: 0
   firerate: 0
-  Crosshair: {fileID: 0}
+  shootMask:
+    serializedVersion: 2
+    m_Bits: 0
+  shootType: 0
+  Crosshair: {fileID: 5277375365027224371, guid: 2a87bf875f250674fbc09daad9bcc8e3, type: 3}
   intensity: 0
   speed: 0
   animatorOverride: {fileID: 0}
   reloadTime: 0
-  reloadItem: {fileID: 0}
-  muzzleFlash: {fileID: 0}
-  wallHit: {fileID: 0}
-  Blood: {fileID: 0}
-  shootAudio: {fileID: 0}
-  shootSouce: {fileID: 0}
-  noAmmoAudio: {fileID: 0}
-  noAmmoSource: {fileID: 0}
-  ammoSprite: {fileID: 0}
+  reloadItem: {fileID: 11400000, guid: f3a15256ebc23754dba563d6c9b03a55, type: 2}
+  muzzleFlash: {fileID: 8993078229490907916, guid: be85a34377cf8d241a2ac441893a7ee6, type: 3}
+  wallHit: {fileID: 2553133760792651111, guid: f518402108b099b42bf42ae7231061e5, type: 3}
+  Blood: {fileID: 5750085299204580772, guid: 3a5dae8569d4f374e8c66e8fef3d1f31, type: 3}
+  ammoSprite: {fileID: 21300000, guid: d5f80fafda73c7a4c96e6ce196a12ede, type: 3}
   aimLocation: {fileID: 1870566353949936233}
   muzzleFlashLocation: {fileID: 5024953459072633552}
   ammoMeshTransform: {fileID: 0}
-  shootType: 0
 --- !u!114 &7474998426322120007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,7 +252,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1870566353949936233}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: AimLocation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -284,7 +283,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5024953459072633552}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: MuzzleFlashLocation
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 [RequireComponent(typeof(Name))]
 [RequireComponent(typeof(WeaponAnimationManager))]
@@ -16,6 +15,10 @@ public class Weapon : MonoBehaviour
     [SerializeField] int maxAmmo;
     [SerializeField] float bulletForce;
     [SerializeField] float firerate;
+    [SerializeField] LayerMask shootMask;
+
+    [Header("Weapon shoot mode")]
+    public ShootType shootType;
 
     [Header("Crosshair")]
     [SerializeField] public GameObject Crosshair;
@@ -36,11 +39,11 @@ public class Weapon : MonoBehaviour
     [SerializeField] ParticleSystem wallHit;
     [SerializeField] ParticleSystem Blood;
 
-    [Header("Audio")]
-    [SerializeField] AudioClip shootAudio;
-    [SerializeField] AudioSource shootSouce;
-    [SerializeField] AudioClip noAmmoAudio;
-    [SerializeField] AudioSource noAmmoSource;
+    //[Header("Audio")]
+    //[SerializeField] AudioClip shootAudio;
+    //[SerializeField] AudioSource shootSouce;
+    //[SerializeField] AudioClip noAmmoAudio;
+    //[SerializeField] AudioSource noAmmoSource;
 
     [Header("Sprites")]
     [SerializeField] Sprite ammoSprite;
@@ -50,10 +53,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] Transform muzzleFlashLocation;
     [SerializeField] Transform ammoMeshTransform;
 
-    [Header("Weapon shoot mode")]
-    public ShootType shootType;
     public enum ShootType { Single, Automatic, }
-    LayerMask shootMask;
 
     AudioSource gunSound;
     public RaycastHit hit;

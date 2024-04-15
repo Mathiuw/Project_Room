@@ -17,7 +17,7 @@ public class UI_Hit : MonoBehaviour
     void Start() 
     {
         playerWeaponInteraction = FindObjectOfType<Player>().GetComponent<PlayerWeaponInteraction>();
-        playerWeaponInteraction.onPickupEnd += AddPlayerEvents;
+        playerWeaponInteraction.onPickupWeapon += AddPlayerEvents;
         playerWeaponInteraction.onDrop += RemovePlayerEvents;
     }
 
@@ -40,11 +40,11 @@ public class UI_Hit : MonoBehaviour
 
     void AddPlayerEvents(Weapon weaponPicked) 
     {
-        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onHit += OnHit;
+        playerWeaponInteraction.GetWeapon().GetComponent<Weapon>().onHit += OnHit;
     }
 
     void RemovePlayerEvents() 
     {
-        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onHit -= OnHit;
+        playerWeaponInteraction.GetWeapon().GetComponent<Weapon>().onHit -= OnHit;
     }
 }

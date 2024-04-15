@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9019454924810367428}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: AimLocation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1023189051818108254}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: MuzzleFlashLocation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 7697447313023933607}
   - component: {fileID: -2878835474423884450}
   - component: {fileID: 1326198996104021252}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Weapon_MP5
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
@@ -196,7 +196,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 1523149f122cd704c99549905c1f7c55, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -246,29 +246,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponSO: {fileID: 0}
-  weaponName: 
+  weaponName: MP5
   damage: 0
   maxAmmo: 31
   bulletForce: 0
   firerate: 0
-  Crosshair: {fileID: 0}
+  shootMask:
+    serializedVersion: 2
+    m_Bits: 0
+  shootType: 1
+  Crosshair: {fileID: 5277375365027224371, guid: 2a87bf875f250674fbc09daad9bcc8e3, type: 3}
   intensity: 0
   speed: 0
   animatorOverride: {fileID: 0}
   reloadTime: 0
-  reloadItem: {fileID: 0}
-  muzzleFlash: {fileID: 0}
-  wallHit: {fileID: 0}
-  Blood: {fileID: 0}
-  shootAudio: {fileID: 0}
-  shootSouce: {fileID: 0}
-  noAmmoAudio: {fileID: 0}
-  noAmmoSource: {fileID: 0}
-  ammoSprite: {fileID: 0}
+  reloadItem: {fileID: 11400000, guid: cfa922a2daac2e341a46f6ac8c735ce2, type: 2}
+  muzzleFlash: {fileID: 4911441779393937281, guid: 6d2f69ef9a8a1884b963eb0c73b29bf0, type: 3}
+  wallHit: {fileID: 2553133760792651111, guid: f518402108b099b42bf42ae7231061e5, type: 3}
+  Blood: {fileID: 5750085299204580772, guid: 3a5dae8569d4f374e8c66e8fef3d1f31, type: 3}
+  ammoSprite: {fileID: 21300000, guid: edd13380d32c5354d8bf572478e89fa1, type: 3}
   aimLocation: {fileID: 9019454924810367428}
   muzzleFlashLocation: {fileID: 1023189051818108254}
   ammoMeshTransform: {fileID: 1761762439967628006}
-  shootType: 0
 --- !u!114 &7697447313023933607
 MonoBehaviour:
   m_ObjectHideFlags: 0

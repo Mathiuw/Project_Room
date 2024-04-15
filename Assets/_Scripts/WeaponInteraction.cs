@@ -8,10 +8,11 @@ public abstract class WeaponInteraction : MonoBehaviour
     public bool isHoldingWeapon { get; protected set; } = false;
 
     [Header("Weapon settings")]
-    [SerializeField]Weapon weapon;
-    public Weapon Weapon { get => weapon; protected set => Weapon = value; }
+    [SerializeField] protected Weapon weapon;
 
-    protected abstract IEnumerator PickUpWeapon(Transform gun);
+    public Weapon GetWeapon() { return weapon; }
+
+    protected abstract IEnumerator PickUpWeapon(Weapon weapon);
 
     public abstract IEnumerator ReloadWeapon(); 
 

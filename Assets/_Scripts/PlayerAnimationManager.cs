@@ -17,7 +17,7 @@ public class PlayerAnimationManager : MonoBehaviour
         sprint= player.GetComponent<Sprint>();
         rb = player.GetComponent<Rigidbody>();
 
-        playerWeaponInteraction.onPickupEnd += OnPickup;
+        playerWeaponInteraction.onPickupWeapon += OnPickup;
         playerWeaponInteraction.onDrop += OnDrop;
         playerWeaponInteraction.onAimStart += ActivateAim;
     }

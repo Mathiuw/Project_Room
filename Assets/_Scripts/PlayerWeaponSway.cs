@@ -18,7 +18,7 @@ public class PlayerWeaponSway : MonoBehaviour
     {
         if (!playerWeaponInteraction.isHoldingWeapon) return;
 
-        Transform weapon = playerWeaponInteraction.Weapon.transform;
+        Transform weapon = playerWeaponInteraction.GetWeapon().transform;
 
         if (playerWeaponInteraction.isAiming) Sway(weapon, swayMultiplier / 20);
         else Sway(weapon, swayMultiplier);

@@ -11,8 +11,8 @@ public class UI_Ammo : MonoBehaviour
     void Start() 
     {        
         playerWeaponInteraction = FindObjectOfType<Player>().GetComponent<PlayerWeaponInteraction>();
-        playerWeaponInteraction.onPickupEnd += ActivateUISprite;
-        playerWeaponInteraction.onPickupEnd += AddWeaponEvents;
+        playerWeaponInteraction.onPickupWeapon += ActivateUISprite;
+        playerWeaponInteraction.onPickupWeapon += AddWeaponEvents;
         playerWeaponInteraction.onDrop += DisableUISprite;
         playerWeaponInteraction.onDrop += RemoveWeaponEvents;
         playerWeaponInteraction.onReloadStart += OnRealoadFunc;
@@ -45,15 +45,15 @@ public class UI_Ammo : MonoBehaviour
         else DisableUISprite();
     }
 
-    void SetUIAmmo() => ammoUI.SetText(playerWeaponInteraction.Weapon.GetAmmo() + "/" + playerWeaponInteraction.Weapon.GetMaxAmmo());
+    void SetUIAmmo() => ammoUI.SetText(playerWeaponInteraction.GetWeapon().GetAmmo() + "/" + playerWeaponInteraction.GetWeapon().GetMaxAmmo());
 
     void AddWeaponEvents(Weapon weaponPicked) 
     {
-        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onShoot += SetUIAmmo;
+        playerWeaponInteraction.GetWeapon().GetComponent<Weapon>().onShoot += SetUIAmmo;
     }
 
     void RemoveWeaponEvents() 
     {
-        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onShoot -= SetUIAmmo;
+        playerWeaponInteraction.GetWeapon().GetComponent<Weapon>().onShoot -= SetUIAmmo;
     } 
 }

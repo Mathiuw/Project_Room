@@ -8,6 +8,8 @@ public class SettingsSensibility : MonoBehaviour
     [SerializeField] Slider slider;
     public Slider Slider { get => slider; private set => slider = value; }
 
+    PlayerCameraMove playerCameraMoveScript;
+
     void Start() 
     {
         Slider.onValueChanged.AddListener(SetSensibility);
@@ -17,13 +19,15 @@ public class SettingsSensibility : MonoBehaviour
         Slider.value = PlayerPrefs.GetFloat(playerPrefSensibility, 40);
 
         SetSensibility(PlayerPrefs.GetFloat(playerPrefSensibility, 40)); 
+
+        playerCameraMoveScript = FindAnyObjectByType<PlayerCameraMove>();
     }
 
     public void SetSensibility(float value) 
     {
         PlayerPrefs.SetFloat(playerPrefSensibility, value);
         
-        if (PlayerCameraMove.instance != null) PlayerCameraMove.instance.SetSensiblility(value);
+        if (playerCameraMoveScript) playerCameraMoveScript.SetSensiblility(value);
 
         PlayerPrefs.Save();
     } 
