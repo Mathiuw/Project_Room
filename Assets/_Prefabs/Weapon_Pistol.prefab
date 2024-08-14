@@ -100,9 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c124549f987ce449fa088a7acf2fc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponSO: {fileID: 0}
+  soWeapon: {fileID: 11400000, guid: ed656ae13e6643b4a868c56b4fad80bf, type: 2}
   weaponName: Pistol
-  damage: 0
+  damage: 25
   maxAmmo: 11
   bulletForce: 0
   firerate: 0
@@ -110,10 +110,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   shootType: 0
-  Crosshair: {fileID: 5277375365027224371, guid: 2a87bf875f250674fbc09daad9bcc8e3, type: 3}
+  crosshair: {fileID: 5277375365027224371, guid: 2a87bf875f250674fbc09daad9bcc8e3, type: 3}
   intensity: 0
   speed: 0
-  animatorOverride: {fileID: 0}
+  animatorOverride: {fileID: 22100000, guid: 4f547759e1dd5c041b6017e80dc64ee7, type: 2}
   reloadTime: 0
   reloadItem: {fileID: 11400000, guid: f3a15256ebc23754dba563d6c9b03a55, type: 2}
   muzzleFlash: {fileID: 8993078229490907916, guid: be85a34377cf8d241a2ac441893a7ee6, type: 3}

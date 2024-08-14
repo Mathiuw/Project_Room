@@ -245,7 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c124549f987ce449fa088a7acf2fc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponSO: {fileID: 0}
+  soWeapon: {fileID: 11400000, guid: 9e94b170c87fe104c8af6c91b9bd5943, type: 2}
   weaponName: MP5
   damage: 0
   maxAmmo: 31
@@ -255,7 +255,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   shootType: 1
-  Crosshair: {fileID: 5277375365027224371, guid: 2a87bf875f250674fbc09daad9bcc8e3, type: 3}
+  crosshair: {fileID: 5277375365027224371, guid: 2a87bf875f250674fbc09daad9bcc8e3, type: 3}
   intensity: 0
   speed: 0
   animatorOverride: {fileID: 0}

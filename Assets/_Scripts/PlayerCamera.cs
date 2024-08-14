@@ -1,48 +1,106 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(DynamicDOF))]
+[RequireComponent(typeof(CameraShake))]
+[RequireComponent(typeof(PlayerCameraAnimationManager))]
 public class PlayerCamera : MonoBehaviour
 {
-    
-    [SerializeField] Transform gunHolder;
-    public Transform GunHolder { get => gunHolder; private set => gunHolder = value; }
+    [Header("Camera movement")]
+    [Range(1, 100)]
+    [SerializeField] float sensibility = 50;
+    [SerializeField] float multiplier = 1;
 
-    Transform DesiredCameraTransform;
+    float mouseX, mouseY;
+    float xRotation, yRotation;
+    Transform desiredCameraPosition;
 
-    void Start() 
-    {
-        if (Pause.instance != null) Pause.instance.onPause += OnPause;
-        else Debug.LogError("Cant Find PauseUI");
+    [Header("Rotate sideways")]
+    [SerializeField] bool canRotate = true;
+    [Range(1, 5)]
+    [SerializeField] float angleLimit = 2;
+    [SerializeField] float smooth = 20;
+    float angle;
 
-        //Search player
-        Player player = FindObjectOfType<Player>();
+    [Header("Weapon")]
+    [SerializeField] Transform weaponHolder;
 
-        if (player)
-        {
-            player.GetComponent<Health>().onDead += OnDead;
+    public void SetSensibility(float sensibility) { this.sensibility = sensibility; } 
+    public Transform GetWeaponHolder() { return weaponHolder; }
 
-            //Set the position of the camera
-            DesiredCameraTransform = player.CameraPosition;
-        }
-        else Debug.LogError("Cant find Player");
-
+    void Awake()
+    {   
+        // Lock cursor
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        // Search player
+        Player newPlayer = FindObjectOfType<Player>();
+
+        // Get the player camera position
+        if (newPlayer != null)
+        {
+            desiredCameraPosition = newPlayer.GetCameraPosition();
+        }
+        else 
+        {
+            Debug.Log("Cant find Player");
+            enabled = false;
+        }
+    }
+
+    // Update is called once per frame
     void Update()
     {
-        transform.position = DesiredCameraTransform.position;
+        // Move camera
+        CameraMove();
+
+        // Follows the player camera position
+        transform.position = desiredCameraPosition.position;
+
+        // Rotate camera sideways
+        if (canRotate) 
+        {
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, RotateCameraVector());
+        }
     }
 
-    void OnPause(bool b) 
+    void CameraMove() 
     {
-        GetComponentInChildren<PlayerCameraMove>().enabled= !b;
-        GetComponentInChildren<PlayerCameraMove>().enabled= !b;
+        mouseX = Input.GetAxisRaw("Mouse X") * sensibility * multiplier;
+        mouseY = Input.GetAxisRaw("Mouse Y") * sensibility * multiplier;
+
+        Vector3 rot = transform.rotation.eulerAngles;
+
+        yRotation = rot.y + mouseX;
+        xRotation -= mouseY;
+
+        xRotation = Mathf.Clamp(xRotation, -89, 89);
+
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
     }
-    
-    void OnDead() 
+
+    float RotateCameraVector() 
     {
-        GetComponentInChildren<PlayerCameraMove>().enabled = false;
-        GetComponentInChildren<PlayerCameraMove>().enabled = false;
+        angle -= (Input.GetAxisRaw("Horizontal")) * smooth * Time.deltaTime;
+        angle = Mathf.Clamp(angle, -angleLimit, angleLimit);
+
+        if (Input.GetAxisRaw("Horizontal") != 0) return angle;
+
+        if (angle > 0f)
+        {
+            angle -= smooth * Time.deltaTime;
+            angle = Mathf.Clamp(angle, 0f, angleLimit);
+        }
+        else if (angle < 0f)
+        {
+            angle += smooth * Time.deltaTime;
+            angle = Mathf.Clamp(angle, -angleLimit, 0f);
+        }
+        return angle;
     }
 }

@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c124549f987ce449fa088a7acf2fc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponSO: {fileID: 0}
+  soWeapon: {fileID: 11400000, guid: 5e63fe80ca5a02348a79e414a7011aba, type: 2}
   weaponName: Double Barrel
   damage: 0
   maxAmmo: 0
@@ -139,10 +139,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   shootType: 0
-  Crosshair: {fileID: 5277375365027224371, guid: 2a87bf875f250674fbc09daad9bcc8e3, type: 3}
+  crosshair: {fileID: 0}
   intensity: 0
   speed: 0
-  animatorOverride: {fileID: 0}
+  animatorOverride: {fileID: 22100000, guid: 256889344a1820d4f9d9ad130e20a49a, type: 2}
   reloadTime: 0
   reloadItem: {fileID: 11400000, guid: b936a3ffd96c47249a5c826bf08bdfc8, type: 2}
   muzzleFlash: {fileID: 2004880136692511865, guid: db3a34192a3b02f44ad5c5f4809c75b9, type: 3}

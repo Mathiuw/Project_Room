@@ -4,7 +4,7 @@ using UnityEngine.Rendering.PostProcessing;
 public class DynamicDOF : MonoBehaviour
 {
     [Range(1,10)]
-    [SerializeField] float focusSpeed;
+    [SerializeField] float focusSpeed = 7.5f;
     [SerializeField] LayerMask collsionMask;
     float maxDistance = 5f;
     float distance;
@@ -18,7 +18,11 @@ public class DynamicDOF : MonoBehaviour
             postProcessVolume = GameObject.FindGameObjectWithTag("Post Processing").transform.GetComponent<PostProcessVolume>();
             postProcessVolume.profile.TryGetSettings(out dof);
         }
-        else Destroy(this);
+        else 
+        {
+            Debug.LogError("Cant find PostProcessVolume, disabling component");
+            enabled = false;
+        }
     }
 
     void Update()

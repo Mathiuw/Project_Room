@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Name))]
-public class Door : Interact
+[RequireComponent(typeof(ShowNameToHUD))]
+public class Door : MonoBehaviour, IInteractable
 {
     [Header("Object Name")]
     [SerializeField] string objectName = "Door";
@@ -12,20 +12,26 @@ public class Door : Interact
     [SerializeField] Transform[] doors;
     [SerializeField] Vector3[] startRotation;
     [SerializeField] Vector3[] desiredRotations;
+
+    [Header("Destruction")]
+    [SerializeField] bool isDestrucble = true;
+
     public bool open { get; private set; } = false;
-    Name doorName;
+    ShowNameToHUD doorName;
 
     void Start() 
     {
-        doorName = GetComponent<Name>();
+        doorName = GetComponent<ShowNameToHUD>();
 
         SetName(objectName);
 
         for (int i = 0; i < doors.Length; i++) doors[i].localEulerAngles = startRotation[i];
     }
 
-    public override void Interacting(Transform t) => StartCoroutine(OpenCloseDoor());
-
+    public void Interact(Transform interactor)
+    {
+        StartCoroutine(OpenCloseDoor());
+    }
     IEnumerator OpenCloseDoor() 
     {
         enabled= false;
@@ -58,11 +64,44 @@ public class Door : Interact
         yield break;
     }
 
+    // Animacao procedural para porta
     void ArrayLerp(Transform[] t, Vector3[] startRotation, Vector3[] desiredRotation, float percentageComplete ) 
     {
         for (int i = 0; i < doors.Length; i++)
         {
             t[i].localRotation = Quaternion.Lerp( Quaternion.Euler(startRotation[i]), Quaternion.Euler(desiredRotation[i]), percentageComplete);
+        }
+    }
+
+    // Logica para destruir a porta
+    public void DestroyDoor(Vector3 direction, float force)
+    {
+        if (!isDestrucble)
+        {
+            Debug.Log("Door is not destrucble");
+            return;
+        }
+
+        ShowNameToHUD nameScript;
+        Door doorScript;
+
+        if (doorScript = GetComponent<Door>())
+        {
+            if (doorScript.open) return;
+            Destroy(doorScript);
+        }
+        if (nameScript = GetComponent<ShowNameToHUD>()) Destroy(nameScript);
+
+        foreach (Transform door in doors)
+        {
+            door.SetParent(null);
+
+            Rigidbody doorRB = door.GetComponentInChildren<Rigidbody>();
+
+            doorRB.isKinematic = false;
+            doorRB.interpolation = RigidbodyInterpolation.Interpolate;
+            doorRB.AddForce(direction * force, ForceMode.VelocityChange);
+            doorRB.AddTorque(direction * force, ForceMode.VelocityChange);
         }
     }
 
@@ -73,4 +112,6 @@ public class Door : Interact
         if (open) ChangeNames("Close " + text);
         else ChangeNames("Open " + text);
     }
+
+
 }

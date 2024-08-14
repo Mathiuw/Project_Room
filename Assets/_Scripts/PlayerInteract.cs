@@ -6,25 +6,29 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField] float rayLength = 5;
     Transform cameraTransform;
 
-    void Start() => cameraTransform = Camera.main.transform;
+    void Start()
+    {
+        Player player = GetComponent<Player>();    
+
+        cameraTransform = player.GetPlayerCamera().transform;
+    }
 
     void Update() 
     {
-        if (Input.GetKeyDown(KeyCode.E)) Interacting(transform);
+        if (Input.GetKeyDown(KeyCode.E)) Interact();
     } 
 
-    public void Interacting(Transform t) 
+    public void Interact() 
     {
         RaycastHit hit;
 
         if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, rayLength, interactiveMask))
         {
-            Interact interact;
+            IInteractable interactable = hit.transform.GetComponentInParent<IInteractable>();
 
-            if ((interact = hit.transform.GetComponentInParent<Interact>()) && interact.enabled) 
+            if (interactable != null) 
             {
-                interact.Interacting(t);
-                Debug.Log("<b><color=magenta>" + transform.name + "</color></b> interacted with <b><color=cyan>" + interact.transform.name + "</color></b>");
+                interactable.Interact(transform);
             } 
         }
     }

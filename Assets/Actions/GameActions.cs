@@ -37,7 +37,7 @@ public partial class @GameActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""Interact/Pickup"",
+                    ""name"": ""Interact"",
                     ""type"": ""Button"",
                     ""id"": ""e5aa1f91-d00d-4349-b9fe-b6820f62863b"",
                     ""expectedControlType"": ""Button"",
@@ -72,7 +72,7 @@ public partial class @GameActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Interact/Pickup"",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -261,7 +261,7 @@ public partial class @GameActions: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
-        m_Player_InteractPickup = m_Player.FindAction("Interact/Pickup", throwIfNotFound: true);
+        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_DropWeapon = m_Player.FindAction("Drop Weapon", throwIfNotFound: true);
         m_Player_DropItem = m_Player.FindAction("Drop Item", throwIfNotFound: true);
         // Camera
@@ -332,7 +332,7 @@ public partial class @GameActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Movement;
-    private readonly InputAction m_Player_InteractPickup;
+    private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_DropWeapon;
     private readonly InputAction m_Player_DropItem;
     public struct PlayerActions
@@ -340,7 +340,7 @@ public partial class @GameActions: IInputActionCollection2, IDisposable
         private @GameActions m_Wrapper;
         public PlayerActions(@GameActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
-        public InputAction @InteractPickup => m_Wrapper.m_Player_InteractPickup;
+        public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @DropWeapon => m_Wrapper.m_Player_DropWeapon;
         public InputAction @DropItem => m_Wrapper.m_Player_DropItem;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -355,9 +355,9 @@ public partial class @GameActions: IInputActionCollection2, IDisposable
             @Movement.started += instance.OnMovement;
             @Movement.performed += instance.OnMovement;
             @Movement.canceled += instance.OnMovement;
-            @InteractPickup.started += instance.OnInteractPickup;
-            @InteractPickup.performed += instance.OnInteractPickup;
-            @InteractPickup.canceled += instance.OnInteractPickup;
+            @Interact.started += instance.OnInteract;
+            @Interact.performed += instance.OnInteract;
+            @Interact.canceled += instance.OnInteract;
             @DropWeapon.started += instance.OnDropWeapon;
             @DropWeapon.performed += instance.OnDropWeapon;
             @DropWeapon.canceled += instance.OnDropWeapon;
@@ -371,9 +371,9 @@ public partial class @GameActions: IInputActionCollection2, IDisposable
             @Movement.started -= instance.OnMovement;
             @Movement.performed -= instance.OnMovement;
             @Movement.canceled -= instance.OnMovement;
-            @InteractPickup.started -= instance.OnInteractPickup;
-            @InteractPickup.performed -= instance.OnInteractPickup;
-            @InteractPickup.canceled -= instance.OnInteractPickup;
+            @Interact.started -= instance.OnInteract;
+            @Interact.performed -= instance.OnInteract;
+            @Interact.canceled -= instance.OnInteract;
             @DropWeapon.started -= instance.OnDropWeapon;
             @DropWeapon.performed -= instance.OnDropWeapon;
             @DropWeapon.canceled -= instance.OnDropWeapon;
@@ -492,7 +492,7 @@ public partial class @GameActions: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
-        void OnInteractPickup(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
         void OnDropWeapon(InputAction.CallbackContext context);
         void OnDropItem(InputAction.CallbackContext context);
     }

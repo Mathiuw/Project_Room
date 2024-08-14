@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c91ce02f6d96ce4f8347baeef20a293, type: 3}
+  m_Name: Weapon_DB
+  m_EditorClassIdentifier: 
+  weaponName: Double Barrel
+  damage: 60
+  bulletForce: 50
+  maxAmmo: 2
+  firerate: 5
+  waitToShoot: 0
+  shootType: 0
+  shootMask:
+    serializedVersion: 2
+    m_Bits: 9993
+  crosshair: {fileID: 5277375365027224371, guid: 2a87bf875f250674fbc09daad9bcc8e3, type: 3}
+  intensity: 1
+  speed: 10
+  animatorOverride: {fileID: 22100000, guid: 256889344a1820d4f9d9ad130e20a49a, type: 2}
+  reloadTime: 5
+  reloadItem: {fileID: 11400000, guid: b936a3ffd96c47249a5c826bf08bdfc8, type: 2}
+  muzzleFlash: {fileID: 2004880136692511860, guid: db3a34192a3b02f44ad5c5f4809c75b9, type: 3}
+  wallHit: {fileID: 2553133760792651097, guid: f518402108b099b42bf42ae7231061e5, type: 3}
+  Blood: {fileID: 5750085299204580770, guid: 3a5dae8569d4f374e8c66e8fef3d1f31, type: 3}
+  ammoSprite: {fileID: 21300000, guid: bb90bc28b6479c64a8fa4548034fac62, type: 3}

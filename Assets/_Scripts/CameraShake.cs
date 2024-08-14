@@ -29,7 +29,7 @@ public class CameraShake : MonoBehaviour
 
     void Update()
     {
-        //Debug Input
+        // Debug Input
         //if (Input.GetKey(KeyCode.Space)) intensity += growthIntensity * Time.deltaTime;
         //else
 

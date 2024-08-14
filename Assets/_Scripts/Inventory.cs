@@ -1,25 +1,36 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
+    [Header("Inventory")]
     [SerializeField] int inventorySize = 5;
-    public int InventorySize { get => inventorySize; set => inventorySize = value; }
+    public List<Item> inventoryList = new List<Item>();
 
-    public List<Item> inventory = new List<Item>();
+    [Header("Drop item")]
+    [SerializeField] SpawnItem spawnItemPrefab;
+    [SerializeField] float dropForce = 3.5f;
 
     public event Action OnItemAdded;
     public event Action OnItemRemoved;
 
+    public int GetInventorySize() { return inventorySize; }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F)) UseItem();
+
+        if (Input.GetKeyDown(KeyCode.Q)) DropItem();
+    }
+
     public bool AddItem(Item item)
     {
-        foreach (Item i in inventory)
+        foreach (Item i in inventoryList)
         {
             if (item.SOItem.itemName == i.SOItem.itemName)
             {
-                if (item.SOItem.isStackable && i.amount < i.SOItem.maxStack && inventory.Count <= inventorySize)
+                if (item.SOItem.isStackable && i.amount < i.SOItem.maxStack && inventoryList.Count <= inventorySize)
                 {
                     i.amount++;
                     OnItemAdded.Invoke();
@@ -27,9 +38,9 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
-        if (inventory.Count< inventorySize)
+        if (inventoryList.Count< inventorySize)
         {
-            inventory.Add(item);
+            inventoryList.Add(item);
             OnItemAdded.Invoke();
             return true;
         }
@@ -40,9 +51,30 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    public void UseItem()
+    {
+        foreach (Item item in inventoryList)
+        {           
+            if (inventoryList.IndexOf(item) == UI_SelectItem.index)
+            {
+                SOConsumable soConsumable = (SOConsumable)item.SOItem;
+
+                if (soConsumable != null) 
+                {
+                    GetComponent<Health>().AddHealth(soConsumable.recoverHealth);
+
+                    RemoveItem(item.SOItem);
+
+                    Debug.Log(item.SOItem.name + " used and removed");
+                    break;                 
+                }
+            }
+        }
+    }
+
     public bool RemoveItem(SOItem item)
     {
-        foreach (Item i in inventory)
+        foreach (Item i in inventoryList)
         {
             if (item.itemName == i.SOItem.itemName)
             {
@@ -54,7 +86,7 @@ public class Inventory : MonoBehaviour
                 }
                 else
                 {
-                    inventory.Remove(i);
+                    inventoryList.Remove(i);
                     OnItemRemoved.Invoke();
                     return true;
                 }
@@ -64,11 +96,38 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
+    public void DropItem()
+    {
+        foreach (Item item in inventoryList)
+        {
+            if (inventoryList.IndexOf(item) == UI_SelectItem.index)
+            {
+                //Remove item from inventory
+                RemoveItem(item.SOItem);
+
+                //Intantiate and set item
+                SpawnItem itemSpawned = Instantiate(spawnItemPrefab, transform.position, transform.rotation);
+                itemSpawned.itemSO = item.SOItem;
+
+                //Set item transform
+                itemSpawned.transform.localPosition = transform.position;
+                itemSpawned.transform.rotation = transform.rotation;
+
+                //Apply force to item
+                Rigidbody dropRigidbody = itemSpawned.GetComponent<Rigidbody>();
+                dropRigidbody.AddForce(transform.forward * dropForce, ForceMode.VelocityChange);
+
+                Debug.Log("Item Droped");
+                break;
+            }
+        }
+    }
+
     public bool HaveItemSelected(SOItem item)
     {
-        foreach (Item i in inventory)
+        foreach (Item i in inventoryList)
         {
-            if (inventory.IndexOf(i) == UI_SelectItem.index && item.itemName == i.SOItem.itemName)
+            if (inventoryList.IndexOf(i) == UI_SelectItem.index && item.itemName == i.SOItem.itemName)
             {
                 Debug.Log("Player has " + item.itemName + " in the Index");
                 return true;
@@ -80,7 +139,7 @@ public class Inventory : MonoBehaviour
 
     public bool HaveItem(SOItem item)
     {
-        foreach (Item i in inventory)
+        foreach (Item i in inventoryList)
         {
             if (item.name == i.SOItem.name)
             {

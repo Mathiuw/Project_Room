@@ -3,14 +3,14 @@ using UnityEngine;
 
 public abstract class WeaponInteraction : MonoBehaviour
 {
-    [SerializeField] protected Transform weaponHolder;
-
-    public bool isHoldingWeapon { get; protected set; } = false;
-
     [Header("Weapon settings")]
+    [SerializeField] protected Transform weaponHolder;
     [SerializeField] protected Weapon weapon;
+    protected bool isHoldingWeapon = false;
 
     public Weapon GetWeapon() { return weapon; }
+
+    public bool GetIsHoldingWeapon() { return isHoldingWeapon; }
 
     protected abstract IEnumerator PickUpWeapon(Weapon weapon);
 

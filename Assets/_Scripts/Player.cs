@@ -1,43 +1,68 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(PlayerMovement))]
+[RequireComponent(typeof(PlayerInteract))]
+[RequireComponent(typeof(PlayerWeaponInteraction))]
+[RequireComponent(typeof(Inventory))]
 public class Player : MonoBehaviour
 {
-    
-    [SerializeField] Transform cameraPosition;
-    public Transform CameraPosition { get => cameraPosition; set => cameraPosition = value; }
+    // Input class
+    GameActions input;
 
+    [SerializeField] Transform playerCameraPosition;
+    PlayerCamera playerCamera;
     Rigidbody rb;
-    PlayerWeaponInteraction playerWeaponInteraction;
+
+    public GameActions GetInput() { return input; }
+    public Transform GetCameraPosition() { return playerCameraPosition; }
+    public PlayerCamera GetPlayerCamera() { return playerCamera; }
+
+    void OnEnable()
+    {
+        // Enable input
+        input.Enable();
+    }
+
+    void OnDisable()
+    {
+        // Disable input
+        input.Disable();
+    }
 
     void Awake()
     {
+        // Create input class
+        input = new GameActions();
+
+        // Get Rigidbody component
         rb = GetComponent<Rigidbody>();
-        playerWeaponInteraction = GetComponent<PlayerWeaponInteraction>();
 
-        GetComponent<Health>().onDead += OnDead;
+        // Bind on on dead health event
+        GetComponent<Health>().onDead += OnDeadFunc;
     }
 
-    void Start() 
+    void Start()
     {
-        if (Pause.instance != null) Pause.instance.onPause += OnPause;
-        else Debug.LogError("Cant Find Player UI");
+        // Find PlayerCamera
+        PlayerCamera playerCameraComponent = FindAnyObjectByType<PlayerCamera>();
+
+        if (playerCameraComponent != null)
+        {
+            playerCamera = playerCameraComponent;
+        }
+        else 
+        {
+            Debug.Log("Cant find PlayerCamera");
+            enabled = false;
+        }
+        
     }
 
-    void OnPause(bool b) 
+    void OnDeadFunc()
     {
-        GetComponentInChildren<PlayerMovement>().enabled = !b;
-        GetComponentInChildren<PlayerInteract>().enabled = !b;
-        GetComponentInChildren<PlayerWeaponInteraction>().enabled = !b;
-    }
-
-    void OnDead() 
-    {
-        playerWeaponInteraction.DropWeapon();
         rb.freezeRotation = false;
-        GetComponentInChildren<PlayerMovement>().enabled = false;
-        GetComponentInChildren<PlayerInteract>().enabled = false;
-        GetComponentInChildren<PlayerWeaponInteraction>().enabled = false;
+        input.Disable();
     }
 }
