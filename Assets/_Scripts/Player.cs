@@ -1,9 +1,9 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Health))]
 [RequireComponent(typeof(PlayerMovement))]
-[RequireComponent(typeof(PlayerInteract))]
 [RequireComponent(typeof(PlayerWeaponInteraction))]
 [RequireComponent(typeof(Inventory))]
 public class Player : MonoBehaviour
@@ -11,12 +11,16 @@ public class Player : MonoBehaviour
     // Input class
     GameActions input;
 
-    [SerializeField] Transform playerCameraPosition;
+    [SerializeField] Transform playerCameraDesiredPosition;
     PlayerCamera playerCamera;
     Rigidbody rb;
 
+    [Header("Interact")]
+    [SerializeField] LayerMask interactiveMask;
+    [SerializeField] float rayLength = 5;
+
     public GameActions GetInput() { return input; }
-    public Transform GetCameraPosition() { return playerCameraPosition; }
+    public Transform GetCameraDesiredPosition() { return playerCameraDesiredPosition; }
     public PlayerCamera GetPlayerCamera() { return playerCamera; }
 
     void OnEnable()
@@ -46,7 +50,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         // Find PlayerCamera
-        PlayerCamera playerCameraComponent = FindAnyObjectByType<PlayerCamera>();
+        PlayerCamera playerCameraComponent = FindObjectOfType<PlayerCamera>();
 
         if (playerCameraComponent != null)
         {
@@ -57,7 +61,25 @@ public class Player : MonoBehaviour
             Debug.Log("Cant find PlayerCamera");
             enabled = false;
         }
-        
+
+        // Add movement input to player GameActions class
+        input.Player.Interact.started += Interact;
+
+    }
+
+    public void Interact(InputAction.CallbackContext value)
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, rayLength, interactiveMask))
+        {
+            IInteractable interactable = hit.transform.GetComponentInParent<IInteractable>();
+
+            if (interactable != null)
+            {
+                interactable.Interact(transform);
+            }
+        }
     }
 
     void OnDeadFunc()

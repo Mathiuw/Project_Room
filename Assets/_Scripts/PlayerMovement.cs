@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float moveSpeed = 200.0f;
     float sprintMultiplier = 1;
     Transform playerCameraTransform;
-    Player player;
+    GameActions playerInput;    
     Vector2 moveVector;
     Rigidbody rb;
 
@@ -46,30 +46,28 @@ public class PlayerMovement : MonoBehaviour
         else SetSprintMultiplier(1);
     }
 
-    void OnEnable()
-    {
-        // Add events
-        player.GetInput().Player.Movement.performed += OnMovementPerformed;
-        player.GetInput().Player.Movement.canceled += OnMovementCanceled;
-    }
-
     void OnDisable()
     {
         // Remove events
-        player.GetInput().Player.Movement.performed -= OnMovementPerformed;
-        player.GetInput().Player.Movement.canceled -= OnMovementCanceled;
+        playerInput.Player.Movement.performed -= OnMovementPerformed;
+        playerInput.Player.Movement.canceled -= OnMovementCanceled;
     }
 
     void Awake()
     {
-        player = GetComponent<Player>();
         rb = GetComponent<Rigidbody>();
     }
 
     void Start()
     {
-        playerCameraTransform = player.GetPlayerCamera().transform;
+        playerCameraTransform = FindAnyObjectByType<PlayerCamera>().transform;
 
+        // Add movement input to player GameActions class
+        playerInput = GetComponent<Player>().GetInput();
+        playerInput.Player.Movement.performed += OnMovementPerformed;
+        playerInput.Player.Movement.canceled += OnMovementCanceled;
+
+        // Update stamina event call
         staminaUpdated?.Invoke(stamina);
     }
 
@@ -121,5 +119,4 @@ public class PlayerMovement : MonoBehaviour
     {
         moveVector = Vector2.zero;
     }
-
 }

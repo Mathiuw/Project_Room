@@ -39,12 +39,12 @@ public class PlayerCamera : MonoBehaviour
     void Start()
     {
         // Search player
-        Player newPlayer = FindObjectOfType<Player>();
+        Player player = FindObjectOfType<Player>();
 
         // Get the player camera position
-        if (newPlayer != null)
+        if (player != null)
         {
-            desiredCameraPosition = newPlayer.GetCameraPosition();
+            desiredCameraPosition = player.GetCameraDesiredPosition();
         }
         else 
         {

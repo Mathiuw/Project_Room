@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 6666209224780133104}
   - component: {fileID: 8743995961887181770}
   - component: {fileID: 3846323399545191338}
-  - component: {fileID: 3237916423255130865}
   - component: {fileID: 7358881893585344815}
   m_Layer: 10
   m_Name: Player
@@ -79,7 +78,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f031320f5b28b7b4095ad2fa22f0ff23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCameraPosition: {fileID: 6842614245566907821}
+  playerCameraDesiredPosition: {fileID: 6842614245566907821}
+  interactiveMask:
+    serializedVersion: 2
+    m_Bits: 15105
+  rayLength: 5
 --- !u!114 &6666209224780133104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,22 +130,6 @@ MonoBehaviour:
   staminaCost: 10
   staminaRecover: 8
   multiplier: 1.5
---- !u!114 &3237916423255130865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 973883225166471410}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3e475e28eb60c448af04e776623665f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactiveMask:
-    serializedVersion: 2
-    m_Bits: 15104
-  rayLength: 5
 --- !u!114 &7358881893585344815
 MonoBehaviour:
   m_ObjectHideFlags: 0
