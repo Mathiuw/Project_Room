@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         // Find PlayerCamera
-        PlayerCamera playerCameraComponent = FindObjectOfType<PlayerCamera>();
+        PlayerCamera playerCameraComponent = FindFirstObjectByType<PlayerCamera>();
 
         if (playerCameraComponent != null)
         {

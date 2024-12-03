@@ -10,7 +10,7 @@ public class UI_Ammo : MonoBehaviour
 
     void Start() 
     {        
-        playerWeaponInteraction = FindObjectOfType<Player>().GetComponent<PlayerWeaponInteraction>();
+        playerWeaponInteraction = FindFirstObjectByType<Player>().GetComponent<PlayerWeaponInteraction>();
         playerWeaponInteraction.onWeaponPickup += ActivateUISprite;
         playerWeaponInteraction.onWeaponPickup += AddWeaponEvents;
         playerWeaponInteraction.onWeaponDrop += DisableUISprite;

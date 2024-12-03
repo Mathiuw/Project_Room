@@ -16,7 +16,7 @@ public class UI_Crosshair : MonoBehaviour
 
     void Start() 
     {
-        PlayerWeaponInteraction playerWeaponInteraction = FindObjectOfType<Player>().GetComponent<PlayerWeaponInteraction>();
+        PlayerWeaponInteraction playerWeaponInteraction = FindFirstObjectByType<Player>().GetComponent<PlayerWeaponInteraction>();
         playerWeaponInteraction.onWeaponPickup += SetCrossHair;
         playerWeaponInteraction.onAimStart += DisableCrosshair;
         playerWeaponInteraction.onAimEnd += EnableCrosshair;

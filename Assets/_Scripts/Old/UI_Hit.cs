@@ -16,7 +16,7 @@ public class UI_Hit : MonoBehaviour
 
     void Start() 
     {
-        playerWeaponInteraction = FindObjectOfType<Player>().GetComponent<PlayerWeaponInteraction>();
+        playerWeaponInteraction = FindFirstObjectByType<Player>().GetComponent<PlayerWeaponInteraction>();
         playerWeaponInteraction.onWeaponPickup += AddPlayerEvents;
         playerWeaponInteraction.onWeaponDrop += RemovePlayerEvents;
     }

@@ -90,7 +90,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 moveDirection;
 
         moveDirection = transform.forward * moveV + transform.right * moveH;
-        rb.velocity = moveDirection.normalized * moveSpeed * sprintMultiplier * Time.deltaTime;
+        rb.linearVelocity = moveDirection.normalized * moveSpeed * sprintMultiplier * Time.deltaTime;
     }
 
     public void Sprint(KeyCode RunInput, KeyCode WalkInput)

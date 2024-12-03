@@ -30,7 +30,7 @@ public class UI_Inventory : MonoBehaviour
 
     void Start() 
     {       
-        Player player = FindObjectOfType<Player>();
+        Player player = FindFirstObjectByType<Player>();
 
         if (player != null)
         {

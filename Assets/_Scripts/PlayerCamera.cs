@@ -1,7 +1,6 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(DynamicDOF))]
 [RequireComponent(typeof(CameraShake))]
 [RequireComponent(typeof(PlayerCameraAnimationManager))]
 public class PlayerCamera : MonoBehaviour
@@ -39,7 +38,7 @@ public class PlayerCamera : MonoBehaviour
     void Start()
     {
         // Search player
-        Player player = FindObjectOfType<Player>();
+        Player player = FindFirstObjectByType<Player>();
 
         // Get the player camera position
         if (player != null)

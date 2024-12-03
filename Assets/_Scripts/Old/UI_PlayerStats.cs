@@ -8,7 +8,7 @@ public class UI_PlayerStats : MonoBehaviour
 
     void Start() 
     {
-        Player player = FindObjectOfType<Player>();
+        Player player = FindFirstObjectByType<Player>();
 
         if (player != null)
         {

@@ -14,7 +14,7 @@ public class PlayerCameraAnimationManager : MonoBehaviour
 
     void Start() 
     {
-        Player player = FindObjectOfType<Player>();
+        Player player = FindFirstObjectByType<Player>();
 
         playerWeaponInteraction = player.GetComponent<PlayerWeaponInteraction>();
         playerMovement = player.GetComponent<PlayerMovement>();
@@ -29,7 +29,7 @@ public class PlayerCameraAnimationManager : MonoBehaviour
     void Update() 
     {
         animator.SetFloat("Walk Speed", WalkSpeed());
-        animator.SetFloat("RbVelocity", rb.velocity.magnitude);
+        animator.SetFloat("RbVelocity", rb.linearVelocity.magnitude);
         animator.SetBool("Hold", playerWeaponInteraction.GetIsHoldingWeapon());
         
         if (playerWeaponInteraction.GetIsHoldingWeapon()) 
