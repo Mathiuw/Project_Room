@@ -1,11 +1,8 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
-[RequireComponent(typeof(CameraShake))]
-[RequireComponent(typeof(PlayerCameraAnimationManager))]
 public class PlayerCamera : MonoBehaviour
 {
-    [Header("Camera movement")]
+    [Header("Camera Movement")]
     [Range(1, 100)]
     [SerializeField] float sensibility = 50;
     [SerializeField] float multiplier = 1;
@@ -14,8 +11,8 @@ public class PlayerCamera : MonoBehaviour
     float xRotation, yRotation;
     Transform desiredCameraPosition;
 
-    [Header("Rotate sideways")]
-    [SerializeField] bool canRotate = true;
+    [Header("Camera Roll")]
+    [SerializeField] bool canRoll = true;
     [Range(1, 5)]
     [SerializeField] float angleLimit = 2;
     [SerializeField] float smooth = 20;
@@ -27,14 +24,6 @@ public class PlayerCamera : MonoBehaviour
     public void SetSensibility(float sensibility) { this.sensibility = sensibility; } 
     public Transform GetWeaponHolder() { return weaponHolder; }
 
-    void Awake()
-    {   
-        // Lock cursor
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    // Start is called before the first frame update
     void Start()
     {
         // Search player
@@ -43,16 +32,18 @@ public class PlayerCamera : MonoBehaviour
         // Get the player camera position
         if (player != null)
         {
-            desiredCameraPosition = player.GetCameraDesiredPosition();
+            desiredCameraPosition = player.GetCameraPivot();
         }
         else 
         {
-            Debug.Log("Cant find Player");
-            enabled = false;
+            Debug.LogError("Cant find Player");
         }
+
+        // Lock cursor
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Move camera
@@ -60,12 +51,6 @@ public class PlayerCamera : MonoBehaviour
 
         // Follows the player camera position
         transform.position = desiredCameraPosition.position;
-
-        // Rotate camera sideways
-        if (canRotate) 
-        {
-            transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, RotateCameraVector());
-        }
     }
 
     void CameraMove() 
@@ -73,17 +58,26 @@ public class PlayerCamera : MonoBehaviour
         mouseX = Input.GetAxisRaw("Mouse X") * sensibility * multiplier;
         mouseY = Input.GetAxisRaw("Mouse Y") * sensibility * multiplier;
 
-        Vector3 rot = transform.rotation.eulerAngles;
+        //Vector3 rot = transform.rotation.eulerAngles;
 
-        yRotation = rot.y + mouseX;
+        yRotation += mouseX;
         xRotation -= mouseY;
 
         xRotation = Mathf.Clamp(xRotation, -89, 89);
 
-        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        if (canRoll)
+        {
+            // Camera rotation with roll
+            transform.rotation = Quaternion.Euler(xRotation, yRotation, CameraRollVector());
+        }
+        else 
+        {
+            // Camera rotation without roll
+            transform.rotation = Quaternion.Euler(xRotation, yRotation, 0);
+        }
     }
 
-    float RotateCameraVector() 
+    float CameraRollVector()
     {
         angle -= (Input.GetAxisRaw("Horizontal")) * smooth * Time.deltaTime;
         angle = Mathf.Clamp(angle, -angleLimit, angleLimit);

@@ -2,25 +2,28 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour
 {
+    // Input class
+    GameActions input;
+
     [Header("Movement")]
     [SerializeField] float moveSpeed = 200.0f;
-    float sprintMultiplier = 1;
-    Transform playerCameraTransform;
-    GameActions playerInput;    
     Vector2 moveVector;
     Rigidbody rb;
+
+    Transform playerCamera;
 
     [Header("Sprint")]
     [SerializeField] bool canSprint = true;
     [SerializeField] float maxStamina = 30;
-    float stamina;
     [SerializeField] int staminaCost = 10;
     [SerializeField] int staminaRecover = 8;
     [SerializeField] float multiplier = 1.5f;
+    float stamina;
+    float sprintMultiplier = 1;
     bool isSprinting = false;
+
 
     // Stamina update event
     public event Action<float> staminaUpdated;
@@ -46,26 +49,46 @@ public class PlayerMovement : MonoBehaviour
         else SetSprintMultiplier(1);
     }
 
-    void OnDisable()
-    {
-        // Remove events
-        playerInput.Player.Movement.performed -= OnMovementPerformed;
-        playerInput.Player.Movement.canceled -= OnMovementCanceled;
-    }
-
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        if (rb == null)
+        {
+            Debug.LogError("Player doesnt have rigidbody");
+            enabled = false;
+        }
+
+        TryGetComponent(out Health health);
+
+        if (health)
+        {
+            health.onDead += OnDied;
+        }
+    }
+
+    void OnEnable()
+    {
+        // Create input class
+        input = new GameActions();
+
+        input.Player.Move.performed += OnMovementPerformed;
+        input.Player.Move.canceled += OnMovementCanceled;
+
+        input.Enable();
+    }
+
+    void OnDisable()
+    {
+        input.Player.Move.performed -= OnMovementPerformed;
+        input.Player.Move.canceled -= OnMovementCanceled;
+
+        input.Disable();
     }
 
     void Start()
     {
-        playerCameraTransform = FindAnyObjectByType<PlayerCamera>().transform;
-
-        // Add movement input to player GameActions class
-        playerInput = GetComponent<Player>().GetInput();
-        playerInput.Player.Movement.performed += OnMovementPerformed;
-        playerInput.Player.Movement.canceled += OnMovementCanceled;
+        playerCamera = FindAnyObjectByType<Camera>().transform;
 
         // Update stamina event call
         staminaUpdated?.Invoke(stamina);
@@ -78,11 +101,20 @@ public class PlayerMovement : MonoBehaviour
 
     void FixedUpdate() 
     {
-        // Move player
         Move(moveVector.y, moveVector.x);
 
-        // Rotate player body
-        transform.localRotation = Quaternion.Euler(0, playerCameraTransform.eulerAngles.y, 0);
+        // Rotate body
+        transform.localRotation = Quaternion.Euler(0, playerCamera.eulerAngles.y, 0);
+    }
+
+    void OnMovementPerformed(InputAction.CallbackContext value)
+    {
+        moveVector = value.ReadValue<Vector2>();
+    }
+
+    void OnMovementCanceled(InputAction.CallbackContext value)
+    {
+        moveVector = Vector2.zero;
     }
 
     public void Move(float moveV, float moveH)
@@ -109,14 +141,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // Movement event functions
-    void OnMovementPerformed(InputAction.CallbackContext value) 
+    void OnDied()
     {
-        moveVector = value.ReadValue<Vector2>();
-    }
-
-    void OnMovementCanceled(InputAction.CallbackContext value)
-    {
-        moveVector = Vector2.zero;
+        rb.freezeRotation = false;
+        input.Disable();
     }
 }

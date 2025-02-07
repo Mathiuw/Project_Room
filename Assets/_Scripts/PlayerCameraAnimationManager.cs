@@ -16,13 +16,21 @@ public class PlayerCameraAnimationManager : MonoBehaviour
     {
         Player player = FindFirstObjectByType<Player>();
 
-        playerWeaponInteraction = player.GetComponent<PlayerWeaponInteraction>();
-        playerMovement = player.GetComponent<PlayerMovement>();
-        rb = player.GetComponent<Rigidbody>();
+        if (player != null)
+        {
+            playerWeaponInteraction = player.GetComponent<PlayerWeaponInteraction>();
+            playerMovement = player.GetComponent<PlayerMovement>();
+            rb = player.GetComponent<Rigidbody>();
 
-        playerWeaponInteraction.onWeaponPickup += OnPickup;
-        playerWeaponInteraction.onWeaponDrop += OnDrop;
-        playerWeaponInteraction.onAimStart += ActivateAim;
+            playerWeaponInteraction.onWeaponPickup += OnPickup;
+            playerWeaponInteraction.onWeaponDrop += OnDrop;
+            playerWeaponInteraction.onAimStart += ActivateAim;
+        }
+        else 
+        {
+            Debug.LogError("Cant find player");
+            enabled = false;
+        }
 
     }
 
