@@ -13,9 +13,10 @@ public class DynamicDOF : MonoBehaviour
 
     void Start()
     {
-        if (GameObject.FindGameObjectWithTag("Post Processing"))
+        postProcessVolume = FindFirstObjectByType<PostProcessVolume>();
+
+        if (postProcessVolume)
         {
-            postProcessVolume = GameObject.FindGameObjectWithTag("Post Processing").transform.GetComponent<PostProcessVolume>();
             postProcessVolume.profile.TryGetSettings(out dof);
         }
         else 

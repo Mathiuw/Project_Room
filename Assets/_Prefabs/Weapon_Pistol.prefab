@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2796705434005797875}
   - component: {fileID: 8360839775889383363}
   - component: {fileID: 7474998426322120007}
-  - component: {fileID: -8981847855321363238}
+  - component: {fileID: 7803673090883228248}
   - component: {fileID: 4056158318860744372}
   m_Layer: 12
   m_Name: Weapon_Pistol
@@ -42,7 +42,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &5016902295995579361
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -56,6 +56,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -135,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 400cbb11d7734e641a586ecdf24d4b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-8981847855321363238
+--- !u!114 &7803673090883228248
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,9 +145,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 53250435727361313}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
+  m_Script: {fileID: 11500000, guid: 304b0caf28a87e141834ecfad45f9b37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: 
 --- !u!82 &4056158318860744372
 AudioSource:
   m_ObjectHideFlags: 0
@@ -158,6 +160,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -4675161092127226800, guid: 93a559875b335c84f86b2a42df5fb19c, type: 2}
   m_audioClip: {fileID: 8300000, guid: 039ad0fbe0f91294b80aa198a8d33e3e, type: 3}
+  m_Resource: {fileID: 8300000, guid: 039ad0fbe0f91294b80aa198a8d33e3e, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -365,6 +368,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

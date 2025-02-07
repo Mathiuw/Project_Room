@@ -89,6 +89,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -158,7 +161,7 @@ GameObject:
   - component: {fileID: -1045476947395622889}
   - component: {fileID: 6945052298925291577}
   - component: {fileID: 7697447313023933607}
-  - component: {fileID: -2878835474423884450}
+  - component: {fileID: 1925002862729550704}
   - component: {fileID: 1326198996104021252}
   m_Layer: 12
   m_Name: Weapon_MP5
@@ -187,7 +190,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &3209923789521418467
 Animator:
-  serializedVersion: 5
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -201,6 +204,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -280,7 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 400cbb11d7734e641a586ecdf24d4b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-2878835474423884450
+--- !u!114 &1925002862729550704
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -289,9 +293,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6401145719867435353}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87803c7e525e9d4db9bad345b83093a, type: 3}
+  m_Script: {fileID: 11500000, guid: 304b0caf28a87e141834ecfad45f9b37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: 
 --- !u!82 &1326198996104021252
 AudioSource:
   m_ObjectHideFlags: 0
@@ -303,6 +308,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -4675161092127226800, guid: 93a559875b335c84f86b2a42df5fb19c, type: 2}
   m_audioClip: {fileID: 8300000, guid: 039ad0fbe0f91294b80aa198a8d33e3e, type: 3}
+  m_Resource: {fileID: 8300000, guid: 039ad0fbe0f91294b80aa198a8d33e3e, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -419,8 +425,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.105699986, z: 0.031000033}
-  m_LocalScale: {x: 0.4, y: 0.40000004, z: 0.40000004}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1761762439967628006}
   m_Father: {fileID: 7046516514582021817}
@@ -450,6 +456,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

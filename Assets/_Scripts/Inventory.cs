@@ -9,7 +9,6 @@ public class Inventory : MonoBehaviour
     public List<Item> inventoryList = new List<Item>();
 
     [Header("Drop item")]
-    [SerializeField] SpawnItem spawnItemPrefab;
     [SerializeField] float dropForce = 3.5f;
 
     public event Action OnItemAdded;
@@ -106,16 +105,16 @@ public class Inventory : MonoBehaviour
                 RemoveItem(item.SOItem);
 
                 //Intantiate and set item
-                SpawnItem itemSpawned = Instantiate(spawnItemPrefab, transform.position, transform.rotation);
-                itemSpawned.itemSO = item.SOItem;
+                //SpawnItem itemSpawned = Instantiate(spawnItemPrefab, transform.position, transform.rotation);
+                //itemSpawned.itemSO = item.SOItem;
 
                 //Set item transform
-                itemSpawned.transform.localPosition = transform.position;
-                itemSpawned.transform.rotation = transform.rotation;
+                //itemSpawned.transform.localPosition = transform.position;
+                //itemSpawned.transform.rotation = transform.rotation;
 
                 //Apply force to item
-                Rigidbody dropRigidbody = itemSpawned.GetComponent<Rigidbody>();
-                dropRigidbody.AddForce(transform.forward * dropForce, ForceMode.VelocityChange);
+                //Rigidbody dropRigidbody = itemSpawned.GetComponent<Rigidbody>();
+                //dropRigidbody.AddForce(transform.forward * dropForce, ForceMode.VelocityChange);
 
                 Debug.Log("Item Droped");
                 break;

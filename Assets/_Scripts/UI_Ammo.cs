@@ -10,15 +10,19 @@ public class UI_Ammo : MonoBehaviour
 
     void Start() 
     {        
-        playerWeaponInteraction = FindFirstObjectByType<Player>().GetComponent<PlayerWeaponInteraction>();
-        playerWeaponInteraction.onWeaponPickup += ActivateUISprite;
-        playerWeaponInteraction.onWeaponPickup += AddWeaponEvents;
-        playerWeaponInteraction.onWeaponDrop += DisableUISprite;
-        playerWeaponInteraction.onWeaponDrop += RemoveWeaponEvents;
-        playerWeaponInteraction.onReloadStart += OnRealoadFunc;
-        playerWeaponInteraction.onReloadEnd += SetUIAmmo;
+        playerWeaponInteraction = FindFirstObjectByType<PlayerWeaponInteraction>();
 
-        CheckUISprite(playerWeaponInteraction);
+        if (playerWeaponInteraction) 
+        {
+            playerWeaponInteraction.onWeaponPickup += ActivateUISprite;
+            playerWeaponInteraction.onWeaponPickup += AddWeaponEvents;
+            playerWeaponInteraction.onWeaponDrop += DisableUISprite;
+            playerWeaponInteraction.onWeaponDrop += RemoveWeaponEvents;
+            playerWeaponInteraction.onReloadStart += OnRealoadFunc;
+            playerWeaponInteraction.onReloadEnd += SetUIAmmo;
+
+            CheckUISprite(playerWeaponInteraction);
+        }
     }
 
     void OnRealoadFunc(float duration) 

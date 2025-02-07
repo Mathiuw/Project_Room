@@ -30,9 +30,9 @@ public class UI_Inventory : MonoBehaviour
 
     void Start() 
     {       
-        Player player = FindFirstObjectByType<Player>();
+        PlayerMovement player = FindFirstObjectByType<PlayerMovement>();
 
-        if (player != null)
+        if (player)
         {
             //Get inventory
             inventory = player.GetComponent<Inventory>();

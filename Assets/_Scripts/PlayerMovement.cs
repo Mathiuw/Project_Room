@@ -8,10 +8,10 @@ public class PlayerMovement : MonoBehaviour
     GameActions input;
 
     [Header("Movement")]
+    [SerializeField] Transform cameraPivot;
     [SerializeField] float moveSpeed = 200.0f;
     Vector2 moveVector;
     Rigidbody rb;
-
     Transform playerCamera;
 
     [Header("Sprint")]
@@ -24,23 +24,32 @@ public class PlayerMovement : MonoBehaviour
     float sprintMultiplier = 1;
     bool isSprinting = false;
 
-
     // Stamina update event
     public event Action<float> staminaUpdated;
 
+    public Transform GetCameraPivot() { return cameraPivot; }
+
     public float GetMoveSpeed() { return moveSpeed; }
+
     public float GetSprintMultiplier() { return sprintMultiplier; }
+
     public void SetSprintMultiplier(float sprintMultiplier) { this.sprintMultiplier = sprintMultiplier; }
+
     public float GetMaxStamina() { return maxStamina; }
+
     public void SetMaxStamina(float maxStamina) { this.maxStamina = maxStamina; }
+
     public float GetStamina() { return stamina; }
+
     public void SetStamina(float stamina)
     {
         this.stamina = stamina;
         this.stamina = Math.Clamp(stamina, 0, maxStamina);
         staminaUpdated?.Invoke(this.stamina);
     }
+
     public bool GetIsSprinting() { return isSprinting; }
+
     public void SetIsSprinting(bool isSprinting)
     {
         this.isSprinting = isSprinting;
@@ -65,6 +74,8 @@ public class PlayerMovement : MonoBehaviour
         {
             health.onDead += OnDied;
         }
+
+        stamina = maxStamina;
     }
 
     void OnEnable()
@@ -122,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 moveDirection;
 
         moveDirection = transform.forward * moveV + transform.right * moveH;
-        rb.linearVelocity = moveDirection.normalized * moveSpeed * sprintMultiplier * Time.deltaTime;
+        rb.AddForce(moveDirection.normalized * moveSpeed * sprintMultiplier * Time.deltaTime, ForceMode.VelocityChange);
     }
 
     public void Sprint(KeyCode RunInput, KeyCode WalkInput)

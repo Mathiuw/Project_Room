@@ -11,7 +11,7 @@ public class PlayerInteract : MonoBehaviour
     void Start()
     {
         // Find PlayerCamera
-        PlayerCamera playerCameraComponent = FindFirstObjectByType<PlayerCamera>();
+        CameraMovement playerCameraComponent = FindFirstObjectByType<CameraMovement>();
 
         if (playerCameraComponent != null)
         {

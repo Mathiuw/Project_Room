@@ -14,24 +14,22 @@ public class PlayerCameraAnimationManager : MonoBehaviour
 
     void Start() 
     {
-        Player player = FindFirstObjectByType<Player>();
+        playerWeaponInteraction = FindFirstObjectByType<PlayerWeaponInteraction>();
 
-        if (player != null)
+        if (playerWeaponInteraction)
         {
-            playerWeaponInteraction = player.GetComponent<PlayerWeaponInteraction>();
-            playerMovement = player.GetComponent<PlayerMovement>();
-            rb = player.GetComponent<Rigidbody>();
-
             playerWeaponInteraction.onWeaponPickup += OnPickup;
             playerWeaponInteraction.onWeaponDrop += OnDrop;
             playerWeaponInteraction.onAimStart += ActivateAim;
+
+            playerMovement = playerWeaponInteraction.GetComponent<PlayerMovement>();
+            rb = playerWeaponInteraction.GetComponent<Rigidbody>();
         }
         else 
         {
             Debug.LogError("Cant find player");
             enabled = false;
         }
-
     }
 
     void Update() 
@@ -73,7 +71,7 @@ public class PlayerCameraAnimationManager : MonoBehaviour
 
     float WalkSpeed() 
     {
-        if (playerMovement.GetIsSprinting()) return 1.5f;
+        if (playerMovement && playerMovement.GetIsSprinting()) return 1.5f;
         else return 1f;
     }
 }

@@ -54,7 +54,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
     {
         cameraTransform = Camera.main.transform;
 
-        PlayerCamera playerCamera = FindAnyObjectByType<PlayerCamera>();
+        CameraMovement playerCamera = FindAnyObjectByType<CameraMovement>();
 
         if (playerCamera) 
         {

@@ -8,21 +8,23 @@ public class UI_PlayerStats : MonoBehaviour
 
     void Start() 
     {
-        Player player = FindFirstObjectByType<Player>();
+        PlayerMovement playerMovement = FindFirstObjectByType<PlayerMovement>();
 
-        if (player != null)
+        if (playerMovement)
         {
-            Health health = player.GetComponent<Health>();
-            PlayerMovement playerMovement = player.GetComponent<PlayerMovement>();
-
-            SetHealthUI(health.GetHealth());
             SetStaminaUI(playerMovement.GetStamina());
-
-            healthBar.maxValue = health.GetMaxHealth();
             staminaBar.maxValue = playerMovement.GetMaxStamina();
-
-            health.healthUpdated += SetHealthUI;
             playerMovement.staminaUpdated += SetStaminaUI;
+
+            Health health = playerMovement.GetComponent<Health>();
+
+            if (health)
+            {
+                SetHealthUI(health.GetHealth());
+                healthBar.maxValue = health.GetMaxHealth();
+
+                health.healthUpdated += SetHealthUI;
+            }
         }
         else Debug.LogError("Cant find Player");
     }

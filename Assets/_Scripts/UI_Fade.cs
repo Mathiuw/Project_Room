@@ -20,7 +20,7 @@ public class UI_Fade : MonoBehaviour
 
     IEnumerator Start() 
     {
-        Health playerHealth = FindFirstObjectByType<Player>().GetComponent<Health>();
+        Health playerHealth = FindFirstObjectByType<PlayerMovement>().GetComponent<Health>();
 
         SetValue(1f);
         yield return new WaitForSeconds(0.5f);

@@ -16,12 +16,16 @@ public class UI_Crosshair : MonoBehaviour
 
     void Start() 
     {
-        PlayerWeaponInteraction playerWeaponInteraction = FindFirstObjectByType<Player>().GetComponent<PlayerWeaponInteraction>();
-        playerWeaponInteraction.onWeaponPickup += SetCrossHair;
-        playerWeaponInteraction.onAimStart += DisableCrosshair;
-        playerWeaponInteraction.onAimEnd += EnableCrosshair;
-        playerWeaponInteraction.onWeaponDrop += SetDotCrosshair;
-        playerWeaponInteraction.onReloadStart += OnReloadFunc;
+        PlayerWeaponInteraction playerWeaponInteraction = FindFirstObjectByType<PlayerWeaponInteraction>();
+
+        if (playerWeaponInteraction)
+        {
+            playerWeaponInteraction.onWeaponPickup += SetCrossHair;
+            playerWeaponInteraction.onAimStart += DisableCrosshair;
+            playerWeaponInteraction.onAimEnd += EnableCrosshair;
+            playerWeaponInteraction.onWeaponDrop += SetDotCrosshair;
+            playerWeaponInteraction.onReloadStart += OnReloadFunc;
+        }
     }
 
     void OnReloadFunc(float duration)
@@ -50,7 +54,7 @@ public class UI_Crosshair : MonoBehaviour
     {
         DestroyCrosshairSprite();
 
-        if (crosshair != null) 
+        if (crosshair) 
         {
             GameObject crosshairSprite = Instantiate(crosshair, crosshairTransform);
             crosshairSprite.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;

@@ -1,15 +1,14 @@
 using UnityEngine;
 
-public class PlayerCamera : MonoBehaviour
+public class CameraMovement : MonoBehaviour
 {
     [Header("Camera Movement")]
     [Range(1, 100)]
-    [SerializeField] float sensibility = 50;
+    [SerializeField] float sensibility = 5;
     [SerializeField] float multiplier = 1;
-
     float mouseX, mouseY;
     float xRotation, yRotation;
-    Transform desiredCameraPosition;
+    Transform cameraPivot;
 
     [Header("Camera Roll")]
     [SerializeField] bool canRoll = true;
@@ -26,31 +25,28 @@ public class PlayerCamera : MonoBehaviour
 
     void Start()
     {
-        // Search player
-        Player player = FindFirstObjectByType<Player>();
-
-        // Get the player camera position
-        if (player != null)
-        {
-            desiredCameraPosition = player.GetCameraPivot();
-        }
-        else 
-        {
-            Debug.LogError("Cant find Player");
-        }
-
         // Lock cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
+
+        // Search player
+        PlayerMovement playerMovement = FindFirstObjectByType<PlayerMovement>();
+
+        // Get the player camera position
+        if (playerMovement)
+        {
+            cameraPivot = playerMovement.GetCameraPivot();
+        }
+        else Debug.LogError("Cant find Player");
     }
 
     void Update()
     {
+        // Follows the player camera position
+        transform.position = cameraPivot.position;
+
         // Move camera
         CameraMove();
-
-        // Follows the player camera position
-        transform.position = desiredCameraPosition.position;
     }
 
     void CameraMove() 
