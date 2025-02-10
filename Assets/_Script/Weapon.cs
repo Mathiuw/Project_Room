@@ -48,7 +48,7 @@ public class Weapon : MonoBehaviour, IInteractable
     void Awake()
     {
         // Set hold state to false
-        SetHoldState(false, null);
+        SetHoldState(false);
 
         // Set ammo to max
         AddAmmo(soWeapon.maxAmmo);
@@ -61,7 +61,12 @@ public class Weapon : MonoBehaviour, IInteractable
 
     public void Interact(Transform interactor)
     {
-        Debug.Log("Pickup weapon");
+        interactor.TryGetComponent(out WeaponInteraction weaponInteraction);
+
+        if (weaponInteraction)
+        {
+            weaponInteraction.StartCoroutine(weaponInteraction.PickUpWeapon(this));
+        }
     }
 
     public void AddAmmo(int amount)
@@ -76,26 +81,18 @@ public class Weapon : MonoBehaviour, IInteractable
         ammo = Mathf.Clamp(ammo, 0, soWeapon.maxAmmo);
     }
  
-    public void SetHoldState(bool state, Transform holder) 
+    public void SetHoldState(bool state, Transform holder = null) 
     {
+        this.holder = holder;
+
         Rigidbody rb = GetComponent<Rigidbody>();
 
         rb.isKinematic = state;
-
-        this.holder = holder;
-
         if (state) rb.interpolation = RigidbodyInterpolation.None;
         else rb.interpolation = RigidbodyInterpolation.Interpolate;
 
         Collider[] colliders = GetComponentsInChildren<Collider>();
         for (int i = 0; i < colliders.Length; i++) colliders[i].isTrigger = state;
-
-        MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
-        for (int i = 0; i < renderers.Length; i++) 
-        {
-            if (state) renderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-            else renderers[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
-        }
     }
 
     // Shooting logic
@@ -108,23 +105,24 @@ public class Weapon : MonoBehaviour, IInteractable
         nextTimeToFire = Time.time + (1f / soWeapon.firerate);
         PlayGunSound();
         PlayMuzzleFlashParticle();
-        //CameraShake.AddCameraShake(Camera.main.transform, intensity, speed);
         RemoveAmmo(1);
+
+        //CameraShake.AddCameraShake(soWeapon.intensity, soWeapon.speed);
 
         // Raycast para checar se atingi algo
         if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000, soWeapon.shootMask))
         {
-            Health health;
-            EnemyAi enemyAi;
+            hit.transform.TryGetComponent(out Health health);
+            hit.transform.TryGetComponent(out EnemyAi enemyAi);
 
             // Se atingir um inimigo, vc vira o alvo
-            if ((enemyAi = hit.transform.GetComponentInParent<EnemyAi>()) && holder != null)
+            if (enemyAi && holder != null)
             {
                 enemyAi.SetTarget(holder);
             }
 
             // Tira vida do alvo
-            if (health = hit.transform.GetComponentInParent<Health>())
+            if (health)
             {
                 onHit?.Invoke(health);
                 PlayBloodParticle();
@@ -132,13 +130,18 @@ public class Weapon : MonoBehaviour, IInteractable
 
                 if (health.GetIsDead()) AddForceToRbs(hit.transform, raycastPos, soWeapon.bulletForce);
             }
-            else 
+            else
             {
                 // Adiciona forca ao rigidbody se for um objeto imovel
                 AddForceToRbs(hit.transform, raycastPos, soWeapon.bulletForce);
-                PlayWallHitParticle();
-            } 
+                //PlayWallHitParticle();
+            }
 
+            Debug.DrawLine(raycastPos.position, hit.point, Color.green, 1f);    
+        }
+        else 
+        {
+            Debug.DrawRay(raycastPos.position, raycastPos.forward, Color.red, 1f);
         }
 
         // Invoca o evento de atirar
@@ -152,11 +155,14 @@ public class Weapon : MonoBehaviour, IInteractable
     }
 
     // Adiciona forca a Rigidbodys
-    void AddForceToRbs(Transform t, Transform directionForce, float forceAmount)
+    void AddForceToRbs(Transform hitTransform, Transform directionForce, float forceAmount)
     {
-        Rigidbody rb;
+        hitTransform.TryGetComponent(out Rigidbody rb);
 
-        if (t.TryGetComponent(out rb) && !rb.isKinematic) rb.AddForce(directionForce.forward * forceAmount, ForceMode.Impulse);
+        if (rb) 
+        {
+            rb.AddForce(directionForce.forward * forceAmount, ForceMode.Impulse);
+        }                         
     }
 
     // Toca a particula de atirar a arma
@@ -187,14 +193,5 @@ public class Weapon : MonoBehaviour, IInteractable
         GameObject particle = Instantiate(Resources.Load("Particle_Blood") as GameObject);
         particle.transform.position = hit.point;
         particle.transform.forward = hit.normal;
-    }
-
-    void OnDrawGizmos()
-    {
-        if (hit.transform == null) return;
-
-        Gizmos.color = Color.green;
-
-        Gizmos.DrawLine(transform.position, hit.point);
     }
 }

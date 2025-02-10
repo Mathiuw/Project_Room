@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WeaponAnimationManager : MonoBehaviour
 {
@@ -9,13 +8,20 @@ public class WeaponAnimationManager : MonoBehaviour
     void Awake()
     {
         animator = GetComponentInChildren<Animator>();
-        weapon = GetComponent<Weapon>();
+        animator.enabled = true;
+    }
 
-        // Adiciona a animação da arma ao evento de atirar
+    private void OnEnable()
+    {
+        weapon = GetComponent<Weapon>();
         weapon.onShoot += ShootWeaponAnimation;
 
         SetAnimationTime();
-        animator.enabled = true;
+    }
+
+    private void OnDisable()
+    {
+        weapon.onShoot -= ShootWeaponAnimation;
     }
 
     // Deixa o tempo da animação de acordo com o firerate da arma

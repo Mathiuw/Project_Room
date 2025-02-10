@@ -49,8 +49,12 @@ public class PlayerInteract : MonoBehaviour
             IInteractable interactable = hit.transform.GetComponentInParent<IInteractable>();
 
             if (interactable != null) interactable.Interact(transform);
-        }
 
-        Debug.DrawLine(playerCamera.position, playerCamera.position + playerCamera.forward * rayLength, Color.red, 1f);
+            Debug.DrawLine(playerCamera.position, hit.point, Color.green, 1f);
+        }
+        else
+        {
+            Debug.DrawLine(playerCamera.position, playerCamera.position + playerCamera.forward * rayLength, Color.red, 1f);
+        }
     }
 }

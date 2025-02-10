@@ -2,18 +2,14 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(Inventory))]
 public class PlayerWeaponInteraction : WeaponInteraction
 {
     [Header("Weapon Interation")]
-    [SerializeField] LayerMask WeaponMask;
-    [SerializeField] int pickupDistance;
     [SerializeField] float aimTime;
 
     [Header("Weapon Sway")]
     [SerializeField] float smooth = 8;
     [SerializeField] float swayMultiplier = 4;
-    Transform gunHolder;
 
     bool isAiming = false;
     bool isReloading = false;
@@ -21,8 +17,9 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     Transform cameraTransform;
     Inventory inventory;
+    PlayerMovement playerMovement;
 
-    //Set hold position for whem mot aiming
+    // Set hold position for whem mot aiming
     Vector3 defautHoldPosition;
 
     public event Action onWeaponShot;
@@ -48,6 +45,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
     void Awake() 
     {
         inventory = GetComponent<Inventory>();
+        playerMovement = GetComponent<PlayerMovement>();
     } 
 
     void Start() 
@@ -59,10 +57,10 @@ public class PlayerWeaponInteraction : WeaponInteraction
         if (playerCamera) 
         {
             weaponHolder = playerCamera.GetWeaponHolder();
-        } 
 
-        // set holder position for aimming
-        defautHoldPosition = weaponHolder.transform.localPosition;
+            // set holder position for aimming
+            defautHoldPosition = weaponHolder.transform.localPosition;
+        } 
     } 
 
     void Update()
@@ -70,9 +68,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
         Shoot();
 
         if (Input.GetKeyDown(KeyCode.Mouse1)) EnableAim();
-        else if(Input.GetKeyUp(KeyCode.Mouse1)) DisableAim();
-
-        if (Input.GetKeyDown(KeyCode.E)) TryToPickupWeapon();
+        else if(Input.GetKeyUp(KeyCode.Mouse1)) StopAim();
 
         if (Input.GetKeyDown(KeyCode.R)) StartCoroutine(ReloadWeapon());
 
@@ -130,29 +126,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
         weapon.transform.localRotation = Quaternion.Slerp(weapon.transform.localRotation, targetRotation, smooth * Time.deltaTime);
     }
 
-    public void TryToPickupWeapon()
-    {
-        if (isHoldingWeapon) return;
-
-        RaycastHit hit;
-
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, pickupDistance, WeaponMask))
-        {
-            Weapon weaponSelected = hit.transform.GetComponentInParent<Weapon>();
-
-            if (weaponSelected) 
-            {
-                StopAllCoroutines();
-                StartCoroutine(PickUpWeapon(weaponSelected));
-                Debug.Log("Picked up " + weaponSelected.name);
-                return;
-            } 
-            
-        }
-        Debug.Log("Find nothing");
-    }
-
-    protected override IEnumerator PickUpWeapon(Weapon pickedWeapon)
+    public override IEnumerator PickUpWeapon(Weapon pickedWeapon)
     {
         if (isHoldingWeapon) yield break;
         if (isLerping) yield break;
@@ -212,14 +186,24 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
         Vector3 aimVector = -defautHoldPosition - weapon.GetAimLocation();
 
+        if (playerMovement != null)
+        {
+            playerMovement.SetCanSprint(false);
+        }
+
         SetIsAiming(true, aimVector);
         onAimStart?.Invoke();
     }
 
-    void DisableAim() 
+    void StopAim() 
     {
         if (!isHoldingWeapon) return;
         if (isReloading) return;
+
+        if (playerMovement != null)
+        {
+            playerMovement.SetCanSprint(true);
+        }
 
         SetIsAiming(false, Vector3.zero);
         onAimEnd?.Invoke();
@@ -230,13 +214,12 @@ public class PlayerWeaponInteraction : WeaponInteraction
         if (!isHoldingWeapon) yield break;
         if (isReloading) yield break;
         if (isAiming) yield break;
-
         if(weapon.GetAmmo() == weapon.GetMaxAmmo()) yield break;
-
+        if (inventory == null) yield break;
         if (!inventory.HaveItem(weapon.GetReloadItem())) yield break;
-        inventory.RemoveItem(weapon.GetReloadItem());
 
         isReloading = true;
+        inventory.RemoveItem(weapon.GetReloadItem());
         onReloadStart?.Invoke(weapon.GetMaxAmmo());
 
         yield return new WaitForSeconds(weapon.GetReloadTime());
@@ -254,44 +237,24 @@ public class PlayerWeaponInteraction : WeaponInteraction
         if (isReloading) return;
 
         StopAllCoroutines();
+        onWeaponDrop?.Invoke();
 
-        Transform currentWeaponTransform = weapon.transform;
-        Rigidbody weaponRb = currentWeaponTransform.GetComponent<Rigidbody>();
+        Transform weaponTransform = weapon.transform;
+        Rigidbody weaponRb = weaponTransform.GetComponent<Rigidbody>();
 
         weapon.SetHoldState(false, null);
-        //SetWeaponEvents(false);
-        currentWeaponTransform.SetParent(null);
-        currentWeaponTransform.transform.position = transform.position;
+        weaponTransform.SetParent(null);
+        weaponTransform.transform.position = transform.position;
         weaponRb.AddForce(transform.forward * 5, ForceMode.VelocityChange);
-        currentWeaponTransform.localScale = Vector3.one;
+        weaponTransform.localScale = Vector3.one;
 
         isLerping = false;
         isAiming = false;
         isReloading = false;
         isHoldingWeapon = false;
 
-        onWeaponDrop?.Invoke();
-
         weapon = null;
+
         Debug.Log("Dropped weapon");
-    }
-
-    void SetWeaponEvents(bool b) 
-    {
-        if (!isHoldingWeapon) return;
-        
-        WeaponAnimationManager weaponAnimationManager = weapon.GetComponent<WeaponAnimationManager>();
-        Animator animator = weapon.GetComponent<Animator>();
-
-        animator.enabled = b;
-
-        if (b) 
-        {         
-            weapon.onShoot += weaponAnimationManager.ShootWeaponAnimation;
-        }
-        else
-        {
-            weapon.onShoot -= weaponAnimationManager.ShootWeaponAnimation;
-        }
     }
 }

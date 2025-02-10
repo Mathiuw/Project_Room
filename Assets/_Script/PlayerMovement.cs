@@ -52,13 +52,17 @@ public class PlayerMovement : MonoBehaviour
 
     public bool GetIsSprinting() { return isSprinting; }
 
-    public void SetIsSprinting(bool isSprinting)
+    void SetIsSprinting(bool isSprinting)
     {
         this.isSprinting = isSprinting;
 
         if (isSprinting) SetSprintMultiplier(multiplier);
         else SetSprintMultiplier(1);
     }
+
+    public bool GetCanSprint() { return canSprint; }
+
+    public void SetCanSprint(bool canSprint) { this.canSprint = canSprint; }
 
     void Awake()
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyWeaponInteraction : WeaponInteraction
 {
-    protected override IEnumerator PickUpWeapon(Weapon weapon)
+    public override IEnumerator PickUpWeapon(Weapon weapon)
     {
         this.weapon = weapon;
 

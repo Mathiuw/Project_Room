@@ -3,13 +3,9 @@
 public class Ragdoll : MonoBehaviour
 {
     [SerializeField] bool ActivateOnStart = false;
-    Rigidbody[] rbs;
    
     void Start() 
     {
-        //Pega todos os rigidbodies na herança
-        rbs = GetComponentsInChildren<Rigidbody>();
-
         if (ActivateOnStart) RagdollActive(true);    
         else RagdollActive(false);
     }   
@@ -17,7 +13,17 @@ public class Ragdoll : MonoBehaviour
     //Ativa ou desativa os rigidbodies
     public void RagdollActive(bool b) 
     {
-        foreach (Rigidbody rb in rbs) rb.isKinematic = !b;
+        foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>()) 
+        {
+            rb.isKinematic = !b;
+        }
+
+        foreach (Collider collider in GetComponentsInChildren<Collider>()) 
+        {
+            collider.isTrigger = !b;
+        }
+
+        GetComponent<Collider>().isTrigger = b;
 
         Debug.Log("<b><color=magenta>" + transform.name + "</color></b> ragdoll = <b><color=cyan>" + b + "</color></b>");
     }

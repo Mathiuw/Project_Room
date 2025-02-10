@@ -12,7 +12,7 @@ public abstract class WeaponInteraction : MonoBehaviour
 
     public bool GetIsHoldingWeapon() { return isHoldingWeapon; }
 
-    protected abstract IEnumerator PickUpWeapon(Weapon weapon);
+    public abstract IEnumerator PickUpWeapon(Weapon weapon);
 
     public abstract IEnumerator ReloadWeapon(); 
 

@@ -203,7 +203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraPivot: {fileID: 2449517527454802833}
-  moveSpeed: 50
+  moveSpeed: 125
   canSprint: 1
   maxStamina: 30
   staminaCost: 10
@@ -223,7 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactiveMask:
     serializedVersion: 2
-    m_Bits: 12545
+    m_Bits: 13057
   rayLength: 5
 --- !u!114 &5593206175896380583
 MonoBehaviour:
@@ -254,10 +254,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponHolder: {fileID: 0}
   weapon: {fileID: 0}
-  WeaponMask:
-    serializedVersion: 2
-    m_Bits: 4096
-  pickupDistance: 0
   aimTime: 0.2
   smooth: 8
   swayMultiplier: 4
