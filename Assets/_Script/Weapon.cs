@@ -1,128 +1,81 @@
 ﻿using System;
 using UnityEngine;
 
-[RequireComponent(typeof(ShowNameToHUD))]
-[RequireComponent(typeof(WeaponAnimationManager))]
-public class Weapon : MonoBehaviour
+public class Weapon : MonoBehaviour, IInteractable
 {
     [Header("Scriptable object")]
     [SerializeField] SOWeapon soWeapon;
-
-    [Header("Weapon settings")]
-    [SerializeField] string weaponName;
-    [SerializeField] int damage;
-    int ammo;
-    [SerializeField] int maxAmmo;
-    [SerializeField] float bulletForce;
-    [SerializeField] float firerate;
-    [SerializeField] LayerMask shootMask;
-
-    [Header("Weapon shoot mode")]
-    public ShootType shootType;
-
-    [Header("Crosshair")]
-    [SerializeField] public GameObject crosshair;
-
-    [Header("Camera Shake")]
-    [SerializeField] float intensity;
-    [SerializeField] float speed;
-
-    [Header("Animations")]
-    [SerializeField] AnimatorOverrideController animatorOverride;
-
-    [Header("Reload")]
-    [SerializeField] float reloadTime;
-    [SerializeField] SOItem reloadItem;
-
-    [Header("Particles")]
-    [SerializeField] ParticleSystem muzzleFlash;
-    [SerializeField] ParticleSystem wallHit;
-    [SerializeField] ParticleSystem Blood;
-
-    [Header("Sprites")]
-    [SerializeField] Sprite ammoSprite;
 
     [Header("Weapon location")]
     [SerializeField] Transform aimLocation;
     [SerializeField] Transform muzzleFlashLocation;
     [SerializeField] Transform ammoMeshTransform;
 
-    public enum ShootType { Single, Automatic }
-
     AudioSource gunSound;
     public RaycastHit hit;
+    float nextTimeToFire = 0;
+    int ammo;
 
     public event Action onShoot;
     public event Action<Health> onHit;
 
-    float nextTimeToFire = 0;
-
     public Transform holder { get; private set; }
+
+    public SOWeapon GetSOWeapon() { return soWeapon; }
+
+    public int GetAmmo() { return ammo; }
+
+    public int GetMaxAmmo() { return soWeapon.maxAmmo; }
+
+    public Sprite GetAmmoSprite() { return soWeapon.ammoSprite; }
+
+    public float GetFirerate() { return soWeapon.firerate; }
+
+    public float GetReloadTime() { return soWeapon.reloadTime; }
+
+    public SOItem GetReloadItem() { return soWeapon.reloadItem; }
+
+    public float GetIntensity() { return soWeapon.intensity; }
+
+    public float GetSpeed() { return soWeapon.speed; }
+
+    public Vector3 GetAimLocation() { return aimLocation.localPosition; }
+
+    public Vector3 GetMuzzleFlashLocation() { return muzzleFlashLocation.localPosition; }
+
+    public Transform GetAmmoMeshTransform() { return ammoMeshTransform; }
 
     void Awake()
     {
-        SetWeaponStats();
-
+        // Set hold state to false
         SetHoldState(false, null);
 
+        // Set ammo to max
+        AddAmmo(soWeapon.maxAmmo);
+
+        // Set name to show on hud
+        GetComponent<ShowNameToHUD>().SetText(soWeapon.weaponName);
+
         gunSound = GetComponent<AudioSource>();
-        AddAmmo(maxAmmo);
     }
 
-    public int GetAmmo() { return ammo; }
-    public int GetMaxAmmo() { return maxAmmo; }
-    public float GetFirerate() { return firerate; }
-    public float GetReloadTime() { return reloadTime; }
-    public SOItem GetReloadItem() { return reloadItem; }
-    public float GetIntensity() { return intensity; }
-    public float GetSpeed() { return speed; }
-    public Vector3 GetAimLocation() { return aimLocation.localPosition; }
-    public Vector3 GetMuzzleFlashLocation() { return muzzleFlashLocation.localPosition; }
-    public Transform GetAmmoMeshTransform() { return ammoMeshTransform; }
-    public Sprite GetAmmoSprite() { return ammoSprite; }
-
-    // Adiciona as informações da arma de acordo com o scriptable object
-    void SetWeaponStats() 
+    public void Interact(Transform interactor)
     {
-        weaponName = soWeapon.weaponName;
-        name = weaponName;
-        GetComponent<ShowNameToHUD>().SetText(weaponName);
-        damage = soWeapon.damage;
-        maxAmmo = soWeapon.maxAmmo;
-        ammo = maxAmmo;
-        bulletForce = soWeapon.bulletForce;
-        firerate = soWeapon.firerate;
-        shootMask = soWeapon.shootMask;
-        shootType = soWeapon.shootType;
-
-        if (soWeapon.crosshair != null)
-        {
-            crosshair = soWeapon.crosshair;
-        }
-    
-        intensity = soWeapon.intensity;
-        speed = soWeapon.speed;
-        animatorOverride = soWeapon.animatorOverride;
-        reloadTime = soWeapon.reloadTime;
-        reloadItem = soWeapon.reloadItem;
-        muzzleFlash = soWeapon.muzzleFlash.GetComponent<ParticleSystem>();
-        wallHit = soWeapon.wallHit.GetComponent<ParticleSystem>();
-        Blood = soWeapon.Blood.GetComponent<ParticleSystem>();
+        Debug.Log("Pickup weapon");
     }
 
     public void AddAmmo(int amount)
     {
         ammo += amount;
-        ammo = Mathf.Clamp(ammo, 0, maxAmmo);
+        ammo = Mathf.Clamp(ammo, 0, soWeapon.maxAmmo);
     }
 
     public void RemoveAmmo(int amount)
     {
         ammo -= amount;
-        ammo = Mathf.Clamp(ammo, 0, maxAmmo);
+        ammo = Mathf.Clamp(ammo, 0, soWeapon.maxAmmo);
     }
-
-    // 
+ 
     public void SetHoldState(bool state, Transform holder) 
     {
         Rigidbody rb = GetComponent<Rigidbody>();
@@ -152,14 +105,14 @@ public class Weapon : MonoBehaviour
         if (!(Time.time > nextTimeToFire)) return;
 
         // Firerate calculation
-        nextTimeToFire = Time.time + (1f / firerate);
+        nextTimeToFire = Time.time + (1f / soWeapon.firerate);
         PlayGunSound();
         PlayMuzzleFlashParticle();
         //CameraShake.AddCameraShake(Camera.main.transform, intensity, speed);
         RemoveAmmo(1);
 
         // Raycast para checar se atingi algo
-        if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000, shootMask))
+        if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000, soWeapon.shootMask))
         {
             Health health;
             EnemyAi enemyAi;
@@ -175,14 +128,14 @@ public class Weapon : MonoBehaviour
             {
                 onHit?.Invoke(health);
                 PlayBloodParticle();
-                health.RemoveHealth(damage);
+                health.RemoveHealth(soWeapon.damage);
 
-                if (health.GetIsDead()) AddForceToRbs(hit.transform, raycastPos, bulletForce);
+                if (health.GetIsDead()) AddForceToRbs(hit.transform, raycastPos, soWeapon.bulletForce);
             }
             else 
             {
                 // Adiciona forca ao rigidbody se for um objeto imovel
-                AddForceToRbs(hit.transform, raycastPos, bulletForce);
+                AddForceToRbs(hit.transform, raycastPos, soWeapon.bulletForce);
                 PlayWallHitParticle();
             } 
 
@@ -209,7 +162,12 @@ public class Weapon : MonoBehaviour
     // Toca a particula de atirar a arma
     void PlayMuzzleFlashParticle()
     {
-        muzzleFlash.GetComponent<ParticleSystem>().Play();
+        TryGetComponent(out ParticleSystem particleSystem);
+
+        if (particleSystem)
+        {
+            particleSystem.Play();
+        }
     }
 
     // Toca a particula de atingir a parede
@@ -218,7 +176,7 @@ public class Weapon : MonoBehaviour
         if (hit.transform == null) return;
         if (!hit.transform.gameObject.isStatic) return;
 
-        GameObject particle = Instantiate(wallHit.gameObject);
+        GameObject particle = Instantiate(Resources.Load("Particle_WallHit") as GameObject);
         particle.transform.position = hit.point;
         particle.transform.forward = hit.normal;
     }
@@ -226,7 +184,7 @@ public class Weapon : MonoBehaviour
     // Toca a particula de sangue
     void PlayBloodParticle()
     {
-        GameObject particle = Instantiate(Blood.gameObject);
+        GameObject particle = Instantiate(Resources.Load("Particle_Blood") as GameObject);
         particle.transform.position = hit.point;
         particle.transform.forward = hit.normal;
     }

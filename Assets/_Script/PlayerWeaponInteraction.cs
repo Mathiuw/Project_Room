@@ -181,11 +181,11 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     bool InputShoot() 
     {
-        switch (weapon.shootType) 
+        switch (weapon.GetSOWeapon().shootType)
         {
-            case Weapon.ShootType.Single: 
+            case SOWeapon.ShootType.Single: 
                 return Input.GetKeyDown(KeyCode.Mouse0);
-            case Weapon.ShootType.Automatic:
+            case SOWeapon.ShootType.Automatic:
                 return Input.GetKey(KeyCode.Mouse0);
             default: 
                 return false;

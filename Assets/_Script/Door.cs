@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(ShowNameToHUD))]
 public class Door : MonoBehaviour, IInteractable
 {
-    [Header("Object Name")]
+    [Header("Name")]
     [SerializeField] string objectName = "Door";
     
     [Header("Rotation")]
@@ -32,6 +32,7 @@ public class Door : MonoBehaviour, IInteractable
     {
         StartCoroutine(OpenCloseDoor());
     }
+
     IEnumerator OpenCloseDoor() 
     {
         enabled= false;

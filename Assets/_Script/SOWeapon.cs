@@ -3,6 +3,8 @@
 [CreateAssetMenu(fileName = "Weapon", menuName = "Weapon")]
 public class SOWeapon : ScriptableObject
 {
+    public enum ShootType { Single, Automatic }
+
     [Header("Weapon")]
     public string weaponName;
     public int damage;
@@ -10,7 +12,7 @@ public class SOWeapon : ScriptableObject
     public int maxAmmo;
     public float firerate;
     public bool waitToShoot;
-    public Weapon.ShootType shootType;
+    public ShootType shootType;
     public LayerMask shootMask;
 
     [Header("Crosshair")]

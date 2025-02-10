@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Bandage
   hotbarSprite: {fileID: 21300000, guid: d69c7746f1e872648a49842f1543ea8e, type: 3}
-  itemPrefab: {fileID: 919132149155446097, guid: 0eb715045bfcc6a47b339dc29b508752, type: 3}
+  itemPrefab: {fileID: 2581154368758085075, guid: 03e16546f9a234345bc8e764f6e7ff45, type: 3}
   isStackable: 1
   maxStack: 3
   recoverHealth: 30

@@ -72,7 +72,7 @@ public class UI_Crosshair : MonoBehaviour
 
     void SetCrossHair(Weapon weaponPicked)
     {
-        SpawnCrosshairSprite(weaponPicked.crosshair);
+        SpawnCrosshairSprite(weaponPicked.GetSOWeapon().crosshair);
     }
 
     IEnumerator ReloadLerp(float duration)

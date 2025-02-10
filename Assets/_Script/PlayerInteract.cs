@@ -6,16 +6,17 @@ public class PlayerInteract : MonoBehaviour
     [Header("Interact")]
     [SerializeField] LayerMask interactiveMask;
     [SerializeField] float rayLength = 5;
+    PlayerMovement playerMovement;
     Transform playerCamera;
 
     void Start()
     {
         // Find PlayerCamera
-        CameraMovement playerCameraComponent = FindFirstObjectByType<CameraMovement>();
+        CameraMovement cameraMovement = FindFirstObjectByType<CameraMovement>();
 
-        if (playerCameraComponent != null)
+        if (cameraMovement != null)
         {
-            playerCamera = playerCameraComponent.transform;
+            playerCamera = cameraMovement.transform;
         }
         else
         {
@@ -23,7 +24,20 @@ public class PlayerInteract : MonoBehaviour
             enabled = false;
         }
 
-        //input.Player.Interact.started += Interact;
+        playerMovement = GetComponent<PlayerMovement>();
+
+        if (playerMovement)
+        {
+            playerMovement.GetInput().Player.Interact.started += Interact;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (playerMovement)
+        {
+            playerMovement.GetInput().Player.Interact.started -= Interact;
+        }
     }
 
     public void Interact(InputAction.CallbackContext value)
@@ -34,10 +48,9 @@ public class PlayerInteract : MonoBehaviour
         {
             IInteractable interactable = hit.transform.GetComponentInParent<IInteractable>();
 
-            if (interactable != null)
-            {
-                interactable.Interact(transform);
-            }
+            if (interactable != null) interactable.Interact(transform);
         }
+
+        Debug.DrawLine(playerCamera.position, playerCamera.position + playerCamera.forward * rayLength, Color.red, 1f);
     }
 }

@@ -27,6 +27,8 @@ public class PlayerMovement : MonoBehaviour
     // Stamina update event
     public event Action<float> staminaUpdated;
 
+    public GameActions GetInput() { return input; }
+
     public Transform GetCameraPivot() { return cameraPivot; }
 
     public float GetMoveSpeed() { return moveSpeed; }
