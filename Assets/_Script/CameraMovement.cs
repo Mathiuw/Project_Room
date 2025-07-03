@@ -11,7 +11,7 @@ public class CameraMovement : MonoBehaviour
     Transform cameraPivot;
 
     [Header("Camera Roll")]
-    [SerializeField] bool canRoll = true;
+    [SerializeField] bool cameraRoll = true;
     [Range(1, 5)]
     [SerializeField] float angleLimit = 2;
     [SerializeField] float smooth = 20;
@@ -61,7 +61,7 @@ public class CameraMovement : MonoBehaviour
 
         xRotation = Mathf.Clamp(xRotation, -89, 89);
 
-        if (canRoll)
+        if (cameraRoll)
         {
             // Camera rotation with roll
             transform.rotation = Quaternion.Euler(xRotation, yRotation, CameraRollVector());
