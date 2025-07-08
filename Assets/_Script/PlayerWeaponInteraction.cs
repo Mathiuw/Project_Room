@@ -45,6 +45,12 @@ public class PlayerWeaponInteraction : WeaponInteraction
     void Awake() 
     {
         inventory = GetComponent<Inventory>();
+
+        if (!inventory)
+        {
+            Debug.LogWarning("Cant find inventory");
+        }
+
         playerMovement = GetComponent<PlayerMovement>();
     } 
 
@@ -67,15 +73,15 @@ public class PlayerWeaponInteraction : WeaponInteraction
     {
         Shoot();
 
-        if (Input.GetKeyDown(KeyCode.Mouse1)) EnableAim();
-        else if(Input.GetKeyUp(KeyCode.Mouse1)) StopAim();
+        //if (Input.GetKeyDown(KeyCode.Mouse1)) EnableAim();
+        //else if(Input.GetKeyUp(KeyCode.Mouse1)) StopAim();
 
         if (Input.GetKeyDown(KeyCode.R)) StartCoroutine(ReloadWeapon());
 
         if (Input.GetKeyDown(KeyCode.G)) DropWeapon();
 
         // Weapon sway
-        if (isHoldingWeapon) 
+        if (weapon) 
         {
             if (isAiming) SwayWeapon(swayMultiplier / 20);
             else SwayWeapon(swayMultiplier);
@@ -128,9 +134,9 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     public override IEnumerator PickUpWeapon(Weapon pickedWeapon)
     {
-        if (isHoldingWeapon) yield break;
+        if (weapon) yield break;
         if (isLerping) yield break;
-        if (pickedWeapon.holder != null)
+        if (pickedWeapon.owner != null)
         {
             Debug.LogError("Gun already Picked up");
             yield break;
@@ -146,7 +152,6 @@ public class PlayerWeaponInteraction : WeaponInteraction
         StartCoroutine(LerpWeaponCoroutine(0.2f, pickedWeapon.transform, Vector3.zero, Quaternion.identity, weaponHolder));
         while (isLerping) yield return null;
 
-        isHoldingWeapon = true;
         //SetWeaponEvents(true);
         onWeaponPickup?.Invoke(base.weapon);
 
@@ -155,11 +160,11 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     bool InputShoot() 
     {
-        switch (weapon.GetSOWeapon().shootType)
+        switch (GetWeapon().GetSOWeapon().shootType)
         {
-            case SOWeapon.ShootType.Single: 
+            case EShootType.Single:
                 return Input.GetKeyDown(KeyCode.Mouse0);
-            case SOWeapon.ShootType.Automatic:
+            case EShootType.Automatic:
                 return Input.GetKey(KeyCode.Mouse0);
             default: 
                 return false;
@@ -168,7 +173,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     void Shoot()
     {
-        if (!isHoldingWeapon) return;
+        if (!weapon) return;
         if (isReloading) return;
         if (isLerping) return;
 
@@ -181,7 +186,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     void EnableAim()
     {
-        if (!isHoldingWeapon) return;
+        if (!weapon) return;
         if (isReloading) return;
 
         Vector3 aimVector = -defautHoldPosition - weapon.GetAimLocation();
@@ -197,7 +202,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     void StopAim() 
     {
-        if (!isHoldingWeapon) return;
+        if (!weapon) return;
         if (isReloading) return;
 
         if (playerMovement != null)
@@ -211,20 +216,49 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     public override IEnumerator ReloadWeapon()  
     {
-        if (!isHoldingWeapon) yield break;
+        if (!weapon) yield break;
         if (isReloading) yield break;
         if (isAiming) yield break;
         if(weapon.GetAmmo() == weapon.GetMaxAmmo()) yield break;
         if (inventory == null) yield break;
-        if (!inventory.HaveItem(weapon.GetReloadItem())) yield break;
+        //if (!inventory.HaveItem(weapon.GetReloadItem())) yield break;
+        if (inventory.GetAmmoAmountByType(weapon.GetSOWeapon().ammoType) == 0)
+        {
+            Debug.Log("No ammo to reload");
+            yield break;
+        }
 
         isReloading = true;
-        inventory.RemoveItem(weapon.GetReloadItem());
-        onReloadStart?.Invoke(weapon.GetMaxAmmo());
 
         yield return new WaitForSeconds(weapon.GetReloadTime());
 
-        weapon.AddAmmo(weapon.GetMaxAmmo());
+        // Old reloading logic
+        //inventory.RemoveItem(weapon.GetReloadItem());
+        //onReloadStart?.Invoke(weapon.GetMaxAmmo());
+
+        // New reloading logic
+        // Remove ammo from player inventory
+        EAmmoType ammoType = weapon.GetSOWeapon().ammoType;
+        int amountToReload = 0;
+        int inventoryAmount = inventory.GetAmmoAmountByType(ammoType);
+
+        for (int i = weapon.GetAmmo(); i <= weapon.GetSOWeapon().maxAmmo; i++)
+        {
+            if (inventoryAmount == 0)
+            {
+                break;
+            }
+            inventoryAmount--;
+
+            amountToReload++;
+        }
+
+
+        inventory.RemoveAmmo(ammoType, amountToReload);
+
+        //Add ammo to weapon
+        weapon.AddAmmo(amountToReload);
+
         isReloading = false;
         onReloadEnd?.Invoke();
 
@@ -233,7 +267,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     public override void DropWeapon()
     {
-        if (!isHoldingWeapon) return;
+        if (!weapon) return;
         if (isReloading) return;
 
         StopAllCoroutines();
@@ -251,7 +285,6 @@ public class PlayerWeaponInteraction : WeaponInteraction
         isLerping = false;
         isAiming = false;
         isReloading = false;
-        isHoldingWeapon = false;
 
         weapon = null;
 

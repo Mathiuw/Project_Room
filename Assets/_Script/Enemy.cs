@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
         WeaponInteraction weaponInteraction = GetComponent<WeaponInteraction>();
 
         //Dropa a arma
-        if (weaponInteraction.GetIsHoldingWeapon()) weaponInteraction.DropWeapon();
+        if (!weaponInteraction.GetWeapon()) weaponInteraction.DropWeapon();
         
         //Destroi os componentes
         Destroy(GetComponent<RigBuilder>());

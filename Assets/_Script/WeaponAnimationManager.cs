@@ -32,7 +32,7 @@ public class WeaponAnimationManager : MonoBehaviour
 
     public void ShootWeaponAnimation() 
     {
-        PlayerWeaponInteraction playerWeaponInteraction = weapon.holder.GetComponent<PlayerWeaponInteraction>();
+        PlayerWeaponInteraction playerWeaponInteraction = weapon.owner.GetComponent<PlayerWeaponInteraction>();
 
         if (playerWeaponInteraction != null) 
         {

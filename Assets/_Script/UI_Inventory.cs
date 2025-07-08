@@ -7,7 +7,7 @@ using System.Collections;
 public class UI_Inventory : MonoBehaviour
 {
     [Header("Margin")]
-    [SerializeField] float uiMargin = 95;
+    //[SerializeField] float uiMargin = 95;
 
     [Header("Transforms")]
     [SerializeField] RectTransform hotbarTransform;
@@ -56,28 +56,28 @@ public class UI_Inventory : MonoBehaviour
 
     void SetInventorySlots() 
     {
-        if (inventory == null) 
-        {
-            Debug.LogError("Cant set UI inventorty, inventory is NULL");
-            return;
-        }
+        //if (inventory == null) 
+        //{
+        //    Debug.LogError("Cant set UI inventorty, inventory is NULL");
+        //    return;
+        //}
 
-        float uiSlotOffset = 0;
+        //float uiSlotOffset = 0;
 
-        uiSlots = new RectTransform[inventory.GetInventorySize()];
-        items = new RectTransform[inventory.GetInventorySize()];
+        //uiSlots = new RectTransform[inventory.GetInventorySize()];
+        //items = new RectTransform[inventory.GetInventorySize()];
 
-        //Instantiate all inventory slots
-        for (int i = 0; i < inventory.GetInventorySize(); i++)
-        {
-            RectTransform slot = Instantiate(slotSprite, Vector2.zero, slotSprite.rotation, slotsTransform);
-            slot.anchoredPosition = new Vector2(0 + uiSlotOffset, 0);
-            uiSlotOffset += uiMargin;
-            uiSlots[i] = slot;
-        }
+        ////Instantiate all inventory slots
+        //for (int i = 0; i < inventory.GetInventorySize(); i++)
+        //{
+        //    RectTransform slot = Instantiate(slotSprite, Vector2.zero, slotSprite.rotation, slotsTransform);
+        //    slot.anchoredPosition = new Vector2(0 + uiSlotOffset, 0);
+        //    uiSlotOffset += uiMargin;
+        //    uiSlots[i] = slot;
+        //}
 
-        //First inventory refresh
-        RefreshInventory();
+        ////First inventory refresh
+        //RefreshInventory();
     }
 
     public void RefreshInventory()
@@ -92,24 +92,24 @@ public class UI_Inventory : MonoBehaviour
         foreach (RectTransform item in items) if (item != null) Destroy(item.gameObject);
 
         //Rebuild all UI item
-        for (int i = 0; i < inventory.GetInventorySize(); i++)
-        {
-            foreach (Item itemComp in inventory.inventoryList)
-            {
-                if (inventory.inventoryList.IndexOf(itemComp) == i)
-                {
-                    RectTransform item = Instantiate(itemSprite, uiSlots[i].position, Quaternion.identity, itemsTransform);
-                    item.sizeDelta = new Vector2(90, 90);
-                    item.GetComponentInChildren<Image>().sprite = itemComp.SOItem.hotbarSprite;
-                    item.GetComponentInChildren<TextMeshProUGUI>().SetText(itemComp.amount.ToString());
+        //for (int i = 0; i < inventory.GetInventorySize(); i++)
+        //{
+        //    foreach (Item itemComp in inventory.itemInventoryList)
+        //    {
+        //        if (inventory.itemInventoryList.IndexOf(itemComp) == i)
+        //        {
+        //            RectTransform item = Instantiate(itemSprite, uiSlots[i].position, Quaternion.identity, itemsTransform);
+        //            item.sizeDelta = new Vector2(90, 90);
+        //            item.GetComponentInChildren<Image>().sprite = itemComp.SOItem.hotbarSprite;
+        //            item.GetComponentInChildren<TextMeshProUGUI>().SetText(itemComp.amount.ToString());
 
-                    if (itemComp.amount <= 1) item.transform.Find("Text_image").transform.gameObject.SetActive(false);
-                    items[i] = item;
+        //            if (itemComp.amount <= 1) item.transform.Find("Text_image").transform.gameObject.SetActive(false);
+        //            items[i] = item;
 
-                    break;
-                }
-            }
-        }
+        //            break;
+        //        }
+        //    }
+        //}
 
         //Check if inventory should move
         CheckIfMoveInventory();
@@ -142,7 +142,7 @@ public class UI_Inventory : MonoBehaviour
     {
         StopAllCoroutines();
 
-        if (inventory.inventoryList.Count == 0)
+        if (inventory.itemInventoryList.Count == 0)
         {
             StartCoroutine(lerpInventoryHeight(hotbarTransform, 0, time));
         }

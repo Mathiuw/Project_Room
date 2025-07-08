@@ -36,9 +36,9 @@ public class PlayerCameraAnimationManager : MonoBehaviour
     {
         animator.SetFloat("Walk Speed", WalkSpeed());
         animator.SetFloat("RbVelocity", rb.linearVelocity.magnitude);
-        animator.SetBool("Hold", playerWeaponInteraction.GetIsHoldingWeapon());
+        animator.SetBool("Hold", playerWeaponInteraction.GetWeapon());
         
-        if (playerWeaponInteraction.GetIsHoldingWeapon()) 
+        if (playerWeaponInteraction.GetWeapon()) 
         {
             animator.SetBool("Aim", playerWeaponInteraction.GetIsAiming());
             animator.SetBool("Reload", playerWeaponInteraction.GetIsReloading());

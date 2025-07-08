@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
+public enum EShootType { Single, Automatic }
+
 [CreateAssetMenu(fileName = "Weapon", menuName = "Weapon")]
 public class SOWeapon : ScriptableObject
 {
-    public enum ShootType { Single, Automatic }
-
     [Header("Weapon")]
     public string weaponName;
     public int damage;
@@ -12,7 +12,8 @@ public class SOWeapon : ScriptableObject
     public int maxAmmo;
     public float firerate;
     public bool waitToShoot;
-    public ShootType shootType;
+    public EShootType shootType;
+    public EAmmoType ammoType;
     public LayerMask shootMask;
 
     [Header("Crosshair")]

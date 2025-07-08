@@ -19,6 +19,7 @@ MonoBehaviour:
   firerate: 7
   waitToShoot: 1
   shootType: 0
+  ammoType: 0
   shootMask:
     serializedVersion: 2
     m_Bits: 9993
@@ -26,7 +27,7 @@ MonoBehaviour:
   intensity: 0.5
   speed: 10
   animatorOverride: {fileID: 22100000, guid: 4f547759e1dd5c041b6017e80dc64ee7, type: 2}
-  reloadTime: 3
+  reloadTime: 0.5
   reloadItem: {fileID: 11400000, guid: f3a15256ebc23754dba563d6c9b03a55, type: 2}
   muzzleFlash: {fileID: 7285557099671381770, guid: be85a34377cf8d241a2ac441893a7ee6, type: 3}
   wallHit: {fileID: 2553133760792651097, guid: f518402108b099b42bf42ae7231061e5, type: 3}

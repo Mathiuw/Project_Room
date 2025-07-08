@@ -19,7 +19,7 @@ public class Weapon : MonoBehaviour, IInteractable
     public event Action onShoot;
     public event Action<Health> onHit;
 
-    public Transform holder { get; private set; }
+    public Transform owner { get; private set; }
 
     public SOWeapon GetSOWeapon() { return soWeapon; }
 
@@ -83,7 +83,7 @@ public class Weapon : MonoBehaviour, IInteractable
  
     public void SetHoldState(bool state, Transform holder = null) 
     {
-        this.holder = holder;
+        this.owner = holder;
 
         Rigidbody rb = GetComponent<Rigidbody>();
 
@@ -116,9 +116,9 @@ public class Weapon : MonoBehaviour, IInteractable
             hit.transform.TryGetComponent(out EnemyAi enemyAi);
 
             // Se atingir um inimigo, vc vira o alvo
-            if (enemyAi && holder != null)
+            if (enemyAi && owner != null)
             {
-                enemyAi.SetTarget(holder);
+                enemyAi.SetTarget(owner);
             }
 
             // Tira vida do alvo

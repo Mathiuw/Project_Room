@@ -11,8 +11,6 @@ public class EnemyWeaponInteraction : WeaponInteraction
         weapon.transform.SetParent(weaponHolder);
         weapon.transform.transform.localScale = Vector3.one;
         weapon.SetHoldState(true, transform);
-        
-        isHoldingWeapon = true;
 
         Debug.Log("<b><color=magenta>" + transform.name + "</color></b> picked up gun");
 
@@ -21,7 +19,7 @@ public class EnemyWeaponInteraction : WeaponInteraction
 
     public override IEnumerator ReloadWeapon()
     {
-        if (!isHoldingWeapon) yield break;
+        if (!weapon) yield break;
 
         weapon.AddAmmo(weapon.GetMaxAmmo());
         
