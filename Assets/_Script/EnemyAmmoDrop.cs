@@ -8,8 +8,6 @@ public class EnemyAmmoDrop : MonoBehaviour, IInteractable
 
         if ((inventory = interactor.GetComponent<Inventory>()) && inventory.AddItem(GetComponent<Item>()))
         {
-            Destroy(GetComponent<ShowNameToHUD>());
-
             //Despawn the gun mag (if they have)
             Weapon weapon = GetComponentInChildren<Weapon>();
             if (weapon.GetAmmoMeshTransform() != null)

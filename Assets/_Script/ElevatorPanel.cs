@@ -1,8 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-[RequireComponent(typeof(ShowNameToHUD))]
-public class ElevatorPanel : MonoBehaviour, IInteractable
+public class ElevatorPanel : MonoBehaviour, IInteractable, IUIName
 {
     bool used = false;
 
@@ -12,22 +11,20 @@ public class ElevatorPanel : MonoBehaviour, IInteractable
 
     [SerializeField] Material onMaterial;
     [SerializeField] Material offMaterial;
-
     MeshRenderer mesh;
-    ShowNameToHUD panelName;
+
+    public string ReadName => SetReadName();
 
     public event Action onButtomPress;
 
     void Awake() 
     {
-        panelName = GetComponent<ShowNameToHUD>();
         mesh = GetComponentInChildren<MeshRenderer>();
     } 
 
     void Start() 
     {
         SetMaterials(mesh);
-        SetText(panelName);
 
         if (buttom == Buttom.down) onButtomPress += ManagerGame.instance.EndGame;
     }
@@ -36,7 +33,6 @@ public class ElevatorPanel : MonoBehaviour, IInteractable
     {
         used = !used;
         SetMaterials(mesh);
-        SetText(panelName);
         onButtomPress?.Invoke();
         Destroy(this);
     }
@@ -59,16 +55,15 @@ public class ElevatorPanel : MonoBehaviour, IInteractable
         mesh.materials = materials;
     }
 
-    void SetText(ShowNameToHUD name) 
+    string SetReadName() 
     {
         if (used)
         {
-            panelName.SetText("");
-            return;
+            return "";
         }
 
-        if (buttom == Buttom.up) name.SetText("Call Elevator");
-        else name.SetText("Close Elevator");
+        if (buttom == Buttom.up) return "Call Elevator";
+        else return "Close Elevator";
     }
 
 }

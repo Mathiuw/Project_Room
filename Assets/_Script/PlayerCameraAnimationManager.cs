@@ -20,7 +20,6 @@ public class PlayerCameraAnimationManager : MonoBehaviour
         {
             playerWeaponInteraction.onWeaponPickup += OnPickup;
             playerWeaponInteraction.onWeaponDrop += OnDrop;
-            playerWeaponInteraction.onAimStart += ActivateAim;
 
             playerMovement = playerWeaponInteraction.GetComponent<PlayerMovement>();
             rb = playerWeaponInteraction.GetComponent<Rigidbody>();
@@ -36,12 +35,11 @@ public class PlayerCameraAnimationManager : MonoBehaviour
     {
         animator.SetFloat("Walk Speed", WalkSpeed());
         animator.SetFloat("RbVelocity", rb.linearVelocity.magnitude);
-        animator.SetBool("Hold", playerWeaponInteraction.GetWeapon());
+        animator.SetBool("Hold", playerWeaponInteraction.Weapon);
         
-        if (playerWeaponInteraction.GetWeapon()) 
+        if (playerWeaponInteraction.Weapon) 
         {
-            animator.SetBool("Aim", playerWeaponInteraction.GetIsAiming());
-            animator.SetBool("Reload", playerWeaponInteraction.GetIsReloading());
+            animator.SetBool("Reload", playerWeaponInteraction.IsReloading);
         } 
     } 
 

@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(ShowNameToHUD))]
-public class Door : MonoBehaviour, IInteractable
+public class Door : MonoBehaviour, IInteractable, IUIName
 {
     [Header("Name")]
-    [SerializeField] string objectName = "Door";
+    [SerializeField] string doorName = "Door";
     
     [Header("Rotation")]
     [SerializeField] float duration = 0.4f;
@@ -17,14 +16,11 @@ public class Door : MonoBehaviour, IInteractable
     [SerializeField] bool isDestrucble = true;
 
     public bool open { get; private set; } = false;
-    ShowNameToHUD doorName;
 
-    void Start() 
+    public string ReadName => GetUIName();
+
+    private void Awake()
     {
-        doorName = GetComponent<ShowNameToHUD>();
-
-        SetName(objectName);
-
         for (int i = 0; i < doors.Length; i++) doors[i].localEulerAngles = startRotation[i];
     }
 
@@ -36,7 +32,6 @@ public class Door : MonoBehaviour, IInteractable
     IEnumerator OpenCloseDoor() 
     {
         enabled= false;
-        doorName.enabled = false;
 
         float elapsedtime = 0f;
         float percentageComplete = 0f;
@@ -57,10 +52,9 @@ public class Door : MonoBehaviour, IInteractable
             else doors[i].localRotation = Quaternion.Euler(startRotation[i]);
         }
 
+        // Invert open state
         open = !open;
-        SetName(objectName);
 
-        doorName.enabled= true;
         enabled = true;
         yield break;
     }
@@ -83,7 +77,6 @@ public class Door : MonoBehaviour, IInteractable
             return;
         }
 
-        ShowNameToHUD nameScript;
         Door doorScript;
 
         if (doorScript = GetComponent<Door>())
@@ -91,7 +84,6 @@ public class Door : MonoBehaviour, IInteractable
             if (doorScript.open) return;
             Destroy(doorScript);
         }
-        if (nameScript = GetComponent<ShowNameToHUD>()) Destroy(nameScript);
 
         foreach (Transform door in doors)
         {
@@ -106,13 +98,9 @@ public class Door : MonoBehaviour, IInteractable
         }
     }
 
-    void ChangeNames(string text)=> doorName.SetText(text);
-
-    void SetName(string text) 
+    string GetUIName() 
     {
-        if (open) ChangeNames("Close " + text);
-        else ChangeNames("Open " + text);
+        if (open) return "Close " + doorName;
+        else return "Open " + doorName;
     }
-
-
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
 public enum EAmmoType 
 {
     smallAmmo,
@@ -10,26 +9,39 @@ public enum EAmmoType
     ShellAmmo
 }
 
+[System.Serializable]
+public struct InventoryItem
+{
+    public InventoryItem(SOItem soItem, int amount)
+    {
+        SOItem = soItem;
+        Amount = amount;
+    }
+
+    [field: SerializeField] public SOItem SOItem { get; set; }
+    [field: SerializeField] public int Amount { get; set; }
+}
+
 public class Inventory : MonoBehaviour
 {
     [Header("Item Inventory")]
     //[SerializeField] int inventorySize = 5;
-    public List<Item> itemInventoryList = new List<Item>();
+    [field: SerializeField] public List<InventoryItem> ItemInventoryList { get; private set; } = new List<InventoryItem>();
     int index = 0;
 
     //[Header("Drop item")]
     //[SerializeField] float dropForce = 3.5f;
 
     [Header("Ammo Inventory")]
-    int smallAmmoAmount = 0;
-    int largeAmmoAmount = 0;
-    int shellAmmoAmount = 0;
+    public int SmallAmmoAmount { get; private set; } = 0;
+    public int LargeAmmoAmount { get; private set; } = 0;
+    public int ShellAmmoAmount { get; private set; } = 0;
 
     public event Action OnItemAdded;
     public event Action OnItemRemoved;
 
     public delegate void AmmoUpdate();
-    public event AmmoUpdate OnAmmoUpdate;
+    public event AmmoUpdate OnAmmoCountUpdate;
 
 
     void Update()
@@ -39,22 +51,16 @@ public class Inventory : MonoBehaviour
         //if (Input.GetKeyDown(KeyCode.Q)) DropItem();
     }
 
-    public int GetSmallAmmoAmount() { return smallAmmoAmount; }
-
-    public int GetLargeAmmoAmount() { return largeAmmoAmount; }
-
-    public int GetShellAmmoAmount() { return shellAmmoAmount; }
-
     public int GetAmmoAmountByType(EAmmoType ammoType) 
     {
         switch (ammoType)
         {
             case EAmmoType.smallAmmo:
-                return smallAmmoAmount;
+                return SmallAmmoAmount;
             case EAmmoType.largeAmmo:
-                return largeAmmoAmount;
+                return LargeAmmoAmount;
             case EAmmoType.ShellAmmo:
-                return shellAmmoAmount;
+                return ShellAmmoAmount;
             default:
                 return 0;
         }
@@ -65,20 +71,20 @@ public class Inventory : MonoBehaviour
         switch (ammoType)
         {
             case EAmmoType.smallAmmo:
-                smallAmmoAmount += amount;
+                SmallAmmoAmount += amount;
                 break;
             case EAmmoType.largeAmmo:
-                largeAmmoAmount += amount;
+                LargeAmmoAmount += amount;
                 break;
             case EAmmoType.ShellAmmo:
-                shellAmmoAmount += amount;
+                ShellAmmoAmount += amount;
                 break;
             default:
                 Debug.LogError("Failed to add ammo");
                 break;
         }
 
-        OnAmmoUpdate?.Invoke();
+        OnAmmoCountUpdate?.Invoke();
     }
 
     public void RemoveAmmo(EAmmoType ammoType, int amount) 
@@ -86,39 +92,48 @@ public class Inventory : MonoBehaviour
         switch (ammoType)
         {
             case EAmmoType.smallAmmo:
-                smallAmmoAmount -= amount;
-                smallAmmoAmount = Mathf.Clamp(smallAmmoAmount, 0, 999);
+                SmallAmmoAmount -= amount;
+                SmallAmmoAmount = Mathf.Clamp(SmallAmmoAmount, 0, 999);
                 break;
             case EAmmoType.largeAmmo:
-                largeAmmoAmount -= amount;
-                largeAmmoAmount = Mathf.Clamp(smallAmmoAmount, 0, 999);
+                LargeAmmoAmount -= amount;
+                LargeAmmoAmount = Mathf.Clamp(SmallAmmoAmount, 0, 999);
                 break;
             case EAmmoType.ShellAmmo:
-                shellAmmoAmount -= amount;
-                shellAmmoAmount = Mathf.Clamp(smallAmmoAmount, 0, 999);
+                ShellAmmoAmount -= amount;
+                ShellAmmoAmount = Mathf.Clamp(SmallAmmoAmount, 0, 999);
                 break;
             default:
                 break;
         }
 
-        OnAmmoUpdate?.Invoke();
+        OnAmmoCountUpdate?.Invoke();
     }
 
     public bool AddItem(Item item)
     {
-        foreach (Item i in itemInventoryList)
+        for (int i = 0; i < ItemInventoryList.Count; i++)
         {
-            if (item.SOItem.itemName == i.SOItem.itemName)
+            // Check if already have the item
+            if (item.SOItem.itemName == ItemInventoryList[i].SOItem.itemName)
             {
-                if (item.SOItem.isStackable && i.amount < i.SOItem.maxStack /*&& iteminventoryList.Count <= inventorySize*/)
+                // If have the item, check if you have the max amount
+                if (ItemInventoryList[i].SOItem.isStackable && ItemInventoryList[i].Amount < ItemInventoryList[i].SOItem.maxStack /*&& iteminventoryList.Count <= inventorySize*/)
                 {
-                    i.amount++;
-                    OnItemAdded.Invoke();
+                    // Increase item quantity
+                    InventoryItem inventoryItem = ItemInventoryList[i];
+                    inventoryItem.Amount += item.Amount;
+
+                    // Set the new inventoty item with the correct amount
+                    ItemInventoryList[i] = inventoryItem;
+
+                    // Invoke OnItemAdded Event
+                    OnItemAdded?.Invoke();
                     return true;
                 }
                 else
                 {
-                    Debug.Log("You have the max amount of " + item.SOItem.itemName);
+                    Debug.Log("You have the max amount of " + ItemInventoryList[i].SOItem.itemName);
                     return false;
                 }
             }
@@ -135,16 +150,16 @@ public class Inventory : MonoBehaviour
         //    return false;
         //}
 
-        itemInventoryList.Add(item);
-        OnItemAdded.Invoke();
+        ItemInventoryList.Add(new InventoryItem(item.SOItem, 1));
+        OnItemAdded?.Invoke();
         return true;
     }
 
     public void UseItem()
     {
-        foreach (Item item in itemInventoryList)
+        foreach (InventoryItem item in ItemInventoryList)
         {           
-            if (itemInventoryList.IndexOf(item) == UI_SelectItem.index)
+            if (ItemInventoryList.IndexOf(item) == UI_SelectItem.index)
             {
                 SOConsumable soConsumable = (SOConsumable)item.SOItem;
 
@@ -163,25 +178,44 @@ public class Inventory : MonoBehaviour
 
     public bool RemoveItem(SOItem item)
     {
-        foreach (Item i in itemInventoryList)
+        for (int i = 0; i < ItemInventoryList.Count; i++)
         {
-            if (item.itemName == i.SOItem.itemName)
+            if (ItemInventoryList[i].SOItem.itemName == item.itemName)
             {
-                if (item.isStackable && i.amount > 1)
+                InventoryItem inventoryItem = ItemInventoryList[i];
+                inventoryItem.Amount--;
+
+                ItemInventoryList[i] = inventoryItem;
+
+                if (ItemInventoryList[i].Amount == 0)
                 {
-                    i.amount--;
-                    OnItemRemoved.Invoke();
-                    return true;
+                    ItemInventoryList.RemoveAt(i);
                 }
-                else
-                {
-                    itemInventoryList.Remove(i);
-                    OnItemRemoved.Invoke();
-                    return true;
-                }
+
+                OnItemRemoved.Invoke();
+                return true;
             }
         }
-        Debug.LogError("Cant Remove Item / Dont Have Item");
+
+        //foreach (InventoryItem i in itemInventoryList)
+        //{
+        //    if (item.itemName == i.SOItem.itemName)
+        //    {
+        //        if (item.isStackable && i.Amount > 1)
+        //        {
+        //            i.amount--;
+        //            OnItemRemoved.Invoke();
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            itemInventoryList.Remove(i);
+        //            OnItemRemoved.Invoke();
+        //            return true;
+        //        }
+        //    }
+        //}
+        Debug.LogError("Cant Remove Item | Dont Have Item");
         return false;
     }
 
@@ -214,9 +248,9 @@ public class Inventory : MonoBehaviour
 
     public bool HaveItemSelected(SOItem item)
     {
-        foreach (Item i in itemInventoryList)
+        foreach (InventoryItem i in ItemInventoryList)
         {
-            if (itemInventoryList.IndexOf(i) == index && item.itemName == i.SOItem.itemName)
+            if (ItemInventoryList.IndexOf(i) == index && item.itemName == i.SOItem.itemName)
             {
                 Debug.Log("Player has " + item.itemName + " in the Index");
                 return true;
@@ -228,7 +262,7 @@ public class Inventory : MonoBehaviour
 
     public bool HaveItem(SOItem item)
     {
-        foreach (Item i in itemInventoryList)
+        foreach (InventoryItem i in ItemInventoryList)
         {
             if (item.name == i.SOItem.name)
             {

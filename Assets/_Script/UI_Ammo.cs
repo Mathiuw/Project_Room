@@ -36,7 +36,7 @@ public class UI_Ammo : MonoBehaviour
 
         if (playerInventory)
         {
-            playerInventory.OnAmmoUpdate += SetUIAmmoText;
+            playerInventory.OnAmmoCountUpdate += SetUIAmmoText;
 
 
         }
@@ -57,7 +57,7 @@ public class UI_Ammo : MonoBehaviour
         playerWeaponInteraction.onReloadStart -= OnRealoadFunc;
         playerWeaponInteraction.onReloadEnd -= SetUIAmmoText;
 
-        playerInventory.OnAmmoUpdate -= SetUIAmmoText;
+        playerInventory.OnAmmoCountUpdate -= SetUIAmmoText;
     }
 
     void OnRealoadFunc(float duration) 
@@ -68,7 +68,7 @@ public class UI_Ammo : MonoBehaviour
     void ActivateUISprite(Weapon weaponPicked = null) 
     {
         ammoUI.enabled = true;
-        ammoSprite.sprite = weaponPicked.GetAmmoSprite();
+        ammoSprite.sprite = weaponPicked.SOWeapon.ammoSprite;
         SetUIAmmoText();
     }
 
@@ -80,19 +80,19 @@ public class UI_Ammo : MonoBehaviour
 
     void CheckUISprite(PlayerWeaponInteraction playerWeaponInteraction) 
     {     
-        if (playerWeaponInteraction.GetWeapon()) ActivateUISprite();
+        if (playerWeaponInteraction.Weapon) ActivateUISprite();
         else DisableUISprite();
     }
 
-    void SetUIAmmoText() => ammoUI.SetText(playerWeaponInteraction.GetWeapon().GetAmmo() + "/" + playerInventory.GetAmmoAmountByType(playerWeaponInteraction.GetWeapon().GetSOWeapon().ammoType));
+    void SetUIAmmoText() => ammoUI.SetText(playerWeaponInteraction.Weapon.Ammo + "/" + playerInventory.GetAmmoAmountByType(playerWeaponInteraction.Weapon.SOWeapon.ammoType));
 
     void AddWeaponEvents(Weapon weaponPicked) 
     {
-        playerWeaponInteraction.GetWeapon().GetComponent<Weapon>().onShoot += SetUIAmmoText;
+        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onShoot += SetUIAmmoText;
     }
 
     void RemoveWeaponEvents() 
     {
-        playerWeaponInteraction.GetWeapon().GetComponent<Weapon>().onShoot -= SetUIAmmoText;
+        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onShoot -= SetUIAmmoText;
     } 
 }

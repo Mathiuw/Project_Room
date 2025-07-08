@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2449517527256407533}
   - component: {fileID: 2449517527256407534}
   - component: {fileID: 2449517527256407535}
-  - component: {fileID: 3294953483903164637}
   m_Layer: 10
   m_Name: Mesh
   m_TagString: Untagged
@@ -87,29 +86,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &3294953483903164637
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2449517527256407530}
-  m_Material: {fileID: 13400000, guid: 3b894918c5b9f1f41a494106aafb5d09, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2449517527289744967
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,6 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2449517527351815633}
   - component: {fileID: 2449517527289744988}
+  - component: {fileID: 6182742785630495072}
   - component: {fileID: 881976215671461181}
   - component: {fileID: 2449517527289744986}
   - component: {fileID: 2736915897404126421}
@@ -157,10 +134,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2449517527289744967}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 10
-  m_Drag: 7
-  m_AngularDrag: 0.05
+  m_LinearDamping: 7
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -177,6 +154,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!136 &6182742785630495072
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2449517527289744967}
+  m_Material: {fileID: 13400000, guid: 3b894918c5b9f1f41a494106aafb5d09, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &881976215671461181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,9 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c149d5e4e748546afab6152c9a29c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventorySize: 5
-  inventoryList: []
-  dropForce: 3.5
+  itemInventoryList: []
 --- !u!114 &1482415707886561885
 MonoBehaviour:
   m_ObjectHideFlags: 0

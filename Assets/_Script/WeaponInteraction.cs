@@ -4,10 +4,8 @@ using UnityEngine;
 public abstract class WeaponInteraction : MonoBehaviour
 {
     [Header("Weapon settings")]
-    [SerializeField] protected Transform weaponHolder;
-    [SerializeField] protected Weapon weapon;
-
-    public Weapon GetWeapon() { return weapon; }
+    [SerializeField] protected Transform weaponContainer;
+    [field: SerializeField] public Weapon Weapon { get; set; }
 
     public abstract IEnumerator PickUpWeapon(Weapon weapon);
 

@@ -214,7 +214,7 @@ public class EnemyAi : MonoBehaviour
 
     public IEnumerator ShootWeapon()
     {
-        if (enemyWeaponInteraction.GetWeapon() == null)
+        if (enemyWeaponInteraction.Weapon == null)
         {
             Debug.LogError("<b><color=red>Enemy Doesnt Have Gun</color></b>");
             yield break;
@@ -241,9 +241,9 @@ public class EnemyAi : MonoBehaviour
                 //Se estiver sem munição recarrega
                 StartCoroutine(enemyWeaponInteraction.ReloadWeapon());
                 //Shoot Weapon
-                enemyWeaponInteraction.GetWeapon().Shoot(raycastPos);
+                enemyWeaponInteraction.Weapon.Shoot(raycastPos);
 
-                yield return new WaitForSeconds(1f / enemyWeaponInteraction.GetWeapon().GetFirerate());
+                yield return new WaitForSeconds(1f / enemyWeaponInteraction.Weapon.SOWeapon.firerate);
             }
 
             yield return new WaitForSeconds(nextBurst);

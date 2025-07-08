@@ -142,7 +142,7 @@ public class UI_Inventory : MonoBehaviour
     {
         StopAllCoroutines();
 
-        if (inventory.itemInventoryList.Count == 0)
+        if (inventory.ItemInventoryList.Count == 0)
         {
             StartCoroutine(lerpInventoryHeight(hotbarTransform, 0, time));
         }

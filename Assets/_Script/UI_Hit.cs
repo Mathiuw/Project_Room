@@ -40,11 +40,11 @@ public class UI_Hit : MonoBehaviour
 
     void AddPlayerEvents(Weapon weaponPicked) 
     {
-        playerWeaponInteraction.GetWeapon().GetComponent<Weapon>().onHit += OnHit;
+        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onHit += OnHit;
     }
 
     void RemovePlayerEvents() 
     {
-        playerWeaponInteraction.GetWeapon().GetComponent<Weapon>().onHit -= OnHit;
+        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onHit -= OnHit;
     }
 }

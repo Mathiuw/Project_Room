@@ -1,12 +1,12 @@
 ﻿using System;
 using UnityEngine;
 
-public class Weapon : MonoBehaviour, IInteractable
+public class Weapon : MonoBehaviour, IInteractable, IUIName
 {
-    [Header("Scriptable object")]
-    [SerializeField] SOWeapon soWeapon;
+    [Header("Weapon Scriptable object")]
+    [field: SerializeField] public SOWeapon SOWeapon { get; private set; }
 
-    [Header("Weapon location")]
+    [Header("Weapon Transforms")]
     [SerializeField] Transform aimLocation;
     [SerializeField] Transform muzzleFlashLocation;
     [SerializeField] Transform ammoMeshTransform;
@@ -14,30 +14,15 @@ public class Weapon : MonoBehaviour, IInteractable
     AudioSource gunSound;
     public RaycastHit hit;
     float nextTimeToFire = 0;
-    int ammo;
+
+    public int Ammo { get; private set; } = 0;
 
     public event Action onShoot;
     public event Action<Health> onHit;
 
     public Transform owner { get; private set; }
 
-    public SOWeapon GetSOWeapon() { return soWeapon; }
-
-    public int GetAmmo() { return ammo; }
-
-    public int GetMaxAmmo() { return soWeapon.maxAmmo; }
-
-    public Sprite GetAmmoSprite() { return soWeapon.ammoSprite; }
-
-    public float GetFirerate() { return soWeapon.firerate; }
-
-    public float GetReloadTime() { return soWeapon.reloadTime; }
-
-    public SOItem GetReloadItem() { return soWeapon.reloadItem; }
-
-    public float GetIntensity() { return soWeapon.intensity; }
-
-    public float GetSpeed() { return soWeapon.speed; }
+    public string ReadName => SOWeapon.weaponName;
 
     public Vector3 GetAimLocation() { return aimLocation.localPosition; }
 
@@ -51,10 +36,7 @@ public class Weapon : MonoBehaviour, IInteractable
         SetHoldState(false);
 
         // Set ammo to max
-        AddAmmo(soWeapon.maxAmmo);
-
-        // Set name to show on hud
-        GetComponent<ShowNameToHUD>().SetText(soWeapon.weaponName);
+        AddAmmo(SOWeapon.maxAmmo);
 
         gunSound = GetComponent<AudioSource>();
     }
@@ -71,19 +53,19 @@ public class Weapon : MonoBehaviour, IInteractable
 
     public void AddAmmo(int amount)
     {
-        ammo += amount;
-        ammo = Mathf.Clamp(ammo, 0, soWeapon.maxAmmo);
+        Ammo += amount;
+        Ammo = Mathf.Clamp(Ammo, 0, SOWeapon.maxAmmo);
     }
 
     public void RemoveAmmo(int amount)
     {
-        ammo -= amount;
-        ammo = Mathf.Clamp(ammo, 0, soWeapon.maxAmmo);
+        Ammo -= amount;
+        Ammo = Mathf.Clamp(Ammo, 0, SOWeapon.maxAmmo);
     }
  
-    public void SetHoldState(bool state, Transform holder = null) 
+    public void SetHoldState(bool state, Transform owner = null) 
     {
-        this.owner = holder;
+        this.owner = owner;
 
         Rigidbody rb = GetComponent<Rigidbody>();
 
@@ -98,11 +80,11 @@ public class Weapon : MonoBehaviour, IInteractable
     // Shooting logic
     public void Shoot(Transform raycastPos)
     {
-        if (ammo == 0) return;
+        if (Ammo == 0) return;
         if (!(Time.time > nextTimeToFire)) return;
 
         // Firerate calculation
-        nextTimeToFire = Time.time + (1f / soWeapon.firerate);
+        nextTimeToFire = Time.time + (1f / SOWeapon.firerate);
         PlayGunSound();
         PlayMuzzleFlashParticle();
         RemoveAmmo(1);
@@ -110,7 +92,7 @@ public class Weapon : MonoBehaviour, IInteractable
         //CameraShake.AddCameraShake(soWeapon.intensity, soWeapon.speed);
 
         // Raycast para checar se atingi algo
-        if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000, soWeapon.shootMask))
+        if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000, SOWeapon.shootMask))
         {
             hit.transform.TryGetComponent(out Health health);
             hit.transform.TryGetComponent(out EnemyAi enemyAi);
@@ -126,14 +108,14 @@ public class Weapon : MonoBehaviour, IInteractable
             {
                 onHit?.Invoke(health);
                 PlayBloodParticle();
-                health.RemoveHealth(soWeapon.damage);
+                health.RemoveHealth(SOWeapon.damage);
 
-                if (health.GetIsDead()) AddForceToRbs(hit.transform, raycastPos, soWeapon.bulletForce);
+                if (health.GetIsDead()) AddForceToRbs(hit.transform, raycastPos, SOWeapon.bulletForce);
             }
             else
             {
                 // Adiciona forca ao rigidbody se for um objeto imovel
-                AddForceToRbs(hit.transform, raycastPos, soWeapon.bulletForce);
+                AddForceToRbs(hit.transform, raycastPos, SOWeapon.bulletForce);
                 //PlayWallHitParticle();
             }
 

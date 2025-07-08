@@ -1,10 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-[RequireComponent(typeof(ShowNameToHUD))]
-public class KeycardReader : MonoBehaviour, IInteractable
+public class KeycardReader : MonoBehaviour, IInteractable, IUIName
 {
-    public SOItem keycard { get; set; }
+    public SOKeycard keycardNeeded { get; set; }
 
     public bool used { get; set; } = false;
 
@@ -12,16 +11,17 @@ public class KeycardReader : MonoBehaviour, IInteractable
     public Material acceptedMaterial { get; set; }
     public Material recusedMaterial { get; set; }
 
+    public string ReadName => SetReadName();
+
     public event Action onAccept;
 
     public void Interact(Transform interactor)
     {
         Inventory inventory = interactor.GetComponent<Inventory>();
 
-        if (inventory.HaveItemSelected(keycard))
+        if (inventory.HaveItemSelected(keycardNeeded))
         {
-            inventory.RemoveItem(keycard);
-            transform.GetComponentInChildren<ShowNameToHUD>().SetText("");
+            inventory.RemoveItem(keycardNeeded);
             used = true;
             ChangeMeshMaterials();
 
@@ -37,5 +37,14 @@ public class KeycardReader : MonoBehaviour, IInteractable
         materials[2] = acceptedMaterial;
 
         GetComponentInChildren<MeshRenderer>().materials = materials;
+    }
+
+    private string SetReadName() 
+    {
+        if (!used)
+        {
+            return "Need " + keycardNeeded.itemName;
+        }
+        else return "";
     }
 }

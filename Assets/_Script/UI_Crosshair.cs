@@ -21,8 +21,6 @@ public class UI_Crosshair : MonoBehaviour
         if (playerWeaponInteraction)
         {
             playerWeaponInteraction.onWeaponPickup += SetCrossHair;
-            playerWeaponInteraction.onAimStart += DisableCrosshair;
-            playerWeaponInteraction.onAimEnd += EnableCrosshair;
             playerWeaponInteraction.onWeaponDrop += SetDotCrosshair;
             playerWeaponInteraction.onReloadStart += OnReloadFunc;
         }
@@ -72,7 +70,7 @@ public class UI_Crosshair : MonoBehaviour
 
     void SetCrossHair(Weapon weaponPicked)
     {
-        SpawnCrosshairSprite(weaponPicked.GetSOWeapon().crosshair);
+        SpawnCrosshairSprite(weaponPicked.SOWeapon.crosshair);
     }
 
     IEnumerator ReloadLerp(float duration)

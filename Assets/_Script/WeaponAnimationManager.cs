@@ -27,7 +27,7 @@ public class WeaponAnimationManager : MonoBehaviour
     // Deixa o tempo da animação de acordo com o firerate da arma
     void SetAnimationTime()
     {
-        animator.SetFloat("Time", weapon.GetFirerate());
+        animator.SetFloat("Time", weapon.SOWeapon.firerate);
     }
 
     public void ShootWeaponAnimation() 
@@ -36,9 +36,7 @@ public class WeaponAnimationManager : MonoBehaviour
 
         if (playerWeaponInteraction != null) 
         {
-
-            if (!playerWeaponInteraction.GetIsAiming()) animator.Play("Shoot", -1, 0f);
-            else animator.Play("Aim Shoot", -1, 0f);
+            animator.Play("Shoot", -1, 0f);
         }
     }
 }

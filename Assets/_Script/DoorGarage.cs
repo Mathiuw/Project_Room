@@ -49,8 +49,6 @@ public class DoorGarage : MonoBehaviour
 
             Readers[i] = reader;
 
-            reader.GetComponent<KeycardReader>().keycard = keyCards[i];
-            reader.GetComponentInChildren<ShowNameToHUD>().SetText("Need " + keyCards[i].itemName);
             offset += 1;
         }
     }

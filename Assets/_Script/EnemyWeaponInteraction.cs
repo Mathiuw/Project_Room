@@ -6,9 +6,9 @@ public class EnemyWeaponInteraction : WeaponInteraction
 {
     public override IEnumerator PickUpWeapon(Weapon weapon)
     {
-        this.weapon = weapon;
+        this.Weapon = weapon;
 
-        weapon.transform.SetParent(weaponHolder);
+        weapon.transform.SetParent(weaponContainer);
         weapon.transform.transform.localScale = Vector3.one;
         weapon.SetHoldState(true, transform);
 
@@ -19,9 +19,9 @@ public class EnemyWeaponInteraction : WeaponInteraction
 
     public override IEnumerator ReloadWeapon()
     {
-        if (!weapon) yield break;
+        if (!Weapon) yield break;
 
-        weapon.AddAmmo(weapon.GetMaxAmmo());
+        Weapon.AddAmmo(Weapon.Ammo);
         
         yield break;
     }
@@ -29,22 +29,19 @@ public class EnemyWeaponInteraction : WeaponInteraction
     public override void DropWeapon()
     {
         //Destroy components
-        Destroy(weapon.GetComponent<Weapon>());
+        Destroy(Weapon.GetComponent<Weapon>());
 
         //set Ammo drop for player
-        Item ammoDrop = weapon.AddComponent<Item>();
-        ammoDrop.SOItem = weapon.GetReloadItem();
-        ammoDrop.amount = 1;
+        Item ammoDrop = Weapon.AddComponent<Item>();
+        //ammoDrop.SOItem = weapon.GetReloadItem();
+        ammoDrop.Amount = 1;
         //Ammo drop pickup
-        weapon.AddComponent<EnemyAmmoDrop>();
-        //Ammo drop name
-        ShowNameToHUD nameComponent = weapon.GetComponent<ShowNameToHUD>();
-        nameComponent.SetText("Pickup ammo");
+        Weapon.AddComponent<EnemyAmmoDrop>();
 
         //Sets weapon state and current weapon NULL
-        weapon.transform.SetParent(null);
-        weapon.SetHoldState(false, null);
-        weapon = null;
+        Weapon.transform.SetParent(null);
+        Weapon.SetHoldState(false, null);
+        Weapon = null;
 
         Debug.Log(name + " dropped weapon");
     }

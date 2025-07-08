@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 
-public class Item : MonoBehaviour, IInteractable
+public class Item : MonoBehaviour, IInteractable, IUIName
 {
-    public SOItem SOItem;
-    public int amount = 1;
+    [field: SerializeField] public SOItem SOItem { get; private set; }
+    [field: SerializeField] public int Amount { get; set; } = 1;
+
+    public string ReadName => SOItem.itemName;
 
     public void Interact(Transform interactor)
     {

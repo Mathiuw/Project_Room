@@ -152,7 +152,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7989073646208417535}
   - component: {fileID: 2993582557528257708}
-  - component: {fileID: 6056349918403723318}
   m_Layer: 8
   m_Name: Locker
   m_TagString: Untagged
@@ -188,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d4f007dd720896408154c7e855dda3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectName: Locker
+  doorName: Door
   duration: 0.5
   doors:
   - {fileID: 2615663458818157880}
@@ -197,19 +196,6 @@ MonoBehaviour:
   desiredRotations:
   - {x: 0, y: 0, z: -100}
   isDestrucble: 1
---- !u!114 &6056349918403723318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7989073646208417534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 304b0caf28a87e141834ecfad45f9b37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  text: 
 --- !u!1 &9071749151219702941
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,10 +291,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9071749151219702941}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}

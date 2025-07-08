@@ -5,7 +5,9 @@ public class UI_ReadNames : MonoBehaviour
 {
     [SerializeField] LayerMask layersToRead;
     [SerializeField] TextMeshProUGUI displayText;
+    [SerializeField] float maxDistance = 5f;
     Transform cameraTransform;
+    RaycastHit hit;
 
     void Start()
     {
@@ -14,14 +16,26 @@ public class UI_ReadNames : MonoBehaviour
 
     void Update()
     {
-        RaycastHit hit;
-
-        displayText.SetText("");
-
-        if (Physics.Raycast(cameraTransform.position,cameraTransform.forward,out hit, 5f,layersToRead))
+        if (Physics.Raycast(cameraTransform.position,cameraTransform.forward, out hit, maxDistance, layersToRead))
         {
-            ShowNameToHUD showNameToHUD;
-            if ((showNameToHUD = hit.transform.GetComponentInParent<ShowNameToHUD>()) && showNameToHUD.enabled) displayText.SetText(showNameToHUD.GetText());
+            //if ((showNameToHUD = hit.transform.GetComponentInParent<ShowNameToHUD>()) && showNameToHUD.enabled) displayText.SetText(showNameToHUD.GetText());
+            Debug.Log("Interact Hit");
+
+            IUIName uiName = hit.transform.GetComponentInParent<IUIName>();
+
+            if (uiName != null)
+            {
+                displayText.SetText(uiName.ReadName);
+            }
+            else
+            {
+                Debug.Log("Interact hit doesnt have IUIName Interface");
+            }
         }
+        else
+        {
+            displayText.SetText("");
+        }
+
     }
 }
