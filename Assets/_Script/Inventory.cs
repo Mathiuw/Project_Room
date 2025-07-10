@@ -25,12 +25,9 @@ public struct InventoryItem
 public class Inventory : MonoBehaviour
 {
     [Header("Item Inventory")]
-    //[SerializeField] int inventorySize = 5;
-    [field: SerializeField] public List<InventoryItem> ItemInventoryList { get; private set; } = new List<InventoryItem>();
-    int index = 0;
-
-    //[Header("Drop item")]
-    //[SerializeField] float dropForce = 3.5f;
+    [field: SerializeField] public List<InventoryItem> InventoryList { get; private set; } = new List<InventoryItem>();
+    public List<int> consumableIndexes = new List<int>(); 
+    public int selectedConsumableIndex { get; set; } = 0;
 
     [Header("Ammo Inventory")]
     public int SmallAmmoAmount { get; private set; } = 0;
@@ -43,12 +40,28 @@ public class Inventory : MonoBehaviour
     public delegate void AmmoUpdate();
     public event AmmoUpdate OnAmmoCountUpdate;
 
+    public delegate void NextConsumableSelection();
+    public event NextConsumableSelection OnConsumableListUpdate;
+
+    private void Start()
+    {
+        SetConsumableList();
+    }
 
     void Update()
     {
+        // Use input input
         if (Input.GetKeyDown(KeyCode.F)) UseItem();
 
-        //if (Input.GetKeyDown(KeyCode.Q)) DropItem();
+        // Scroll consumables input
+        if (Input.mouseScrollDelta.y > 0f)
+        {
+            AddSelectedConsumableIndex(1);
+        }
+        else if (Input.mouseScrollDelta.y < 0f)
+        {
+            AddSelectedConsumableIndex(-1);
+        }
     }
 
     public int GetAmmoAmountByType(EAmmoType ammoType) 
@@ -112,54 +125,45 @@ public class Inventory : MonoBehaviour
 
     public bool AddItem(Item item)
     {
-        for (int i = 0; i < ItemInventoryList.Count; i++)
+        for (int i = 0; i < InventoryList.Count; i++)
         {
             // Check if already have the item
-            if (item.SOItem.itemName == ItemInventoryList[i].SOItem.itemName)
+            if (item.SOItem.itemName == InventoryList[i].SOItem.itemName)
             {
                 // If have the item, check if you have the max amount
-                if (ItemInventoryList[i].SOItem.isStackable && ItemInventoryList[i].Amount < ItemInventoryList[i].SOItem.maxStack /*&& iteminventoryList.Count <= inventorySize*/)
+                if (InventoryList[i].SOItem.isStackable && InventoryList[i].Amount < InventoryList[i].SOItem.maxStack /*&& iteminventoryList.Count <= inventorySize*/)
                 {
                     // Increase item quantity
-                    InventoryItem inventoryItem = ItemInventoryList[i];
+                    InventoryItem inventoryItem = InventoryList[i];
                     inventoryItem.Amount += item.Amount;
 
                     // Set the new inventoty item with the correct amount
-                    ItemInventoryList[i] = inventoryItem;
+                    InventoryList[i] = inventoryItem;
 
-                    // Invoke OnItemAdded Event
+                    SetConsumableList();
+                    // Invoke OnItemAdded 
                     OnItemAdded?.Invoke();
                     return true;
                 }
                 else
                 {
-                    Debug.Log("You have the max amount of " + ItemInventoryList[i].SOItem.itemName);
+                    Debug.Log("You have the max amount of " + InventoryList[i].SOItem.itemName);
                     return false;
                 }
             }
         }
-        //if (iteminventoryList.Count< inventorySize)
-        //{
-        //    iteminventoryList.Add(item);
-        //    OnItemAdded.Invoke();
-        //    return true;
-        //}
-        //else
-        //{
-        //    Debug.Log("Inventory full");
-        //    return false;
-        //}
 
-        ItemInventoryList.Add(new InventoryItem(item.SOItem, 1));
+        InventoryList.Add(new InventoryItem(item.SOItem, 1));
+        SetConsumableList();
         OnItemAdded?.Invoke();
         return true;
     }
 
-    public void UseItem()
+    private void UseItem()
     {
-        foreach (InventoryItem item in ItemInventoryList)
+        foreach (InventoryItem item in InventoryList)
         {           
-            if (ItemInventoryList.IndexOf(item) == UI_SelectItem.index)
+            if (InventoryList.IndexOf(item) == consumableIndexes[selectedConsumableIndex])
             {
                 SOConsumable soConsumable = (SOConsumable)item.SOItem;
 
@@ -172,97 +176,75 @@ public class Inventory : MonoBehaviour
                     Debug.Log(item.SOItem.name + " used and removed");
                     break;                 
                 }
+                else
+                {
+                    Debug.Log("Cant use, item is not consumable");
+                }
             }
         }
     }
 
     public bool RemoveItem(SOItem item)
     {
-        for (int i = 0; i < ItemInventoryList.Count; i++)
+        for (int i = 0; i < InventoryList.Count; i++)
         {
-            if (ItemInventoryList[i].SOItem.itemName == item.itemName)
+            if (InventoryList[i].SOItem.itemName == item.itemName)
             {
-                InventoryItem inventoryItem = ItemInventoryList[i];
+                InventoryItem inventoryItem = InventoryList[i];
                 inventoryItem.Amount--;
 
-                ItemInventoryList[i] = inventoryItem;
+                InventoryList[i] = inventoryItem;
 
-                if (ItemInventoryList[i].Amount == 0)
+                if (InventoryList[i].Amount == 0)
                 {
-                    ItemInventoryList.RemoveAt(i);
+                    InventoryList.RemoveAt(i);
                 }
 
-                OnItemRemoved.Invoke();
+                SetConsumableList();
+                OnItemRemoved?.Invoke();
                 return true;
             }
         }
 
-        //foreach (InventoryItem i in itemInventoryList)
-        //{
-        //    if (item.itemName == i.SOItem.itemName)
-        //    {
-        //        if (item.isStackable && i.Amount > 1)
-        //        {
-        //            i.amount--;
-        //            OnItemRemoved.Invoke();
-        //            return true;
-        //        }
-        //        else
-        //        {
-        //            itemInventoryList.Remove(i);
-        //            OnItemRemoved.Invoke();
-        //            return true;
-        //        }
-        //    }
-        //}
         Debug.LogError("Cant Remove Item | Dont Have Item");
         return false;
     }
 
-    //public void DropItem()
-    //{
-    //    foreach (Item item in iteminventoryList)
-    //    {
-    //        if (iteminventoryList.IndexOf(item) == UI_SelectItem.index)
-    //        {
-    //            //Remove item from inventory
-    //            RemoveItem(item.SOItem);
-
-    //            //Intantiate and set item
-    //            //SpawnItem itemSpawned = Instantiate(spawnItemPrefab, transform.position, transform.rotation);
-    //            //itemSpawned.itemSO = item.SOItem;
-
-    //            //Set item transform
-    //            //itemSpawned.transform.localPosition = transform.position;
-    //            //itemSpawned.transform.rotation = transform.rotation;
-
-    //            //Apply force to item
-    //            //Rigidbody dropRigidbody = itemSpawned.GetComponent<Rigidbody>();
-    //            //dropRigidbody.AddForce(transform.forward * dropForce, ForceMode.VelocityChange);
-
-    //            Debug.Log("Item Droped");
-    //            break;
-    //        }
-    //    }
-    //}
-
-    public bool HaveItemSelected(SOItem item)
+    private void SetConsumableList() 
     {
-        foreach (InventoryItem i in ItemInventoryList)
+        List<int> list = new List<int>();
+
+        for (int i = 0; i < InventoryList.Count; i++)
         {
-            if (ItemInventoryList.IndexOf(i) == index && item.itemName == i.SOItem.itemName)
+            if ((SOConsumable)InventoryList[i].SOItem)
             {
-                Debug.Log("Player has " + item.itemName + " in the Index");
-                return true;
+                list.Add(i);
             }
         }
-        Debug.LogError("Player has not " + item.itemName + " in the Index");
-        return false;
+
+        consumableIndexes = list;
+        OnConsumableListUpdate?.Invoke();
+    }
+
+    private void AddSelectedConsumableIndex(int amount) 
+    {
+        selectedConsumableIndex += amount;
+
+        if (selectedConsumableIndex >= consumableIndexes.Count)
+        {
+            selectedConsumableIndex = 0;
+        }
+        else if (selectedConsumableIndex < 0)
+        {
+            selectedConsumableIndex = consumableIndexes.Count - 1;
+        }
+
+        OnConsumableListUpdate?.Invoke();
     }
 
     public bool HaveItem(SOItem item)
     {
-        foreach (InventoryItem i in ItemInventoryList)
+        foreach (InventoryItem i in InventoryList)
         {
             if (item.name == i.SOItem.name)
             {

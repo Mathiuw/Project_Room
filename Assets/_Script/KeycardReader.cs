@@ -5,7 +5,7 @@ public class KeycardReader : MonoBehaviour, IInteractable, IUIName
 {
     public SOKeycard keycardNeeded { get; set; }
 
-    public bool used { get; set; } = false;
+    public bool Used { get; set; } = false;
 
     public Material offMaterial { get; set; }
     public Material acceptedMaterial { get; set; }
@@ -13,19 +13,19 @@ public class KeycardReader : MonoBehaviour, IInteractable, IUIName
 
     public string ReadName => SetReadName();
 
-    public event Action onAccept;
+    public event Action OnAcceptKeycard;
 
     public void Interact(Transform interactor)
     {
         Inventory inventory = interactor.GetComponent<Inventory>();
 
-        if (inventory.HaveItemSelected(keycardNeeded))
+        if (inventory.HaveItem(keycardNeeded))
         {
             inventory.RemoveItem(keycardNeeded);
-            used = true;
+            Used = true;
             ChangeMeshMaterials();
 
-            onAccept?.Invoke();
+            OnAcceptKeycard?.Invoke();
         }
     }
 
@@ -41,7 +41,7 @@ public class KeycardReader : MonoBehaviour, IInteractable, IUIName
 
     private string SetReadName() 
     {
-        if (!used)
+        if (!Used)
         {
             return "Need " + keycardNeeded.itemName;
         }

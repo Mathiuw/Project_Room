@@ -12,21 +12,28 @@ public class UI_PlayerStats : MonoBehaviour
 
         if (playerMovement)
         {
-            SetStaminaUI(playerMovement.GetStamina());
             staminaBar.maxValue = playerMovement.GetMaxStamina();
+            SetStaminaUI(playerMovement.GetStamina());
+
             playerMovement.staminaUpdated += SetStaminaUI;
+
 
             Health health = playerMovement.GetComponent<Health>();
 
             if (health)
             {
-                SetHealthUI(health.GetHealth());
+
                 healthBar.maxValue = health.GetMaxHealth();
+                SetHealthUI(health.GetHealth());
 
                 health.healthUpdated += SetHealthUI;
             }
+            else
+            {
+                Debug.LogError("Cant find player health");
+            }
         }
-        else Debug.LogError("Cant find Player");
+        else Debug.LogError("Cant find PlayerMovement class");
     }
 
     void SetStaminaUI(float stamina)
@@ -40,8 +47,5 @@ public class UI_PlayerStats : MonoBehaviour
     void SetHealthUI(int healthAmount)
     {
         healthBar.value = healthAmount;
-
-        if (healthBar.value == healthBar.maxValue) healthBar.gameObject.SetActive(false);
-        else healthBar.gameObject.SetActive(true);
     }
 }

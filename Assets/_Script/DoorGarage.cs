@@ -45,7 +45,7 @@ public class DoorGarage : MonoBehaviour
             reader.recusedMaterial = glows[1];
             reader.offMaterial = glows[2];
 
-            reader.onAccept += CanOpenDoor;
+            reader.OnAcceptKeycard += CanOpenDoor;
 
             Readers[i] = reader;
 
@@ -65,7 +65,7 @@ public class DoorGarage : MonoBehaviour
 
         for (int i = 0; i < Readers.Length; i++)
         {
-            if (Readers[i].used) continue;
+            if (Readers[i].Used) continue;
             else return;
         }
 

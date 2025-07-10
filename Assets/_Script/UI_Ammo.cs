@@ -84,7 +84,16 @@ public class UI_Ammo : MonoBehaviour
         else DisableUISprite();
     }
 
-    void SetUIAmmoText() => ammoUI.SetText(playerWeaponInteraction.Weapon.Ammo + "/" + playerInventory.GetAmmoAmountByType(playerWeaponInteraction.Weapon.SOWeapon.ammoType));
+    void SetUIAmmoText() 
+    {
+        if (!playerWeaponInteraction.Weapon)
+        {
+            ammoUI.SetText("");
+            return;
+        }
+
+        ammoUI.SetText(playerWeaponInteraction.Weapon.Ammo + "/" + playerInventory.GetAmmoAmountByType(playerWeaponInteraction.Weapon.SOWeapon.ammoType));
+    } 
 
     void AddWeaponEvents(Weapon weaponPicked) 
     {
