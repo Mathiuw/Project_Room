@@ -127,7 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensibility: 2.5
   multiplier: 1
-  canRoll: 1
+  cameraRoll: 1
   angleLimit: 2
   smooth: 20
   weaponHolder: {fileID: 8420786735734404451}
@@ -253,7 +253,7 @@ GameObject:
   - component: {fileID: 8420786735734404451}
   m_Layer: 10
   m_Name: Weapon_Holder
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

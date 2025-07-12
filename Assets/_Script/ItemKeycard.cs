@@ -4,30 +4,30 @@ public class ItemKeycard : Item
 {
     [SerializeField] private Material[] materials = new Material[4];
 
-    // Make the keycard material color according to the enum type
     private void Awake()
     {
         SOKeycard soKeycard = (SOKeycard)SOItem;
-        MeshRenderer mesh = GetComponentInChildren<MeshRenderer>();
-
+        Material[] materials = GetComponentInChildren<MeshRenderer>().materials;
         switch (soKeycard.keycardColor)
         {
             case EKeycardColor.Red:
-                mesh.materials[0] = materials[0];
+                materials[0] = this.materials[0];
                 break;
             case EKeycardColor.Green:
-                mesh.materials[0] = materials[1];
+                materials[0] = this.materials[1]; 
                 break;
             case EKeycardColor.Blue:
-                mesh.materials[0] = materials[2];
+                materials[0] = this.materials[2];
                 break;
             case EKeycardColor.Yellow:
-                mesh.materials[0] = materials[3];
+                materials[0] = this.materials[3];
                 break;
             default:
                 Debug.LogError("Error setting keycard color");
                 break;
         }
+
+        GetComponentInChildren<MeshRenderer>().materials = materials;
     }
 
 }

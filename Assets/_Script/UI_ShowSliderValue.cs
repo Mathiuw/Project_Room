@@ -2,11 +2,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(TextMeshProUGUI))]
 public class UI_ShowSliderValue : MonoBehaviour
 {
     [SerializeField] Slider slider;
     [SerializeField] float multiplier;
-    [SerializeField] TextMeshProUGUI text;
+    TextMeshProUGUI text;
+
+    private void Awake()
+    {
+        text = GetComponent<TextMeshProUGUI>();
+    }
 
     void Start()
     {

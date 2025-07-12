@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
@@ -21,13 +23,15 @@ public class MainMenu : MonoBehaviour
         options.gameObject.SetActive(false);
         loadingScreen.gameObject.SetActive(false);
 
-        if (ManagerGame.instance != null)
-        {
-            newGame.onClick.AddListener(ManagerGame.instance.StartGame);
-            exit.onClick.AddListener(ManagerGame.instance.ExitGame);
-        }
-  
+        newGame.onClick.AddListener(StartGame);
         newGame.onClick.AddListener(SetLoadScreen);
+
+        exit.onClick.AddListener(Application.Quit);
+    }
+
+    private void StartGame() 
+    {
+        SceneManager.LoadScene(1);
     }
 
     public void SetLoadScreen() 

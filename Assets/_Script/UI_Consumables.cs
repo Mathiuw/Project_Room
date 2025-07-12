@@ -19,7 +19,11 @@ public class UI_Consumables : MonoBehaviour
 
         if (inventory)
         {
-            DrawInventory();
+            DrawConsumableInventory();
+
+            inventory.OnItemAdded += DrawConsumableInventory;
+            inventory.OnItemRemoved += DrawConsumableInventory;
+            inventory.OnConsumableIndexUpdate += DrawConsumableInventory;
         }
         else 
         {
@@ -28,16 +32,19 @@ public class UI_Consumables : MonoBehaviour
             enabled = false;
             return;
         }
-
-        inventory.OnConsumableListUpdate += DrawInventory;
     }
 
     private void OnDisable()
     {
-        inventory.OnConsumableListUpdate -= DrawInventory;
+        if (inventory)
+        {
+            inventory.OnItemAdded -= DrawConsumableInventory;
+            inventory.OnItemRemoved -= DrawConsumableInventory;
+            inventory.OnConsumableIndexUpdate += DrawConsumableInventory;
+        }
     }
 
-    private void DrawInventory() 
+    private void DrawConsumableInventory() 
     {
         if (inventory.InventoryList.Count == 0 || inventory.consumableIndexes.Count == 0)
         {
@@ -47,7 +54,9 @@ public class UI_Consumables : MonoBehaviour
         else
         {
             canvasGroup.alpha = 1;
-            selectedConsumableImage.sprite = inventory.InventoryList[inventory.selectedConsumableIndex].SOItem.hotbarSprite;
+            selectedConsumableImage.sprite = inventory.InventoryList[inventory.consumableIndexes[inventory.selectedConsumableIndex]].SOItem.hotbarSprite;
         }
+
+        Debug.Log("Draw Consumable inventory");
     }
 }

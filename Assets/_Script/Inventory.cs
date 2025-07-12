@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public enum EAmmoType 
 {
@@ -26,7 +27,10 @@ public class Inventory : MonoBehaviour
 {
     [Header("Item Inventory")]
     [field: SerializeField] public List<InventoryItem> InventoryList { get; private set; } = new List<InventoryItem>();
+
+    // Consumable indexes list
     public List<int> consumableIndexes = new List<int>(); 
+    // Selected consumable
     public int selectedConsumableIndex { get; set; } = 0;
 
     [Header("Ammo Inventory")]
@@ -36,12 +40,10 @@ public class Inventory : MonoBehaviour
 
     public event Action OnItemAdded;
     public event Action OnItemRemoved;
+    public event Action OnConsumableIndexUpdate;
 
     public delegate void AmmoUpdate();
     public event AmmoUpdate OnAmmoCountUpdate;
-
-    public delegate void NextConsumableSelection();
-    public event NextConsumableSelection OnConsumableListUpdate;
 
     private void Start()
     {
@@ -51,16 +53,16 @@ public class Inventory : MonoBehaviour
     void Update()
     {
         // Use input input
-        if (Input.GetKeyDown(KeyCode.F)) UseItem();
+        if (Input.GetKeyDown(KeyCode.F)) UseSelectedConsumable();
 
         // Scroll consumables input
         if (Input.mouseScrollDelta.y > 0f)
         {
-            AddSelectedConsumableIndex(1);
+            ChangeConsumableIndex(1);
         }
         else if (Input.mouseScrollDelta.y < 0f)
         {
-            AddSelectedConsumableIndex(-1);
+            ChangeConsumableIndex(-1);
         }
     }
 
@@ -141,7 +143,6 @@ public class Inventory : MonoBehaviour
                     InventoryList[i] = inventoryItem;
 
                     SetConsumableList();
-                    // Invoke OnItemAdded 
                     OnItemAdded?.Invoke();
                     return true;
                 }
@@ -157,31 +158,6 @@ public class Inventory : MonoBehaviour
         SetConsumableList();
         OnItemAdded?.Invoke();
         return true;
-    }
-
-    private void UseItem()
-    {
-        foreach (InventoryItem item in InventoryList)
-        {           
-            if (InventoryList.IndexOf(item) == consumableIndexes[selectedConsumableIndex])
-            {
-                SOConsumable soConsumable = (SOConsumable)item.SOItem;
-
-                if (soConsumable != null) 
-                {
-                    GetComponent<Health>().AddHealth(soConsumable.recoverHealth);
-
-                    RemoveItem(item.SOItem);
-
-                    Debug.Log(item.SOItem.name + " used and removed");
-                    break;                 
-                }
-                else
-                {
-                    Debug.Log("Cant use, item is not consumable");
-                }
-            }
-        }
     }
 
     public bool RemoveItem(SOItem item)
@@ -210,23 +186,22 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
-    private void SetConsumableList() 
+    private void SetConsumableList()
     {
         List<int> list = new List<int>();
 
         for (int i = 0; i < InventoryList.Count; i++)
         {
-            if ((SOConsumable)InventoryList[i].SOItem)
+            if (InventoryList[i].SOItem.GetType() == typeof(SOConsumable))
             {
                 list.Add(i);
             }
         }
 
         consumableIndexes = list;
-        OnConsumableListUpdate?.Invoke();
     }
 
-    private void AddSelectedConsumableIndex(int amount) 
+    private void ChangeConsumableIndex(int amount)
     {
         selectedConsumableIndex += amount;
 
@@ -236,10 +211,48 @@ public class Inventory : MonoBehaviour
         }
         else if (selectedConsumableIndex < 0)
         {
-            selectedConsumableIndex = consumableIndexes.Count - 1;
+            if (consumableIndexes.Count == 0)
+            {
+                selectedConsumableIndex = 0;
+            }
+            else 
+            {
+                selectedConsumableIndex = consumableIndexes.Count - 1;
+            } 
         }
 
-        OnConsumableListUpdate?.Invoke();
+        OnConsumableIndexUpdate?.Invoke();
+    }
+
+    private void UseSelectedConsumable()
+    {
+        if (consumableIndexes.Count == 0)
+        {
+            Debug.Log("No item to use");
+            return;
+        }
+
+        for (int i = 0; i < InventoryList.Count; i++)
+        {
+            if (i == consumableIndexes[selectedConsumableIndex])
+            {
+                if (InventoryList[i].SOItem.GetType() == typeof(SOConsumable))
+                {
+                    SOConsumable soConsumable = (SOConsumable)InventoryList[i].SOItem;
+
+                    GetComponent<Health>().AddHealth(soConsumable.recoverHealth);
+
+                    Debug.Log(InventoryList[i].SOItem.name + " used and removed");
+
+                    RemoveItem(InventoryList[i].SOItem);
+                    break;
+                }
+                else
+                {
+                    Debug.Log("Cant use, item is not consumable");
+                }
+            }
+        }
     }
 
     public bool HaveItem(SOItem item)

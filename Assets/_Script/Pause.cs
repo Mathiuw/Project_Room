@@ -21,7 +21,8 @@ public class Pause : MonoBehaviour
 
         AlternateSprites();
         resume.onClick.AddListener(SetPause);
-        if (ManagerGame.instance != null) exit.onClick.AddListener(ManagerGame.instance.ExitGame);
+        //if (ManagerGame.instance != null) exit.onClick.AddListener(ManagerGame.instance.ExitGame);
+        exit.onClick.AddListener(Application.Quit);
     } 
 
     void Update() 

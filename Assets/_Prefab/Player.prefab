@@ -237,7 +237,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c149d5e4e748546afab6152c9a29c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemInventoryList: []
+  <InventoryList>k__BackingField: []
+  consumableIndexes: 
 --- !u!114 &1482415707886561885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,8 +251,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11014a2ce9e734d48a183ece1246e08d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponHolder: {fileID: 0}
-  weapon: {fileID: 0}
+  weaponContainer: {fileID: 0}
+  <Weapon>k__BackingField: {fileID: 0}
   aimTime: 0.2
   smooth: 8
   swayMultiplier: 4

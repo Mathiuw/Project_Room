@@ -3,13 +3,15 @@ using UnityEngine;
 
 public class KeycardReader : MonoBehaviour, IInteractable, IUIName
 {
-    public SOKeycard keycardNeeded { get; set; }
+    // Keycard item type scriptable object
+    [field: SerializeField] public SOKeycard keycardNeeded { get; private set; }
 
-    public bool Used { get; set; } = false;
+    // Keycard reader materials
+    [field: SerializeField] public Material offMaterial { get; private set; }
+    [field: SerializeField] public Material acceptedMaterial { get; private set; }
+    [field: SerializeField] public Material recusedMaterial { get; private set; }
 
-    public Material offMaterial { get; set; }
-    public Material acceptedMaterial { get; set; }
-    public Material recusedMaterial { get; set; }
+    public bool Used { get; private set; } = false;
 
     public string ReadName => SetReadName();
 
@@ -41,6 +43,11 @@ public class KeycardReader : MonoBehaviour, IInteractable, IUIName
 
     private string SetReadName() 
     {
+        if (!keycardNeeded)
+        {
+            return "Keycard type null";
+        }
+
         if (!Used)
         {
             return "Need " + keycardNeeded.itemName;

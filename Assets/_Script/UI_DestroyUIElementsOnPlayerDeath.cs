@@ -7,7 +7,18 @@ public class UI_DestroyUIElementsOnPlayerDeath : MonoBehaviour
     {
         Transform player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        if (player) player.GetComponent<Health>().onDead += OnPlayerDead;
+        if (player) 
+        {
+            Health health;
+
+            player.TryGetComponent(out health);
+
+            if (health)
+            {
+                health.onDead += OnPlayerDead;
+            }
+            else Debug.LogError("Cant find player health");
+        } 
         else Debug.LogError("Cant find Player");
     }
 

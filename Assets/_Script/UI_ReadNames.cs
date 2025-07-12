@@ -18,8 +18,7 @@ public class UI_ReadNames : MonoBehaviour
     {
         if (Physics.Raycast(cameraTransform.position,cameraTransform.forward, out hit, maxDistance, layersToRead))
         {
-            //if ((showNameToHUD = hit.transform.GetComponentInParent<ShowNameToHUD>()) && showNameToHUD.enabled) displayText.SetText(showNameToHUD.GetText());
-            Debug.Log("Interact Hit");
+            //Debug.Log("Interact Hit");
 
             IUIName uiName = hit.transform.GetComponentInParent<IUIName>();
 
@@ -29,7 +28,8 @@ public class UI_ReadNames : MonoBehaviour
             }
             else
             {
-                Debug.Log("Interact hit doesnt have IUIName Interface");
+                displayText.SetText("");
+                //Debug.Log("Interact hit doesnt have IUIName Interface");
             }
         }
         else

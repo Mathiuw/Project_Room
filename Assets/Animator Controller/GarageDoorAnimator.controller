@@ -2,19 +2,19 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!1107 &-6632850310459940384
 AnimatorStateMachine:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Base Layer
+  m_Name: Garage Door
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 699871409507407491}
     m_Position: {x: 320, y: 10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1917852350097008725}
-    m_Position: {x: 320, y: 100, z: 0}
+    m_Position: {x: 320, y: 70, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -36,7 +36,7 @@ AnimatorController:
   m_AnimatorParameters: []
   m_AnimatorLayers:
   - serializedVersion: 5
-    m_Name: Base Layer
+    m_Name: Garage Door
     m_StateMachine: {fileID: -6632850310459940384}
     m_Mask: {fileID: 0}
     m_Motions: []
@@ -49,12 +49,12 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
 --- !u!1102 &699871409507407491
 AnimatorState:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: GarageDoor_Open
+  m_Name: Open
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -75,12 +75,12 @@ AnimatorState:
   m_TimeParameter: 
 --- !u!1102 &1917852350097008725
 AnimatorState:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Nothing
+  m_Name: Closed
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []

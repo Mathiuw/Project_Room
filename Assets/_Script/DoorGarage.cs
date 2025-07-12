@@ -1,81 +1,50 @@
 ﻿using UnityEngine;
 
 public class DoorGarage : MonoBehaviour
-{
-    [Header("Garage Door")]
-    [SerializeField] Transform gate;
-    Vector3 openPosition;
+{    
+    [field: SerializeField] public KeycardReader[] keycardReaders { get; private set; } = new KeycardReader[4];
+    Animator animator;
 
-    [Header("Keycard Reader")]
-    [Range(1,4)]
-    [SerializeField] int count;
-    [SerializeField] KeycardReader ReaderPrefab;
-    KeycardReader[] Readers;
-
-    [SerializeField] public SOItem[] keyCards;
-
-    [Header("Glow Materials")]
-    [SerializeField] Material[] glows;
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     void Start()
     {
-        if (count < 1) count = 1;
-
-        Readers = new KeycardReader[count];
-
-        SetDoor();
         SetKeycardReaders();    
     }
 
     void SetKeycardReaders() 
     {
-        float offset = 0;
-        Transform ReadersTransform = transform.Find("KeycardReaders");
-
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < keycardReaders.Length; i++)
         {
-            KeycardReader reader = Instantiate(ReaderPrefab,
-                new Vector3(ReadersTransform.position.x,
-                ReadersTransform.position.y + offset,
-                ReadersTransform.position.z),
-                ReadersTransform.rotation,
-                ReadersTransform);
-
-            reader.acceptedMaterial = glows[0];
-            reader.recusedMaterial = glows[1];
-            reader.offMaterial = glows[2];
-
-            reader.OnAcceptKeycard += CanOpenDoor;
-
-            Readers[i] = reader;
-
-            offset += 1;
+            if (keycardReaders[i])
+            {
+                keycardReaders[i].OnAcceptKeycard += CheckKeycardreaders;
+            }
+            else
+            {
+                Debug.LogWarning("Array index " + i + " doesnt have keycard reader");
+            }
         }
     }
 
-    void SetDoor() 
-    {
-        openPosition = gate.position;
-        gate.position = Vector3.zero;
-    }
-
-    void CanOpenDoor()
+    void CheckKeycardreaders()
     {
         Debug.Log("check if can open doors");
 
-        for (int i = 0; i < Readers.Length; i++)
+        for (int i = 0; i < keycardReaders.Length; i++)
         {
-            if (Readers[i].Used) continue;
-            else return;
+            if (keycardReaders[i].Used) continue;
+            else 
+            {
+                Debug.Log("Not all keycard readers are used");
+                return;
+            } 
         }
 
-        GetComponent<Animator>().Play("GarageDoor_Open");
-        OpenDoor();
+        animator.Play("Open");
         Debug.Log("Gate opened");
-    }
-
-    void OpenDoor() 
-    {
-        gate.position = Vector3.Lerp(gate.position, openPosition, Time.deltaTime);
     }
 }

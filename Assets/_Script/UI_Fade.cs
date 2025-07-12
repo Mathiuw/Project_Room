@@ -4,32 +4,32 @@ using UnityEngine.UI;
 
 public class UI_Fade : MonoBehaviour
 {
-    public static UI_Fade instance { get; private set; }
+    public enum EFadeType 
+    {
+        FadeIn, FadeOut
+    }
 
-    Image image;
-    [SerializeField] float time;
+    [SerializeField] float fadeTime = 1f;
     [SerializeField] AnimationCurve curve;
+    [field: SerializeField] public EFadeType fadeType { get; set; } = EFadeType.FadeOut;
+    Image image;
 
     public float alpha { get; private set; }
 
     void Awake() 
     {
-        instance = this;
         image= GetComponentInChildren<Image>();
     }
 
     IEnumerator Start() 
     {
-        Health playerHealth = FindFirstObjectByType<PlayerMovement>().GetComponent<Health>();
-
-        SetValue(1f);
-        yield return new WaitForSeconds(0.5f);
+        SetImageAlphaValue(1f);
+        yield return new WaitForSeconds(0.1f);
         FadeOut();
-        playerHealth.GetComponentInChildren<Health>().onDead += RestartLevelFadeIn;
         yield break;
     } 
 
-    public void SetValue(float value) 
+    public void SetImageAlphaValue(float value) 
     {
         Color color = image.color;
         color.a = value;
@@ -38,44 +38,24 @@ public class UI_Fade : MonoBehaviour
         image.color = color;
     }
 
-    public IEnumerator FadeValue(float initial,float final) 
+    public void FadeIn() => StartCoroutine(FadeCoroutine(0, 1));
+
+    public void FadeOut() => StartCoroutine(FadeCoroutine(1, 0));
+
+    public IEnumerator FadeCoroutine(float initial,float final) 
     {
         float timePassed = 0;
 
-        SetValue(initial);
-        while (timePassed < time)
+        SetImageAlphaValue(initial);
+        while (timePassed < fadeTime)
         {
-            SetValue(curve.Evaluate(Mathf.Lerp(initial, final, timePassed)));
-            timePassed += (Time.deltaTime / time);
+            SetImageAlphaValue(curve.Evaluate(Mathf.Lerp(initial, final, timePassed)));
+            timePassed += (Time.deltaTime / fadeTime);
 
             yield return null;
         }
-        SetValue(final);
+        SetImageAlphaValue(final);
 
-        yield break;
-    }
-
-    public void FadeIn() => StartCoroutine(FadeValue(0, 1));
-
-    public void FadeOut() => StartCoroutine(FadeValue(1, 0));
-
-    public void RestartLevelFadeIn()
-    {
-        FadeIn();
-        StartCoroutine(WhenRestartLevel());
-    }
-
-    IEnumerator WhenRestartLevel() 
-    {
-        if (ManagerGame.instance == null) 
-        {
-            Debug.LogError("There is no Game Manager");
-            yield break;        
-        }
-
-        while (alpha < 1f) yield return null;
-
-        ManagerGame.instance.RestartCurrentLevel();
         yield break;
     }
 }

@@ -26,7 +26,7 @@ public class ElevatorPanel : MonoBehaviour, IInteractable, IUIName
     {
         SetMaterials(mesh);
 
-        if (buttom == Buttom.down) onButtomPress += ManagerGame.instance.EndGame;
+        //if (buttom == Buttom.down) onButtomPress += ManagerGame.instance.EndGame;
     }
 
     public void Interact(Transform interactor)

@@ -1,24 +1,22 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Elevator : MonoBehaviour
 {
-    [SerializeField] int changeSceneID;
-    [SerializeField] ElevatorPanel panelToEnd;
+    [SerializeField] ElevatorPanel panelInside;
 
-    void Start() => panelToEnd.onButtomPress += EndGame;
+    void Start() => panelInside.onButtomPress += EndGame;
 
-    void EndGame() => StartCoroutine(ChangeScene());
+    void EndGame() => StartCoroutine(EndGameCoroutine());
 
-    IEnumerator ChangeScene() 
-    {
-        UI_Fade.instance.FadeIn();
-        
-        while (UI_Fade.instance.alpha < 1f) yield return null;
+    IEnumerator EndGameCoroutine() 
+    {      
+        //while (UI_Fade.instance.alpha < 1f) yield return null;
 
         yield return new WaitForSeconds(1f);
 
-        ManagerGame.instance.LoadLevel(changeSceneID);
+        SceneManager.LoadScene(2);
         Debug.Log("<b><color=green>Finished game</color></b>");
         yield break;
     }

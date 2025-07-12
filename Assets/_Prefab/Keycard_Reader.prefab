@@ -30,8 +30,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.84903383, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.63, y: 0.5348913, z: 0.63}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 9071711789521750494}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2157,7 +2157,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 0
+  m_VersionIndex: 3
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -2248,7 +2248,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9071711789521750494}
   - component: {fileID: 5000201434429217072}
-  - component: {fileID: 7565888941773322954}
   m_Layer: 13
   m_Name: Keycard_Reader
   m_TagString: Untagged
@@ -2284,16 +2283,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74884f2897c162843afb5aa9c2d672eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7565888941773322954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8021580546063089442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 304b0caf28a87e141834ecfad45f9b37, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  text: 
+  <keycardNeeded>k__BackingField: {fileID: 0}
+  <offMaterial>k__BackingField: {fileID: 2100000, guid: 2426b2e4574b75c44a6be9801506fb25, type: 2}
+  <acceptedMaterial>k__BackingField: {fileID: 2100000, guid: c50971cc90406414eb3c67ccd5727bbd, type: 2}
+  <recusedMaterial>k__BackingField: {fileID: 2100000, guid: bf565b09eda234c40865ce5fb620154d, type: 2}
