@@ -2,16 +2,15 @@
 
 public class Ragdoll : MonoBehaviour
 {
-    [SerializeField] bool ActivateOnStart = false;
+    [SerializeField] bool _activateOnStart = false;
    
     void Start() 
     {
-        if (ActivateOnStart) RagdollActive(true);    
-        else RagdollActive(false);
+        if (_activateOnStart) RagdollState(true);
+        else RagdollState(false);
     }   
 
-    //Ativa ou desativa os rigidbodies
-    public void RagdollActive(bool b) 
+    public void RagdollState(bool b) 
     {
         foreach (Rigidbody rb in GetComponentsInChildren<Rigidbody>()) 
         {
@@ -22,9 +21,5 @@ public class Ragdoll : MonoBehaviour
         {
             collider.isTrigger = !b;
         }
-
-        GetComponent<Collider>().isTrigger = b;
-
-        Debug.Log("<b><color=magenta>" + transform.name + "</color></b> ragdoll = <b><color=cyan>" + b + "</color></b>");
     }
 }

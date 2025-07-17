@@ -8,13 +8,12 @@ public class AiEnemyLook : MonoBehaviour
     [SerializeField] MultiAimConstraint IKBody;
     [Range(0f, 1f)][SerializeField] float IkHeadWeight;
     [SerializeField] MultiAimConstraint IKHead;
+
     EnemyAi enemyAi;
 
     void Awake()
     {
-        enemyAi = GetComponent<EnemyAi>();
-        IKBody.weight = 0;
-        IKHead.weight = 0;     
+        enemyAi = GetComponent<EnemyAi>();   
     }
 
     void Update()
@@ -24,14 +23,12 @@ public class AiEnemyLook : MonoBehaviour
 
     void LookAtTarget() 
     {
-        if (enemyAi.canSeeTarget)
+        if (enemyAi.Target)
         {
-            //Estabelece os weights do IK
             IKBody.weight = IkBodyWeight;
             IKHead.weight = IkHeadWeight;
 
-            //Posiciona o target do IK no alvo do inimigo
-            IKTarget.position = enemyAi.target.position;
+            IKTarget.position = enemyAi.Target.position;
         }
         else 
         {

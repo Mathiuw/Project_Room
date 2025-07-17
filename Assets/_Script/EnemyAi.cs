@@ -4,269 +4,151 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SocialPlatforms;
 
+[RequireComponent(typeof(Health), typeof(EnemyWeaponInteraction), typeof(NavMeshAgent))]
 public class EnemyAi : MonoBehaviour
 {
     [Header("AI settings")]
-    float loopTime = 0.1f;
+    [SerializeField] float _baseSpeed = 6;
+    [SerializeField] float _runningSpeedMultiplier = 1.4f;
 
-    [Header("Attack")]
-    [SerializeField] Transform raycastPos;
-    [SerializeField] float runningSpeedMultiplier;
-    [SerializeField] int burst;
-    [SerializeField] float nextBurst;
+    [field: Header("Attack")]
+    [field: SerializeField] public Transform _shootRaycastTransform;
+    [SerializeField] float attackRange = 10f;
+    [SerializeField] int _burstCount = 3;
+    [SerializeField] float _burstInterval = 1f;
 
     [Header("Patroling")]
-    [SerializeField] Transform path;
-    Vector3[] waypoints;
-    public Transform target { get; private set; }
-    int waypointIndex = 0;
+    [SerializeField] Path _path;
 
     [Header("Field of view")]
-    public float radius;
-    [Range(0, 360)] public float angle;
-    [SerializeField] LayerMask targetMask, obstructionMask;
+    [Range(0, 360)] public float _angle = 160;
+    public float Radius { get; } = 20;
+    [field: SerializeField] public LayerMask TargetMask { get; private set; }
+    [field: SerializeField] public LayerMask ObstructionMask { get; private set; }
 
-    //Booleans de comportamento
-    public bool isPatrolling { get; private set; }
-    public bool isChasing { get; private set; }
-    public bool isAttacking { get; private set; }
-    public bool isRunning { get; private set; }
-    public bool canSeeTarget { get; private set; }
-    public bool canAttackTarget { get; private set; }
+    public Transform Target { get; set; }
 
-    //Eventos
-    public event Action onPatrol;
-    public event Action onChase;
-    public event Action onStopChase;
-    public event Action onAttack;
-    public event Action onStopAttack;
-
-    EnemyWeaponInteraction enemyWeaponInteraction;
-    NavMeshAgent navMeshAgent;
-    Collider[] rangeCheck;
+    EnemyWeaponInteraction _enemyWeaponInteraction;
+    NavMeshAgent _navMeshAgent;
+    StateMachine _stateMachine;
 
     void OnDestroy() => StopAllCoroutines();
 
     void Awake()
     {
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        enemyWeaponInteraction = GetComponent<EnemyWeaponInteraction>();
+        if (!_path)
+        {
+            Debug.LogError("Enemy doesnt have aptch");
+            enabled = false;
+            return;
+        }
+
+        _navMeshAgent = GetComponent<NavMeshAgent>();
+        _navMeshAgent.speed = _baseSpeed;
+
+        _enemyWeaponInteraction = GetComponent<EnemyWeaponInteraction>();
+
+        Health health = GetComponent<Health>();
+        health.onDead += OnDead;
     }
 
-    void Start()
+    private void Start()
     {
-        waypoints = new Vector3[path.childCount];
+        _stateMachine = new StateMachine();
 
-        for (int i = 0; i < path.childCount; i++)
-        {
-            waypoints[i] = path.GetChild(i).position;
-            waypoints[i] = new Vector3(waypoints[i].x, transform.position.y, waypoints[i].z);
-        }
+        Patrolling patrolling = new Patrolling(this, _path, _navMeshAgent);
+        Chase chase = new Chase(this, _navMeshAgent);
+        Attack attack = new Attack(this);
+
+        void At(IState to, IState from, Func<bool> condition) => _stateMachine.AddTransition(from, to, condition);
+
+        At(patrolling, chase, HasTarget());
+        At(chase, attack, IsInTargetReach());
+        At(attack, chase, IsNotInTargetReach());
+
+        Func<bool> HasTarget() => () => Target != null;
+        Func<bool> IsInTargetReach() => () => Vector3.Distance(transform.position, Target.position) < attackRange && CanSeeTarget();
+        Func<bool> IsNotInTargetReach() => () => Vector3.Distance(transform.position, Target.position) > attackRange;
+
+        _stateMachine.SetState(patrolling);
     }
 
     void Update()
     {
-        StartCoroutine(FieldOfViewCheck());
+        _stateMachine?.Tick();
     }
 
-    public Transform GetPath() { return path; }
-
-    public float GetSpeedMultiplier() { return runningSpeedMultiplier; }
-
-    public void SetTarget(Transform target = null)
+    public void Run(bool value)
     {
-        if (target == null)
+        if (value)
         {
-            this.target = null;
-            canSeeTarget = false;
-            canAttackTarget = false;
-            return;
+            _navMeshAgent.speed *= _runningSpeedMultiplier;
         }
-
-        canSeeTarget = true;
-        this.target = target;
+        else _navMeshAgent.speed = _baseSpeed;
     }
 
-    bool TargetHasHealth(Transform target) 
+    public bool CanSeeTarget()
     {
-        if (target.GetComponent<Health>()) return true;
-        else if (target.GetComponentInParent<Health>()) return true;
+        Vector3 directionToTarget = (Target.position - transform.position).normalized;
+        float distanceToTarget = Vector3.Distance(transform.position, Target.position);
+
+        if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, ObstructionMask))
+        {
+            return true;
+        }
         else return false;
     }
 
-    IEnumerator FieldOfViewCheck()
+    public void LookToTarget()
     {
-        while (true) 
-        {
-            canAttackTarget = false;
-
-            rangeCheck = Physics.OverlapSphere(transform.position, radius, targetMask);
-
-            if (rangeCheck.Length == 0) yield return new WaitForSeconds(loopTime);
-
-            foreach (Collider collider in rangeCheck)
-            {
-                Transform target = collider.transform;
-                Vector3 directionToTarget = (target.position - transform.position).normalized;
-                float distanceToTarget = Vector3.Distance(transform.position, target.position);
-
-                if (Vector3.Angle(transform.forward, directionToTarget) < angle / 2)
-                {
-                    if (!Physics.Raycast(transform.position, directionToTarget, distanceToTarget, obstructionMask))
-                    {
-                        if (this.target == null && target != transform && TargetHasHealth(target)) SetTarget(target);
-
-                        if (distanceToTarget < radius / 1.1f) canAttackTarget = true;
-                        else canAttackTarget = false;
-
-                        break;
-                    }
-                }
-                else canAttackTarget = false;
-            }
-
-            //Behavior check
-            Behavior();
-
-            yield return new WaitForSeconds(loopTime);
-
-        }
+        transform.LookAt(Target);
     }
 
-    //Comportamento do inimigo
-    void Behavior()
+    public void StartShooting()
     {
-        if (!canSeeTarget && !canAttackTarget && !isPatrolling && target == null) StartCoroutine(BehaviorPatrol());
-        if (canSeeTarget && !canAttackTarget) 
-        {
-            if(!isChasing) BehaviorChase();
-            navMeshAgent.isStopped = false;
-            navMeshAgent.SetDestination(target.position);
-        } 
-        if (canSeeTarget && canAttackTarget) 
-        {
-            navMeshAgent.isStopped = true;
-            if (!isAttacking) BehaviorAttack();
-        } 
-    }
-
-    IEnumerator BehaviorPatrol()
-    {
-        isPatrolling= true;
-        Debug.Log("<color=magenta><b>" + transform.name + "</b></color><color=green> started patrolling</color>");
-        onPatrol?.Invoke();
-
-        Vector2 position = new Vector2(transform.position.x, transform.position.z);
-        Vector2 desiredPosition = new Vector2(waypoints[waypointIndex].x, waypoints[waypointIndex].z);
-      
-        while (true)
-        {
-            navMeshAgent.SetDestination(waypoints[waypointIndex]);
-
-            while (position != desiredPosition)
-            {              
-                position = new Vector2(transform.position.x, transform.position.z);
-
-                if (canSeeTarget)
-                {
-                    isPatrolling = false;
-                    Debug.Log("<color=magenta><b>" + transform.name + " </b></color><color=red> stopped patrolling</color>");
-                    yield break;
-                }
-                yield return null;
-            }
-
-            waypointIndex++;
-            if (waypointIndex == waypoints.Length) waypointIndex = 0;
-
-            desiredPosition = new Vector2(waypoints[waypointIndex].x, waypoints[waypointIndex].z);
-
-            yield return null;
-        }
-    }
-
-    void Run() 
-    {   
-        float oldSpeed = navMeshAgent.speed;
-
-        navMeshAgent.speed *= runningSpeedMultiplier;
-        isRunning = true;
-        Debug.Log("<b><color=magenta>" + transform.name + "</color></b> started running" +
-            " | Old speed = <b><color=red>" + oldSpeed + "</color></b>" +
-            " | New speed = <b><color=green>" + navMeshAgent.speed + "</color></b>");
-    }
-    void BehaviorChase()
-    {
-        isChasing = true;
-        isAttacking = false;
-        if (!isRunning) Run();
-        onChase?.Invoke();
-    }
-
-    void BehaviorAttack() 
-    {
-        onStopChase?.Invoke();
-        isChasing = false;
-        isAttacking = true;
-        onAttack?.Invoke();
         StartCoroutine(ShootWeapon());
+    }
+
+    public void StopShooting()
+    {
+        StopCoroutine(ShootWeapon());
     }
 
     public IEnumerator ShootWeapon()
     {
-        if (enemyWeaponInteraction.Weapon == null)
+        if (_enemyWeaponInteraction.Weapon == null) yield break;
+
+        while (true)
         {
-            Debug.LogError("<b><color=red>Enemy Doesnt Have Gun</color></b>");
-            yield break;
-        }
-
-        //Pega os scripts
-        Debug.Log("<b><color=magenta>" + transform.name + "</color></b><color=green> started attacking </color>");
-
-        yield return new WaitForSeconds(nextBurst);
-
-        while (true) 
-        {         
-            for (int i = 0; i < burst; i++)
+            for (int i = 0; i < _burstCount; i++)
             {
-                //Checa se consegue atacar
-                if (!canAttackTarget)
-                {
-                    isAttacking = false;
-                    onStopAttack?.Invoke();
-                    Debug.Log("<b><color=magenta>" + transform.name + "</color></b> <color=red> stopped attacking </color>");
-                    yield break;
-                }
+                // Reload
+                StartCoroutine(_enemyWeaponInteraction.ReloadWeapon());
+                // Shoot Weapon
+                _enemyWeaponInteraction.Weapon.Shoot(_shootRaycastTransform);
 
-                //Se estiver sem munição recarrega
-                StartCoroutine(enemyWeaponInteraction.ReloadWeapon());
-                //Shoot Weapon
-                enemyWeaponInteraction.Weapon.Shoot(raycastPos);
-
-                yield return new WaitForSeconds(1f / enemyWeaponInteraction.Weapon.SOWeapon.firerate);
+                yield return new WaitForSeconds(1f / _enemyWeaponInteraction.Weapon.SOWeapon.firerate);
             }
 
-            yield return new WaitForSeconds(nextBurst);
-        }    
+            yield return new WaitForSeconds(_burstInterval);
+        }
     }
 
-    void OnDrawGizmos()
+    void OnDead()
     {
-        if (path == null) return;
+        // Drop weapon
+        WeaponInteraction weaponInteraction = GetComponent<WeaponInteraction>();
+        weaponInteraction?.DropWeapon();
 
-        Vector3 startPosition = path.GetChild(0).position;
-        Vector3 previousPosition = startPosition;
+        // Destroy unused components
+        Destroy(GetComponent<EnemyWeaponInteraction>());;
+        Destroy(GetComponent<DoorDestroyer>());
+        Destroy(GetComponent<CapsuleCollider>());
 
-        foreach (Transform waypoint in path)
-        {
-            Gizmos.DrawSphere(waypoint.position, 0.5f);
-            Gizmos.DrawLine(previousPosition, waypoint.position);
-            previousPosition = waypoint.position;
-        }
-        Gizmos.DrawLine(previousPosition, startPosition);
+        // Activate ragdoll
+        GetComponentInChildren<Ragdoll>()?.RagdollState(true);
 
-        Gizmos.color = Color.green;
-
-        if (target != null) Gizmos.DrawLine(transform.position, target.position);
+        // Destroy self
+        Destroy(this);
     }
 }

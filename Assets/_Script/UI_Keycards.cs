@@ -90,6 +90,6 @@ public class UI_Keycards : MonoBehaviour
         }
         else canvasGroup.alpha = 0;
 
-        Debug.Log("Draw Keycard inventory");
+        Debug.Log("Draw keycard inventory");
     }
 }

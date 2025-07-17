@@ -41,7 +41,7 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
         if (playerCamera) 
         {
-            weaponContainer = playerCamera.GetWeaponHolder();
+            weaponContainer = playerCamera.WeaponHolder;
         } 
     } 
 

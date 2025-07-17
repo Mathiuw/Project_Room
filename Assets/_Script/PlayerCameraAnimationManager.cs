@@ -61,15 +61,9 @@ public class PlayerCameraAnimationManager : MonoBehaviour
         animator.Rebind();
     }
 
-    void ActivateAim() 
-    {
-        if(!animator.GetCurrentAnimatorStateInfo(0).IsName("Idle") || !animator.GetCurrentAnimatorStateInfo(0).IsName("AimTrue") ) 
-            animator.Play("Idle");
-    }
-
     float WalkSpeed() 
     {
-        if (playerMovement && playerMovement.GetIsSprinting()) return 1.5f;
+        if (playerMovement && playerMovement.IsSprinting) return 1.5f;
         else return 1f;
     }
 }

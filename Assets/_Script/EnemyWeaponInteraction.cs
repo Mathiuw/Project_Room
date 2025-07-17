@@ -6,7 +6,7 @@ public class EnemyWeaponInteraction : WeaponInteraction
 {
     public override IEnumerator PickUpWeapon(Weapon weapon)
     {
-        this.Weapon = weapon;
+        Weapon = weapon;
 
         weapon.transform.SetParent(weaponContainer);
         weapon.transform.transform.localScale = Vector3.one;
@@ -21,7 +21,7 @@ public class EnemyWeaponInteraction : WeaponInteraction
     {
         if (!Weapon) yield break;
 
-        Weapon.AddAmmo(Weapon.Ammo);
+        Weapon.AddAmmo(Weapon.SOWeapon.maxAmmo);
         
         yield break;
     }

@@ -12,8 +12,8 @@ public class UI_PlayerStats : MonoBehaviour
 
         if (playerMovement)
         {
-            staminaBar.maxValue = playerMovement.GetMaxStamina();
-            SetStaminaUI(playerMovement.GetStamina());
+            staminaBar.maxValue = playerMovement.MaxStamina;
+            SetStaminaUI(playerMovement.Stamina);
 
             playerMovement.staminaUpdated += SetStaminaUI;
 

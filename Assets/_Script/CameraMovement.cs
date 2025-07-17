@@ -3,8 +3,7 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     [Header("Camera Movement")]
-    [Range(1, 100)]
-    [SerializeField] float sensibility = 5;
+    [field: SerializeField] public float Sensibility { get; set; } = 2.5f;
     [SerializeField] float multiplier = 1;
     float mouseX, mouseY;
     float xRotation, yRotation;
@@ -17,11 +16,8 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] float smooth = 20;
     float angle;
 
-    [Header("Weapon")]
-    [SerializeField] Transform weaponHolder;
-
-    public void SetSensibility(float sensibility) { this.sensibility = sensibility; } 
-    public Transform GetWeaponHolder() { return weaponHolder; }
+    [field: Header("Weapon")]
+    [field: SerializeField] public Transform WeaponHolder { get; private set; }
 
     void Start()
     {
@@ -51,8 +47,8 @@ public class CameraMovement : MonoBehaviour
 
     void CameraMove() 
     {
-        mouseX = Input.GetAxisRaw("Mouse X") * sensibility * multiplier;
-        mouseY = Input.GetAxisRaw("Mouse Y") * sensibility * multiplier;
+        mouseX = Input.GetAxisRaw("Mouse X") * Sensibility * multiplier;
+        mouseY = Input.GetAxisRaw("Mouse Y") * Sensibility * multiplier;
 
         //Vector3 rot = transform.rotation.eulerAngles;
 

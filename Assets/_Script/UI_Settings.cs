@@ -78,7 +78,7 @@ public class UI_Settings : MonoBehaviour
 
         if (cameraMovement)
         {
-            cameraMovement.SetSensibility(value);
+            cameraMovement.Sensibility = value;
         }
     }
 

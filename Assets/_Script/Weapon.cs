@@ -94,16 +94,13 @@ public class Weapon : MonoBehaviour, IInteractable, IUIName
         // Raycast para checar se atingi algo
         if (Physics.Raycast(raycastPos.position, raycastPos.forward, out hit, 1000, SOWeapon.shootMask))
         {
+            Debug.DrawLine(raycastPos.position, hit.point, Color.green, 1f);
+
             hit.transform.TryGetComponent(out Health health);
             hit.transform.TryGetComponent(out EnemyAi enemyAi);
 
-            // Se atingir um inimigo, vc vira o alvo
-            if (enemyAi && owner != null)
-            {
-                enemyAi.SetTarget(owner);
-            }
+            if (enemyAi && owner != null) enemyAi.Target = owner;
 
-            // Tira vida do alvo
             if (health)
             {
                 onHit?.Invoke(health);
@@ -114,12 +111,9 @@ public class Weapon : MonoBehaviour, IInteractable, IUIName
             }
             else
             {
-                // Adiciona forca ao rigidbody se for um objeto imovel
                 AddForceToRbs(hit.transform, raycastPos, SOWeapon.bulletForce);
                 //PlayWallHitParticle();
             }
-
-            Debug.DrawLine(raycastPos.position, hit.point, Color.green, 1f);    
         }
         else 
         {
