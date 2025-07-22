@@ -984,6 +984,7 @@ GameObject:
   - component: {fileID: 7253077468224070411}
   - component: {fileID: 2225207612003415739}
   - component: {fileID: 5246911108911803433}
+  - component: {fileID: 3401399746753774735}
   m_Layer: 3
   m_Name: SKM_Enemy
   m_TagString: Untagged
@@ -1019,10 +1020,10 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1983344435666750460}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: b67792dd8760b6a41a257f541935f943, type: 3}
   m_Controller: {fileID: 9100000, guid: 08ee591d11b429e469949b70229a1fd7, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -1072,7 +1073,7 @@ MonoBehaviour:
   boneShape: 1
   drawBones: 1
   drawTripods: 0
-  boneSize: 0.77
+  boneSize: 2.5
   tripodSize: 1
   boneColor: {r: 0, g: 0, b: 1, a: 0.5}
   m_Transforms:
@@ -1164,6 +1165,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activateOnStart: 0
+--- !u!114 &3401399746753774735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1983344435666750460}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed61490effe22884bb31a4b8cfdf6891, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  IKTarget: {fileID: 6404342635940789004}
+  IkBodyWeight: 0.85
+  IKBody: {fileID: 2009331964802016926}
+  IkHeadWeight: 1
+  IKHead: {fileID: 2360295710831680387}
 --- !u!1 &2000726005615716306
 GameObject:
   m_ObjectHideFlags: 0
@@ -2584,7 +2602,7 @@ GameObject:
   - component: {fileID: 4074400812861992958}
   - component: {fileID: 8420029291731850508}
   m_Layer: 3
-  m_Name: Body.Rig
+  m_Name: Rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

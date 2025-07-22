@@ -136,6 +136,10 @@ public class PlayerMovement : MonoBehaviour
     void OnDied()
     {
         rb.freezeRotation = false;
+
+        TryGetComponent(out PlayerWeaponInteraction playerWeaponInteraction);
+        playerWeaponInteraction?.DropWeapon();
+
         input.Disable();
     }
 }

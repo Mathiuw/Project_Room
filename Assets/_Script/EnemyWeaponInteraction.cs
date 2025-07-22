@@ -1,18 +1,29 @@
 ﻿using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyWeaponInteraction : WeaponInteraction
 {
+    private void Start()
+    {
+        if (Weapon && !Weapon.owner)
+        {
+            StartCoroutine(PickUpWeapon(Weapon));
+        }
+    }
+
     public override IEnumerator PickUpWeapon(Weapon weapon)
     {
         Weapon = weapon;
 
-        weapon.transform.SetParent(weaponContainer);
-        weapon.transform.transform.localScale = Vector3.one;
+        // Set weapon transform in the weapon container
+        weapon.transform.SetParent(weaponContainer, false);
+        weapon.transform.position = Vector3.zero;
+        weapon.transform.rotation = Quaternion.Euler(Vector3.zero);
+        weapon.transform.localScale = Vector3.one;
+
         weapon.SetHoldState(true, transform);
 
-        Debug.Log("<b><color=magenta>" + transform.name + "</color></b> picked up gun");
+        Debug.Log(transform.name + " picked up gun");
 
         yield break;
     }
@@ -29,17 +40,16 @@ public class EnemyWeaponInteraction : WeaponInteraction
     public override void DropWeapon()
     {
         //Destroy components
-        Destroy(Weapon.GetComponent<Weapon>());
+        //Destroy(Weapon.GetComponent<Weapon>());
 
         //set Ammo drop for player
-        Item ammoDrop = Weapon.AddComponent<Item>();
+        //Item ammoDrop = Weapon.AddComponent<Item>();
         //ammoDrop.SOItem = weapon.GetReloadItem();
-        ammoDrop.Amount = 1;
-        //Ammo drop pickup
-        Weapon.AddComponent<EnemyAmmoDrop>();
+        //ammoDrop.Amount = 1;
+        // Ammo drop pickup
+        //Weapon.AddComponent<EnemyAmmoDrop>();
 
         //Sets weapon state and current weapon NULL
-        Weapon.transform.SetParent(null);
         Weapon.SetHoldState(false, null);
         Weapon = null;
 

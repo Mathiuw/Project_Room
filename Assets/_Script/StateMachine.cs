@@ -1,15 +1,16 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class StateMachine
 {
-    private IState currentState;
+    private IState _currentState;
 
-    private Dictionary<Type, List<Transition>> transitions = new Dictionary<Type, List<Transition>>();
-    private List<Transition> currentTransitions = new List<Transition>();
-    private List<Transition> anyTransitions = new List<Transition>();
+    private Dictionary<Type, List<Transition>> _transitions = new Dictionary<Type, List<Transition>>();
+    private List<Transition> _currentTransitions = new List<Transition>();
+    private List<Transition> _anyTransitions = new List<Transition>();
 
-    private List<Transition> EmptyTransitions = new List<Transition>(0);
+    private static List<Transition> EmptyTransitions = new List<Transition>(0);
 
     // Must be called on the AI MonoBehaviour Update()
     public void Tick()
@@ -21,32 +22,33 @@ public class StateMachine
             SetState(transition.To);
         }
 
-        currentState?.Tick();
+        Debug.Log(_currentState.GetType());
+        _currentState?.Tick();
     }
 
     public void SetState(IState state)
     {
-        if (state == currentState) return;
+        if (state == _currentState) return;
 
-        currentState?.OnExit();
-        currentState = state;
+        _currentState?.OnExit();
+        _currentState = state;
 
-        transitions.TryGetValue(currentState.GetType(), out currentTransitions);
+        _transitions.TryGetValue(_currentState.GetType(), out _currentTransitions);
 
-        if (currentTransitions == null)
+        if (_currentTransitions == null)
         {
-            currentTransitions = EmptyTransitions;
+            _currentTransitions = EmptyTransitions;
         }
 
-        currentState.OnEnter();
+        _currentState.OnEnter();
     }
 
     public void AddTransition(IState from, IState to, Func<bool> predicate)
     {
-        if (!transitions.TryGetValue(from.GetType(), out var transitionsList))
+        if (!_transitions.TryGetValue(from.GetType(), out var transitionsList))
         {
             transitionsList = new List<Transition>();
-            transitions[from.GetType()] = transitionsList;
+            _transitions[from.GetType()] = transitionsList;
         }
 
         transitionsList.Add(new Transition(to, predicate));
@@ -54,7 +56,7 @@ public class StateMachine
 
     public void AddAnyTransition(IState state, Func<bool> predicate)
     {
-        anyTransitions.Add(new Transition(state, predicate));
+        _anyTransitions.Add(new Transition(state, predicate));
     }
 
     private class Transition
@@ -71,22 +73,26 @@ public class StateMachine
 
     private Transition GetTransition()
     {
-        foreach (Transition transition in anyTransitions)
+        foreach (Transition transition in _anyTransitions)
         {
             if (transition.Condition())
             {
+                Debug.Log("Condition to any transition met");
                 return transition;
             }
         }
 
-        foreach (Transition transition in currentTransitions)
+        foreach (Transition transition in _currentTransitions)
         {
             if (transition.Condition())
             {
+                Debug.Log("Condition to transition met");
                 return transition;
+                
             }
         }
 
+        Debug.Log("No condition met");
         return null;
     }
 }

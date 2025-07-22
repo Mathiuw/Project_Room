@@ -6,9 +6,12 @@ public class UI_PlayerStats : MonoBehaviour
     [SerializeField] Slider healthBar;
     [SerializeField] Slider staminaBar;
 
+    PlayerMovement playerMovement;
+    Health playerHealth;
+
     void Start() 
     {
-        PlayerMovement playerMovement = FindFirstObjectByType<PlayerMovement>();
+        playerMovement = FindFirstObjectByType<PlayerMovement>();
 
         if (playerMovement)
         {
@@ -18,15 +21,14 @@ public class UI_PlayerStats : MonoBehaviour
             playerMovement.staminaUpdated += SetStaminaUI;
 
 
-            Health health = playerMovement.GetComponent<Health>();
+            playerHealth = playerMovement.GetComponent<Health>();
 
-            if (health)
+            if (playerHealth)
             {
+                healthBar.maxValue = playerHealth.GetMaxHealth();
+                SetHealthUI(playerHealth.GetHealth());
 
-                healthBar.maxValue = health.GetMaxHealth();
-                SetHealthUI(health.GetHealth());
-
-                health.healthUpdated += SetHealthUI;
+                playerHealth.healthUpdated += SetHealthUI;
             }
             else
             {
@@ -34,6 +36,12 @@ public class UI_PlayerStats : MonoBehaviour
             }
         }
         else Debug.LogError("Cant find PlayerMovement class");
+    }
+
+    private void OnDisable()
+    {
+        playerMovement.staminaUpdated -= SetStaminaUI;
+        playerHealth.healthUpdated -= SetHealthUI;
     }
 
     void SetStaminaUI(float stamina)

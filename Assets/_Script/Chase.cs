@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnityEngine.AI;
 
 public class Chase : IState
@@ -13,19 +14,16 @@ public class Chase : IState
 
     public void OnEnter()
     {
-        _navMeshAgent.enabled = true;
-        _navMeshAgent.SetDestination(_enemyAi.Target.position);
         _enemyAi.Run(true);
     }
 
     public void OnExit()
     {
         _enemyAi.Run(false);
-        _navMeshAgent.enabled = false;
     }
 
     public void Tick()
     {
-        
+        _navMeshAgent.destination = _enemyAi.Target.position;
     }
 }

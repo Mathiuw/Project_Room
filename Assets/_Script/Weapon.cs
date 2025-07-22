@@ -63,18 +63,25 @@ public class Weapon : MonoBehaviour, IInteractable, IUIName
         Ammo = Mathf.Clamp(Ammo, 0, SOWeapon.maxAmmo);
     }
  
-    public void SetHoldState(bool state, Transform owner = null) 
+    public void SetHoldState(bool hasOwner, Transform owner = null) 
     {
         this.owner = owner;
 
         Rigidbody rb = GetComponent<Rigidbody>();
+        rb.isKinematic = hasOwner;
 
-        rb.isKinematic = state;
-        if (state) rb.interpolation = RigidbodyInterpolation.None;
-        else rb.interpolation = RigidbodyInterpolation.Interpolate;
+        if (hasOwner)
+        {
+            rb.interpolation = RigidbodyInterpolation.None;
+        }
+        else 
+        {
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
+            transform.SetParent(null);
+        }
 
         Collider[] colliders = GetComponentsInChildren<Collider>();
-        for (int i = 0; i < colliders.Length; i++) colliders[i].isTrigger = state;
+        for (int i = 0; i < colliders.Length; i++) colliders[i].isTrigger = hasOwner;
     }
 
     // Shooting logic
@@ -104,7 +111,7 @@ public class Weapon : MonoBehaviour, IInteractable, IUIName
             if (health)
             {
                 onHit?.Invoke(health);
-                PlayBloodParticle();
+                //PlayBloodParticle();
                 health.RemoveHealth(SOWeapon.damage);
 
                 if (health.GetIsDead()) AddForceToRbs(hit.transform, raycastPos, SOWeapon.bulletForce);
@@ -166,8 +173,8 @@ public class Weapon : MonoBehaviour, IInteractable, IUIName
     // Toca a particula de sangue
     void PlayBloodParticle()
     {
-        GameObject particle = Instantiate(Resources.Load("Particle_Blood") as GameObject);
-        particle.transform.position = hit.point;
-        particle.transform.forward = hit.normal;
+        //GameObject particle = Instantiate(Resources.Load("Particle_Blood") as GameObject);
+        //particle.transform.position = hit.point;
+        //particle.transform.forward = hit.normal;
     }
 }

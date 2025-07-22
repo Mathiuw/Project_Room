@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SocialPlatforms;
 
-[RequireComponent(typeof(Health), typeof(EnemyWeaponInteraction), typeof(NavMeshAgent))]
+//[RequireComponent(typeof(Health), typeof(EnemyWeaponInteraction), typeof(NavMeshAgent))]
 public class EnemyAi : MonoBehaviour
 {
     [Header("AI settings")]
@@ -58,19 +58,19 @@ public class EnemyAi : MonoBehaviour
 
         Patrolling patrolling = new Patrolling(this, _path, _navMeshAgent);
         Chase chase = new Chase(this, _navMeshAgent);
-        Attack attack = new Attack(this);
-
-        void At(IState to, IState from, Func<bool> condition) => _stateMachine.AddTransition(from, to, condition);
+        Attack attack = new Attack(this, _navMeshAgent);
 
         At(patrolling, chase, HasTarget());
         At(chase, attack, IsInTargetReach());
         At(attack, chase, IsNotInTargetReach());
 
-        Func<bool> HasTarget() => () => Target != null;
-        Func<bool> IsInTargetReach() => () => Vector3.Distance(transform.position, Target.position) < attackRange && CanSeeTarget();
-        Func<bool> IsNotInTargetReach() => () => Vector3.Distance(transform.position, Target.position) > attackRange;
-
         _stateMachine.SetState(patrolling);
+
+        void At(IState to, IState from, Func<bool> condition) => _stateMachine.AddTransition(to, from, condition);
+
+        Func<bool> HasTarget() => () => Target != null;
+        Func<bool> IsInTargetReach() => () => Vector3.Distance(transform.position, Target.position) < attackRange /*&& CanSeeTarget()*/;
+        Func<bool> IsNotInTargetReach() => () => Vector3.Distance(transform.position, Target.position) > attackRange;
     }
 
     void Update()
@@ -82,7 +82,7 @@ public class EnemyAi : MonoBehaviour
     {
         if (value)
         {
-            _navMeshAgent.speed *= _runningSpeedMultiplier;
+            _navMeshAgent.speed = _baseSpeed * _runningSpeedMultiplier;
         }
         else _navMeshAgent.speed = _baseSpeed;
     }
@@ -116,7 +116,11 @@ public class EnemyAi : MonoBehaviour
 
     public IEnumerator ShootWeapon()
     {
-        if (_enemyWeaponInteraction.Weapon == null) yield break;
+        if (_enemyWeaponInteraction.Weapon == null) 
+        {
+            Debug.Log("Enemy doesnt have weapon");
+            yield break;
+        } 
 
         while (true)
         {
