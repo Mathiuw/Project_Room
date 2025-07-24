@@ -17,7 +17,7 @@ public class SOWeapon : ScriptableObject
     public LayerMask shootMask;
 
     [Header("Crosshair")]
-    public GameObject crosshair;
+    public Sprite crosshair;
 
     [Header("Camera Shake")]
     public float intensity;

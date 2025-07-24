@@ -11,6 +11,7 @@ public class Door : MonoBehaviour, IInteractable, IUIName
     [SerializeField] Transform[] doors;
     [SerializeField] Vector3[] startRotation;
     [SerializeField] Vector3[] desiredRotations;
+    private bool isMoving = false;
 
     [Header("Destruction")]
     [SerializeField] bool isDestrucble = true;
@@ -21,17 +22,25 @@ public class Door : MonoBehaviour, IInteractable, IUIName
 
     private void Awake()
     {
-        for (int i = 0; i < doors.Length; i++) doors[i].localEulerAngles = startRotation[i];
+        for (int i = 0; i < doors.Length; i++) 
+        {
+            doors[i].localEulerAngles = startRotation[i];
+        } 
     }
 
     public void Interact(Transform interactor)
     {
+        if (isMoving)
+        {
+            return;
+        }
+
         StartCoroutine(OpenCloseDoor());
     }
 
     IEnumerator OpenCloseDoor() 
     {
-        enabled= false;
+        isMoving = true;
 
         float elapsedtime = 0f;
         float percentageComplete = 0f;
@@ -52,14 +61,12 @@ public class Door : MonoBehaviour, IInteractable, IUIName
             else doors[i].localRotation = Quaternion.Euler(startRotation[i]);
         }
 
-        // Invert open state
         open = !open;
 
-        enabled = true;
+        isMoving = false;
         yield break;
     }
 
-    // Animacao procedural para porta
     void ArrayLerp(Transform[] t, Vector3[] startRotation, Vector3[] desiredRotation, float percentageComplete ) 
     {
         for (int i = 0; i < doors.Length; i++)
@@ -68,7 +75,6 @@ public class Door : MonoBehaviour, IInteractable, IUIName
         }
     }
 
-    // Logica para destruir a porta
     public void DestroyDoor(Vector3 direction, float force)
     {
         if (!isDestrucble)
@@ -100,6 +106,11 @@ public class Door : MonoBehaviour, IInteractable, IUIName
 
     string GetUIName() 
     {
+        if (isMoving)
+        {
+            return "";
+        }
+
         if (open) return "Close " + doorName;
         else return "Open " + doorName;
     }

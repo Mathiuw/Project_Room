@@ -1834,7 +1834,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 389
+  m_VersionIndex: 152
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -1953,7 +1953,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6350786387534701431, guid: 291ef8d659fcbe148b432f43aed9be19, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6350786387534701432, guid: 291ef8d659fcbe148b432f43aed9be19, type: 3}
       propertyPath: m_RootOrder
@@ -2017,7 +2017,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6350786387534701436, guid: 291ef8d659fcbe148b432f43aed9be19, type: 3}
       propertyPath: m_VersionIndex
-      value: 90
+      value: 120
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2067,7 +2067,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6350786387534701431, guid: 291ef8d659fcbe148b432f43aed9be19, type: 3}
       propertyPath: m_StaticEditorFlags
-      value: 2147483647
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6350786387534701432, guid: 291ef8d659fcbe148b432f43aed9be19, type: 3}
       propertyPath: m_RootOrder
@@ -2131,7 +2131,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6350786387534701436, guid: 291ef8d659fcbe148b432f43aed9be19, type: 3}
       propertyPath: m_VersionIndex
-      value: 93
+      value: 123
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

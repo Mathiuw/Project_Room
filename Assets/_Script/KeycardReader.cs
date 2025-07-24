@@ -21,9 +21,9 @@ public class KeycardReader : MonoBehaviour, IInteractable, IUIName
     {
         Inventory inventory = interactor.GetComponent<Inventory>();
 
-        if (inventory.HaveItem(keycardNeeded))
+        if (inventory.HaveKeycard(keycardNeeded))
         {
-            inventory.RemoveItem(keycardNeeded);
+            inventory.RemoveConsumable(keycardNeeded);
             Used = true;
             ChangeMeshMaterials();
 

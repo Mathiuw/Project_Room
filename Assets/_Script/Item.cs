@@ -3,7 +3,6 @@
 public class Item : MonoBehaviour, IInteractable, IUIName
 {
     [field: SerializeField] public SOItem SOItem { get; private set; }
-    [field: SerializeField] public int Amount { get; set; } = 1;
 
     public string ReadName => SOItem.itemName;
 

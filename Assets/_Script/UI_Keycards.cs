@@ -38,21 +38,34 @@ public class UI_Keycards : MonoBehaviour
             return;
         }
 
-        inventory.OnItemAdded += DrawKeycards;
-        inventory.OnItemRemoved += DrawKeycards;
+        inventory.OnKeycardAdd += OnkeycardAdd;
 
         DrawKeycards();
     }
 
     private void OnDisable()
     {
-        inventory.OnItemAdded -= DrawKeycards;
-        inventory.OnItemRemoved -= DrawKeycards;
+        inventory.OnKeycardAdd -= OnkeycardAdd;
+    }
+
+    private void OnkeycardAdd(Keycard item)
+    {
+        DrawKeycards();
+    }
+
+    private void OnItemRemoved()
+    {
+        DrawKeycards();
     }
 
     private void DrawKeycards() 
     {
-        if (inventory.InventoryList.Count == 0)
+        for (int i = 1; i < transform.childCount; i++)
+        {
+            Destroy(transform.GetChild(i).gameObject);
+        }
+
+        if (inventory.keycards.Count == 0)
         {
             canvasGroup.alpha = 0;
             return;
@@ -60,26 +73,29 @@ public class UI_Keycards : MonoBehaviour
 
         int keycardcount = 0;
         float offfset = 0f;
-        bool firstSprite = false;
+        bool firstSprite = true;
 
-        for (int i = 0; i < inventory.InventoryList.Count; i++)
+        for (int i = 0; i < inventory.keycards.Count; i++)
         {
-            if (inventory.InventoryList[i].SOItem.GetType() == typeof(SOKeycard))
+            if (inventory.keycards[i].SOItem.GetType() == typeof(SOKeycard))
             {
+                Sprite itemSprite = inventory.keycards[i].SOItem.hotbarSprite;
+
                 if (!firstSprite)
                 {
-                    Image keycardSprite = Instantiate(spriteTemplate, new Vector3(spriteTemplate.rectTransform.anchoredPosition.x + offfset, 
-                        spriteTemplate.rectTransform.anchoredPosition.y), Quaternion.identity);                            
-                    keycardSprite.sprite = inventory.InventoryList[i].SOItem.hotbarSprite;
+                    Vector2 spawnPosition = new Vector2(offfset, 0);
+
+                    Image keycardSprite = Instantiate(spriteTemplate, Vector2.zero, Quaternion.identity, transform);
+                    keycardSprite.rectTransform.anchoredPosition = spawnPosition;
+                    keycardSprite.sprite = itemSprite;
                 }
                 else
                 {
-                    spriteTemplate.sprite = inventory.InventoryList[i].SOItem.hotbarSprite;
-                    offfset += spriteOfset;
-                    firstSprite = true;
+                    spriteTemplate.sprite = itemSprite;
+                    firstSprite = false;
                 }
 
-                offfset += spriteOfset;
+                offfset += (spriteTemplate.rectTransform.rect.width + spriteOfset);
                 keycardcount++;
             }
         }

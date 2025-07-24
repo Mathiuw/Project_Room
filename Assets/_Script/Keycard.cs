@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ItemKeycard : Item
+public class Keycard : Item
 {
     [SerializeField] private Material[] materials = new Material[4];
 

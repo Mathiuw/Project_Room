@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class UI_DestroyUIOnPlayerDeath : MonoBehaviour
+public class DestroyOnPlayerDeath : MonoBehaviour
 {
 
     void Start() 

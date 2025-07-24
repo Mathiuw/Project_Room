@@ -4,100 +4,99 @@ using UnityEngine.UI;
 
 public class UI_Crosshair : MonoBehaviour
 {
-    [SerializeField] RectTransform crosshairTransform;
-    [SerializeField] RectTransform dot;
-    [SerializeField] RectTransform reload;
+    Image crosshair;
+    [SerializeField] Sprite dotCrosshair;
+    [SerializeField] Image reloadCrosshair;
+    PlayerWeaponInteraction playerWeaponInteraction;
 
     void Awake()
     {
-        reload.gameObject.SetActive(false);
-        SetDotCrosshair();
+        crosshair = GetComponent<Image>();
+
+        reloadCrosshair.enabled = false;
     }
 
     void Start() 
     {
-        PlayerWeaponInteraction playerWeaponInteraction = FindFirstObjectByType<PlayerWeaponInteraction>();
+        playerWeaponInteraction = FindFirstObjectByType<PlayerWeaponInteraction>();
 
         if (playerWeaponInteraction)
         {
-            playerWeaponInteraction.onWeaponPickup += SetCrossHair;
-            playerWeaponInteraction.onWeaponDrop += SetDotCrosshair;
-            playerWeaponInteraction.onReloadStart += OnReloadFunc;
+            playerWeaponInteraction.onWeaponPickup += OnWeaponPickup;
+            playerWeaponInteraction.onWeaponDrop += OnWeaponDrop;
+            playerWeaponInteraction.onReloadStart += OnReloadStart;
         }
+
+        SetCroshair(dotCrosshair);
     }
 
-    void OnReloadFunc(float duration)
+    private void OnDisable()
     {
-        StartCoroutine(ReloadLerp(duration));
+        playerWeaponInteraction.onWeaponPickup -= OnWeaponPickup;
+        playerWeaponInteraction.onWeaponDrop -= OnWeaponDrop;
+        playerWeaponInteraction.onReloadStart -= OnReloadStart;
     }
 
-    void EnableCrosshair() 
+    private void OnWeaponPickup(Weapon weapon)
     {
-        crosshairTransform.gameObject.SetActive(true);
+        SetCroshair(weapon.SOWeapon.crosshair);
     }
 
-    void DisableCrosshair() 
+    private void OnWeaponDrop()
     {
-        crosshairTransform.gameObject.SetActive(false);
+        SetCroshair(dotCrosshair);
     }
 
-    //Set the dafault crosshair
-    void SetDotCrosshair() 
+    private void OnReloadStart()
     {
-        DestroyCrosshairSprite();
-        SpawnCrosshairSprite(dot.gameObject);
+        float reloadDuration = playerWeaponInteraction.Weapon.SOWeapon.reloadTime;
+
+        StartCoroutine(ReloadLerp(reloadDuration));
     }
 
-    void SpawnCrosshairSprite(GameObject crosshair) 
+    private void SetCroshair(Sprite sprite) 
     {
-        DestroyCrosshairSprite();
+        crosshair.sprite = sprite;
 
-        if (crosshair) 
+        if (!sprite)
         {
-            GameObject crosshairSprite = Instantiate(crosshair, crosshairTransform);
-            crosshairSprite.GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
+            crosshair.enabled = false;
         }
-    }
-
-    void DestroyCrosshairSprite()
-    {
-        for (int i = 0; i < crosshairTransform.childCount; i++)
+        else
         {
-            Destroy(crosshairTransform.GetChild(i).gameObject);
+            crosshair.enabled = true;
         }
-        Debug.Log("Destroyed crosshair sprite");
-    }
-
-    void SetCrossHair(Weapon weaponPicked)
-    {
-        SpawnCrosshairSprite(weaponPicked.SOWeapon.crosshair);
     }
 
     IEnumerator ReloadLerp(float duration)
     {
-        Image ring = reload.GetComponent<Image>();
+        Image ring = reloadCrosshair.GetComponent<Image>();
 
-        DisableCrosshair();
-        reload.gameObject.SetActive(true);
+        crosshair.enabled = false;
+        reloadCrosshair.enabled = true;
 
         float timeElapsed = 0;
 
         ring.fillAmount = 0;
 
-        while (timeElapsed < duration) 
+        while (ring.fillAmount < 1) 
         {
             ring.fillAmount = Mathf.Lerp(0, 1f, timeElapsed / duration);
-
             timeElapsed += Time.deltaTime;
-            Debug.Log("Duration = " + duration + ", UI ring time elapsed = " + timeElapsed + ", UI ring fill amount = " + ring.fillAmount);
 
             yield return null;
         }
 
-        ring.fillAmount = 1;
+        reloadCrosshair.enabled = false;
 
-        reload.gameObject.SetActive(false);
-        EnableCrosshair();
+        if (!crosshair.sprite)
+        {
+            crosshair.enabled = false;
+        }
+        else
+        {
+            crosshair.enabled = true;
+        }
 
         yield break;
     }

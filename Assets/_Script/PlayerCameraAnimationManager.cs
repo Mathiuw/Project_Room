@@ -5,7 +5,7 @@ public class PlayerCameraAnimationManager : MonoBehaviour
     PlayerWeaponInteraction playerWeaponInteraction;
     PlayerMovement playerMovement;
     Animator animator;
-    Rigidbody rb;
+    Rigidbody playerRb;
 
     void Awake() 
     { 
@@ -18,11 +18,12 @@ public class PlayerCameraAnimationManager : MonoBehaviour
 
         if (playerWeaponInteraction)
         {
-            playerWeaponInteraction.onWeaponPickup += OnPickup;
             playerWeaponInteraction.onWeaponDrop += OnDrop;
+            playerWeaponInteraction.onReloadStart += ReloadStart;
+            playerWeaponInteraction.onReloadEnd += ReloadEnd;
 
             playerMovement = playerWeaponInteraction.GetComponent<PlayerMovement>();
-            rb = playerWeaponInteraction.GetComponent<Rigidbody>();
+            playerRb = playerWeaponInteraction.GetComponent<Rigidbody>();
         }
         else 
         {
@@ -34,7 +35,7 @@ public class PlayerCameraAnimationManager : MonoBehaviour
     void Update() 
     {
         animator.SetFloat("Walk Speed", WalkSpeed());
-        animator.SetFloat("RbVelocity", rb.linearVelocity.magnitude);
+        animator.SetFloat("RbVelocity", playerRb.linearVelocity.magnitude);
         animator.SetBool("Hold", playerWeaponInteraction.Weapon);
         
         if (playerWeaponInteraction.Weapon) 
@@ -43,23 +44,11 @@ public class PlayerCameraAnimationManager : MonoBehaviour
         } 
     } 
 
-    void ReloadStart(float duration) => animator.Play("Start Reload");
+    void ReloadStart() => animator.Play("Start Reload");
 
     void ReloadEnd() => animator.Play("End Reload");
 
-    void OnPickup(Weapon weaponPicked) 
-    {
-        playerWeaponInteraction.onReloadStart += ReloadStart;
-        playerWeaponInteraction.onReloadEnd += ReloadEnd;
-    } 
-
-    void OnDrop() 
-    {
-        playerWeaponInteraction.onReloadStart -= ReloadStart;
-        playerWeaponInteraction.onReloadEnd -= ReloadEnd;
-
-        animator.Rebind();
-    }
+    void OnDrop() => animator.Rebind();
 
     float WalkSpeed() 
     {

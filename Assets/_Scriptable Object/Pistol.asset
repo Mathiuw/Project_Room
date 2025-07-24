@@ -10,26 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c91ce02f6d96ce4f8347baeef20a293, type: 3}
-  m_Name: Weapon_DB
+  m_Name: Pistol
   m_EditorClassIdentifier: 
-  weaponName: Double Barrel
-  damage: 60
-  bulletForce: 50
-  maxAmmo: 2
-  firerate: 5
-  waitToShoot: 0
+  weaponName: Pistol
+  damage: 25
+  bulletForce: 10
+  maxAmmo: 7
+  firerate: 7
+  waitToShoot: 1
   shootType: 0
-  ammoType: 2
+  ammoType: 0
   shootMask:
     serializedVersion: 2
     m_Bits: 9993
-  crosshair: {fileID: 5277375365027224371, guid: 2a87bf875f250674fbc09daad9bcc8e3, type: 3}
-  intensity: 1
+  crosshair: {fileID: 21300000, guid: 964797e12ed3ccb4cbb7dc19d0d9d6fd, type: 3}
+  intensity: 0.5
   speed: 10
-  animatorOverride: {fileID: 22100000, guid: 256889344a1820d4f9d9ad130e20a49a, type: 2}
-  reloadTime: 1.2
-  reloadItem: {fileID: 11400000, guid: b936a3ffd96c47249a5c826bf08bdfc8, type: 2}
-  muzzleFlash: {fileID: 2004880136692511860, guid: db3a34192a3b02f44ad5c5f4809c75b9, type: 3}
+  animatorOverride: {fileID: 22100000, guid: 4f547759e1dd5c041b6017e80dc64ee7, type: 2}
+  reloadTime: 0.5
+  reloadItem: {fileID: 11400000, guid: f3a15256ebc23754dba563d6c9b03a55, type: 2}
+  muzzleFlash: {fileID: 7285557099671381770, guid: be85a34377cf8d241a2ac441893a7ee6, type: 3}
   wallHit: {fileID: 2553133760792651097, guid: f518402108b099b42bf42ae7231061e5, type: 3}
   Blood: {fileID: 5750085299204580770, guid: 3a5dae8569d4f374e8c66e8fef3d1f31, type: 3}
-  ammoSprite: {fileID: 21300000, guid: bb90bc28b6479c64a8fa4548034fac62, type: 3}
+  ammoSprite: {fileID: 21300000, guid: d5f80fafda73c7a4c96e6ce196a12ede, type: 3}

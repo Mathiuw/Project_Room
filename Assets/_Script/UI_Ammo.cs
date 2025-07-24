@@ -16,14 +16,11 @@ public class UI_Ammo : MonoBehaviour
         if (playerWeaponInteraction) 
         {
             playerWeaponInteraction.onWeaponPickup += ActivateUISprite;
-            playerWeaponInteraction.onWeaponPickup += AddWeaponEvents;
+            playerWeaponInteraction.onWeaponShot += SetUIAmmoText;
             playerWeaponInteraction.onWeaponDrop += DisableUISprite;
-            playerWeaponInteraction.onWeaponDrop += RemoveWeaponEvents;
-            playerWeaponInteraction.onReloadStart += OnRealoadFunc;
-            playerWeaponInteraction.onReloadEnd += SetUIAmmoText;
 
-
-            CheckUISprite(playerWeaponInteraction);
+            if (playerWeaponInteraction.Weapon) ActivateUISprite();
+            else DisableUISprite();
         }
         else
         {
@@ -37,8 +34,6 @@ public class UI_Ammo : MonoBehaviour
         if (playerInventory)
         {
             playerInventory.OnAmmoCountUpdate += SetUIAmmoText;
-
-
         }
         else
         {
@@ -51,24 +46,16 @@ public class UI_Ammo : MonoBehaviour
     private void OnDisable()
     {
         playerWeaponInteraction.onWeaponPickup -= ActivateUISprite;
-        playerWeaponInteraction.onWeaponPickup -= AddWeaponEvents;
         playerWeaponInteraction.onWeaponDrop -= DisableUISprite;
-        playerWeaponInteraction.onWeaponDrop -= RemoveWeaponEvents;
-        playerWeaponInteraction.onReloadStart -= OnRealoadFunc;
-        playerWeaponInteraction.onReloadEnd -= SetUIAmmoText;
+        playerWeaponInteraction.onWeaponShot -= SetUIAmmoText;
 
         playerInventory.OnAmmoCountUpdate -= SetUIAmmoText;
     }
 
-    void OnRealoadFunc(float duration) 
-    {
-        SetUIAmmoText();
-    }
-
-    void ActivateUISprite(Weapon weaponPicked = null) 
+    void ActivateUISprite(Weapon weapon = null)
     {
         ammoUI.enabled = true;
-        ammoSprite.sprite = weaponPicked.SOWeapon.ammoSprite;
+        ammoSprite.sprite = weapon.SOWeapon.ammoSprite;
         SetUIAmmoText();
     }
 
@@ -78,12 +65,6 @@ public class UI_Ammo : MonoBehaviour
         ammoSprite.enabled = false;
     }
 
-    void CheckUISprite(PlayerWeaponInteraction playerWeaponInteraction) 
-    {     
-        if (playerWeaponInteraction.Weapon) ActivateUISprite();
-        else DisableUISprite();
-    }
-
     void SetUIAmmoText() 
     {
         if (!playerWeaponInteraction.Weapon)
@@ -91,17 +72,6 @@ public class UI_Ammo : MonoBehaviour
             ammoUI.SetText("");
             return;
         }
-
         ammoUI.SetText(playerWeaponInteraction.Weapon.Ammo + "/" + playerInventory.GetAmmoAmountByType(playerWeaponInteraction.Weapon.SOWeapon.ammoType));
-    } 
-
-    void AddWeaponEvents(Weapon weaponPicked) 
-    {
-        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onShoot += SetUIAmmoText;
-    }
-
-    void RemoveWeaponEvents() 
-    {
-        playerWeaponInteraction.Weapon.GetComponent<Weapon>().onShoot -= SetUIAmmoText;
-    } 
+    }  
 }

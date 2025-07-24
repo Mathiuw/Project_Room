@@ -21,9 +21,9 @@ public class UI_Consumables : MonoBehaviour
         {
             DrawConsumableInventory();
 
-            inventory.OnItemAdded += DrawConsumableInventory;
-            inventory.OnItemRemoved += DrawConsumableInventory;
-            inventory.OnConsumableIndexUpdate += DrawConsumableInventory;
+            inventory.OnConsumableAdd += OnItemAdded;
+            inventory.OnConsumableUse += OnItemRemoved;
+            inventory.OnConsumableIndexUpdate += OnConsumableIndexUpdate;
         }
         else 
         {
@@ -36,17 +36,29 @@ public class UI_Consumables : MonoBehaviour
 
     private void OnDisable()
     {
-        if (inventory)
-        {
-            inventory.OnItemAdded -= DrawConsumableInventory;
-            inventory.OnItemRemoved -= DrawConsumableInventory;
-            inventory.OnConsumableIndexUpdate += DrawConsumableInventory;
-        }
+        inventory.OnConsumableAdd -= OnItemAdded;
+        inventory.OnConsumableUse -= OnItemRemoved;
+        inventory.OnConsumableIndexUpdate += OnConsumableIndexUpdate;
     }
 
-    private void DrawConsumableInventory() 
+    private void OnItemAdded(Consumable item)
     {
-        if (inventory.InventoryList.Count == 0 || inventory.consumableIndexes.Count == 0)
+        DrawConsumableInventory();
+    }
+
+    private void OnItemRemoved()
+    {
+        DrawConsumableInventory();
+    }
+
+    private void OnConsumableIndexUpdate(int index)
+    {
+        DrawConsumableInventory();
+    }
+
+    private void DrawConsumableInventory()
+    {
+        if (inventory.consumables.Count == 0)
         {
             canvasGroup.alpha = 0;
             return;
@@ -54,9 +66,10 @@ public class UI_Consumables : MonoBehaviour
         else
         {
             canvasGroup.alpha = 1;
-            selectedConsumableImage.sprite = inventory.InventoryList[inventory.consumableIndexes[inventory.selectedConsumableIndex]].SOItem.hotbarSprite;
-        }
 
-        Debug.Log("Draw Consumable inventory");
+            Sprite selectedSprite = inventory.consumables[inventory.consumableIndex].SOItem.hotbarSprite;
+            selectedConsumableImage.sprite = selectedSprite;
+            Debug.Log("Draw Consumable inventory");
+        }
     }
 }
