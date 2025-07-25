@@ -7,9 +7,11 @@ public class Weapon : MonoBehaviour, IInteractable, IUIName
     [field: SerializeField] public SOWeapon SOWeapon { get; private set; }
 
     [Header("Weapon Transforms")]
-    [SerializeField] Transform aimLocation;
     [SerializeField] Transform muzzleFlashLocation;
-    [SerializeField] Transform ammoMeshTransform;
+
+    [Header("Particles")]
+    [SerializeField] ParticleSystem muzzleFlash;
+    [SerializeField] ParticleSystem blood;
 
     AudioSource gunSound;
     public RaycastHit hit;
@@ -24,11 +26,7 @@ public class Weapon : MonoBehaviour, IInteractable, IUIName
 
     public string ReadName => SOWeapon.weaponName;
 
-    public Vector3 GetAimLocation() { return aimLocation.localPosition; }
-
     public Vector3 GetMuzzleFlashLocation() { return muzzleFlashLocation.localPosition; }
-
-    public Transform GetAmmoMeshTransform() { return ammoMeshTransform; }
 
     void Awake()
     {
@@ -85,7 +83,7 @@ public class Weapon : MonoBehaviour, IInteractable, IUIName
     }
 
     // Shooting logic
-    public void Shoot(Transform raycastPos)
+    public virtual void Shoot(Transform raycastPos)
     {
         if (Ammo == 0) return;
         if (!(Time.time > nextTimeToFire)) return;
@@ -111,7 +109,7 @@ public class Weapon : MonoBehaviour, IInteractable, IUIName
             if (health)
             {
                 onHit?.Invoke(health);
-                //PlayBloodParticle();
+                PlayBloodParticle();
                 health.RemoveHealth(SOWeapon.damage);
 
                 if (health.GetIsDead()) AddForceToRbs(hit.transform, raycastPos, SOWeapon.bulletForce);
@@ -119,7 +117,6 @@ public class Weapon : MonoBehaviour, IInteractable, IUIName
             else
             {
                 AddForceToRbs(hit.transform, raycastPos, SOWeapon.bulletForce);
-                //PlayWallHitParticle();
             }
         }
         else 
@@ -151,30 +148,13 @@ public class Weapon : MonoBehaviour, IInteractable, IUIName
     // Toca a particula de atirar a arma
     void PlayMuzzleFlashParticle()
     {
-        TryGetComponent(out ParticleSystem particleSystem);
-
-        if (particleSystem)
-        {
-            particleSystem.Play();
-        }
-    }
-
-    // Toca a particula de atingir a parede
-    void PlayWallHitParticle()
-    {
-        if (hit.transform == null) return;
-        if (!hit.transform.gameObject.isStatic) return;
-
-        GameObject particle = Instantiate(Resources.Load("Particle_WallHit") as GameObject);
-        particle.transform.position = hit.point;
-        particle.transform.forward = hit.normal;
+        Instantiate(muzzleFlash, muzzleFlashLocation.position, muzzleFlashLocation.rotation, transform);
     }
 
     // Toca a particula de sangue
     void PlayBloodParticle()
     {
-        //GameObject particle = Instantiate(Resources.Load("Particle_Blood") as GameObject);
-        //particle.transform.position = hit.point;
-        //particle.transform.forward = hit.normal;
+        ParticleSystem particleSystem = Instantiate(blood, hit.point, Quaternion.identity, hit.transform);
+        particleSystem.transform.forward = hit.normal;
     }
 }

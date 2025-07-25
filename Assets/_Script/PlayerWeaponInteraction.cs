@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Inventory))]
-public class PlayerWeaponInteraction : WeaponInteraction
+public class PlayerWeaponInteraction : WeaponInteraction, IDead
 {
     [Header("Weapon Interation")]
     [SerializeField] float aimTime;
@@ -31,13 +31,12 @@ public class PlayerWeaponInteraction : WeaponInteraction
 
     void Start() 
     {
-        cameraTransform = Camera.main.transform;
+        CameraPivot cameraPivot = GetComponentInChildren<CameraPivot>();
 
-        CameraMovement playerCamera = FindAnyObjectByType<CameraMovement>();
-
-        if (playerCamera) 
+        if (cameraPivot)
         {
-            weaponContainer = playerCamera.WeaponHolder;
+            weaponContainer = cameraPivot.attatchedCamera.GetComponentInChildren<WeaponHolder>().transform;
+            cameraTransform = cameraPivot.attatchedCamera.transform;
         } 
     } 
 
@@ -212,5 +211,11 @@ public class PlayerWeaponInteraction : WeaponInteraction
         Weapon = null;
 
         Debug.Log("Dropped weapon");
+    }
+
+    public void Dead()
+    {
+        DropWeapon();
+        Destroy(this);
     }
 }

@@ -3,17 +3,18 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IDead
 {
     // Input class
-    GameActions input;
+    public GameActions Input { get; private set; }
 
     [Header("Movement")]
-    [SerializeField] Transform cameraPivot;
     [SerializeField] float moveSpeed = 200.0f;
     Vector2 moveVector;
     Rigidbody rb;
-    Transform playerCamera;
+
+    [Header("Rotation")]
+    [SerializeField] private CameraPivot cameraPivot;
 
     [Header("Sprint")]
     [SerializeField] bool canSprint = true;
@@ -22,54 +23,33 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] int staminaRecover = 8;
     [SerializeField] float sprintingMultiplier = 1.5f;
     float currentSprintMultiplier = 1;
-
     public float Stamina { get; set; } = 0;
-
     public bool IsSprinting { get; set; } = false;
 
     // Stamina update event
     public event Action<float> staminaUpdated;
 
-    public GameActions GetInput() { return input; }
-
-    public Transform GetCameraPivot() { return cameraPivot; }
-
     void Awake()
     {
         // Create input class
-        input = new GameActions();
+        Input = new GameActions();
 
-        input.Player.Move.performed += OnMovementPerformed;
-        input.Player.Move.canceled += OnMovementCanceled;
+        Input.Player.Move.performed += OnMovementPerformed;
+        Input.Player.Move.canceled += OnMovementCanceled;
 
-        input.Enable();
+        Input.Enable();
 
         rb = GetComponent<Rigidbody>();
-
-        TryGetComponent(out Health health);
-
-        if (health)
-        {
-            health.onDead += OnDied;
-        }
 
         Stamina = MaxStamina;
     }
 
     void OnDisable()
     {
-        input.Player.Move.performed -= OnMovementPerformed;
-        input.Player.Move.canceled -= OnMovementCanceled;
+        Input.Player.Move.performed -= OnMovementPerformed;
+        Input.Player.Move.canceled -= OnMovementCanceled;
 
-        input.Disable();
-    }
-
-    void Start()
-    {
-        playerCamera = FindAnyObjectByType<Camera>().transform;
-
-        // Update stamina event call
-        staminaUpdated?.Invoke(Stamina);
+        Input.Disable();
     }
 
     void Update()
@@ -81,8 +61,8 @@ public class PlayerMovement : MonoBehaviour
     {
         Movement(moveVector.y, moveVector.x);
 
-        // Rotate body
-        transform.localRotation = Quaternion.Euler(0, playerCamera.eulerAngles.y, 0);
+        // Rotate body According to attached camera view
+        transform.localRotation = Quaternion.Euler(0, cameraPivot.attatchedCamera.transform.eulerAngles.y, 0);
     }
 
     void OnMovementPerformed(InputAction.CallbackContext value)
@@ -107,7 +87,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!canSprint) return;
 
-        if (Stamina > 0 && moveVector.y > 0 && Input.GetKey(RunInput))
+        if (Stamina > 0 && moveVector.y > 0 && UnityEngine.Input.GetKey(RunInput))
         {
             IsSprinting = true;
 
@@ -122,7 +102,7 @@ public class PlayerMovement : MonoBehaviour
             currentSprintMultiplier = 1f;
         }
         
-        if (!Input.GetKey(RunInput) && !IsSprinting)
+        if (!UnityEngine.Input.GetKey(RunInput) && !IsSprinting)
         {
             Stamina = Stamina + (staminaRecover * Time.deltaTime);
         }
@@ -133,13 +113,10 @@ public class PlayerMovement : MonoBehaviour
         staminaUpdated?.Invoke(Stamina);
     }
 
-    void OnDied()
+    public void Dead()
     {
         rb.freezeRotation = false;
-
-        TryGetComponent(out PlayerWeaponInteraction playerWeaponInteraction);
-        playerWeaponInteraction?.DropWeapon();
-
-        input.Disable();
+        Input.Disable();
+        Destroy(this);
     }
 }

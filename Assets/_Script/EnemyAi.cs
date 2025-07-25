@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SocialPlatforms;
 
-//[RequireComponent(typeof(Health), typeof(EnemyWeaponInteraction), typeof(NavMeshAgent))]
+[RequireComponent(typeof(EnemyWeaponInteraction), typeof(NavMeshAgent))]
 public class EnemyAi : MonoBehaviour
 {
     [Header("AI settings")]
@@ -47,9 +47,6 @@ public class EnemyAi : MonoBehaviour
         _navMeshAgent.speed = _baseSpeed;
 
         _enemyWeaponInteraction = GetComponent<EnemyWeaponInteraction>();
-
-        Health health = GetComponent<Health>();
-        health.onDead += OnDead;
     }
 
     private void Start()
@@ -107,11 +104,13 @@ public class EnemyAi : MonoBehaviour
     public void StartShooting()
     {
         StartCoroutine(ShootWeapon());
+        Debug.Log("Start Attacking");
     }
 
     public void StopShooting()
     {
         StopCoroutine(ShootWeapon());
+        Debug.Log("Stopped Attacking");
     }
 
     public IEnumerator ShootWeapon()
@@ -126,33 +125,19 @@ public class EnemyAi : MonoBehaviour
         {
             for (int i = 0; i < _burstCount; i++)
             {
-                // Reload
-                StartCoroutine(_enemyWeaponInteraction.ReloadWeapon());
                 // Shoot Weapon
                 _enemyWeaponInteraction.Weapon.Shoot(_shootRaycastTransform);
+
+                // Reload if ammo is over
+                if (_enemyWeaponInteraction.Weapon.Ammo == 0)
+                {
+                    StartCoroutine(_enemyWeaponInteraction.ReloadWeapon());
+                }
 
                 yield return new WaitForSeconds(1f / _enemyWeaponInteraction.Weapon.SOWeapon.firerate);
             }
 
             yield return new WaitForSeconds(_burstInterval);
         }
-    }
-
-    void OnDead()
-    {
-        // Drop weapon
-        WeaponInteraction weaponInteraction = GetComponent<WeaponInteraction>();
-        weaponInteraction?.DropWeapon();
-
-        // Destroy unused components
-        Destroy(GetComponent<EnemyWeaponInteraction>());;
-        Destroy(GetComponent<DoorDestroyer>());
-        Destroy(GetComponent<CapsuleCollider>());
-
-        // Activate ragdoll
-        GetComponentInChildren<Ragdoll>()?.RagdollState(true);
-
-        // Destroy self
-        Destroy(this);
     }
 }

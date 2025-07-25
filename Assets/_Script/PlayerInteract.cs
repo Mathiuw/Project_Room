@@ -28,16 +28,13 @@ public class PlayerInteract : MonoBehaviour
 
         if (playerMovement)
         {
-            playerMovement.GetInput().Player.Interact.started += Interact;
+            playerMovement.Input.Player.Interact.started += Interact;
         }
     }
 
     private void OnDisable()
     {
-        if (playerMovement)
-        {
-            playerMovement.GetInput().Player.Interact.started -= Interact;
-        }
+        playerMovement.Input.Player.Interact.started -= Interact;
     }
 
     public void Interact(InputAction.CallbackContext value)

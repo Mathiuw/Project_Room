@@ -37,18 +37,22 @@ public class Health : MonoBehaviour
         health -= amount;
         health = Mathf.Clamp(health, 0, maxHealth);
         healthUpdated?.Invoke(health);
-        Isdead();
-    }
 
-    // Checa Morte
-    bool Isdead()
-    {
         if (health <= 0)
         {
-            isDead = true;
-            onDead?.Invoke();
-            return true;
+            TriggerDeath();
         }
-        else return false;
+    }
+
+    private void TriggerDeath() 
+    {
+        isDead = true;
+
+        foreach (IDead deadInterface in GetComponents<IDead>())
+        {
+            deadInterface.Dead();
+        }
+
+        onDead?.Invoke();
     }
 }

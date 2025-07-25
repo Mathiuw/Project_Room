@@ -2,16 +2,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum EFadeType
+{
+    FadeIn, FadeOut
+}
+
 public class UI_Fade : MonoBehaviour
 {
-    public enum EFadeType 
-    {
-        FadeIn, FadeOut
-    }
-
     [SerializeField] float fadeTime = 1f;
     [SerializeField] AnimationCurve curve;
-    [field: SerializeField] public EFadeType fadeType { get; set; } = EFadeType.FadeOut;
     Image image;
 
     public float alpha { get; private set; }
@@ -20,14 +19,6 @@ public class UI_Fade : MonoBehaviour
     {
         image= GetComponentInChildren<Image>();
     }
-
-    IEnumerator Start() 
-    {
-        SetImageAlphaValue(1f);
-        yield return new WaitForSeconds(0.1f);
-        FadeOut();
-        yield break;
-    } 
 
     public void SetImageAlphaValue(float value) 
     {
@@ -42,7 +33,7 @@ public class UI_Fade : MonoBehaviour
 
     public void FadeOut() => StartCoroutine(FadeCoroutine(1, 0));
 
-    public IEnumerator FadeCoroutine(float initial,float final) 
+    private IEnumerator FadeCoroutine(float initial,float final) 
     {
         float timePassed = 0;
 

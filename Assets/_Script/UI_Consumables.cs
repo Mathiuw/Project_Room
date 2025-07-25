@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ public class UI_Consumables : MonoBehaviour
     CanvasGroup canvasGroup;
     Inventory inventory;
     [SerializeField] Image selectedConsumableImage;
+    [SerializeField] TextMeshProUGUI amountText;
 
     private void Awake()
     {
@@ -69,6 +71,7 @@ public class UI_Consumables : MonoBehaviour
 
             Sprite selectedSprite = inventory.consumables[inventory.consumableIndex].SOItem.hotbarSprite;
             selectedConsumableImage.sprite = selectedSprite;
+            amountText.text = inventory.consumables[inventory.consumableIndex].Amount.ToString();
             Debug.Log("Draw Consumable inventory");
         }
     }

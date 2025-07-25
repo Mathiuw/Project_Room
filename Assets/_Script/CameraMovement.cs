@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Camera))]
 public class CameraMovement : MonoBehaviour
 {
     [Header("Camera Movement")]
@@ -16,24 +17,24 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] float smooth = 20;
     float angle;
 
-    [field: Header("Weapon")]
-    [field: SerializeField] public Transform WeaponHolder { get; private set; }
-
-    void Start()
+    private void OnEnable()
     {
         // Lock cursor
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
-        // Search player
-        PlayerMovement playerMovement = FindFirstObjectByType<PlayerMovement>();
+        // Searches for any camera pivot to attach
+        CameraPivot cameraPivot = FindFirstObjectByType<CameraPivot>();
 
         // Get the player camera position
-        if (playerMovement)
+        if (cameraPivot)
         {
-            cameraPivot = playerMovement.GetCameraPivot();
+            Camera camera = GetComponent<Camera>();
+
+            this.cameraPivot = cameraPivot.transform;
+            cameraPivot.attatchedCamera = camera;
         }
-        else Debug.LogError("Cant find Player");
+        else Debug.LogError("No camera pivot found");
     }
 
     void Update()
